@@ -1,0 +1,50 @@
+{% load static %}
+
+<div id="product_form-{{ index }}" class="flex gap-[4px] items-center border-b text-center w-full h-[32px]">
+    <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ product_pk }}" />
+    <div class="w-[20%]">
+        {{ product_form.group }}
+        <datalist id="group-list">
+            {% for group in groups %}
+            <option value="{{ group.group_gen }}">
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="w-[20%]">
+        {{ product_form.product }}
+        <datalist id="product-list">
+            {% for product in products %}
+            <option value="{{ product.code }}">
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="w-[10%] flex items-center justify-center">
+        {{ product_form.discount }}
+    </div>
+    <div class="w-[10%] flex items-center justify-center">
+        {{ product_form.profit_margin }}
+    </div>
+    <div class="w-[10%] flex items-center justify-center">
+        {{ product_form.quantity }}
+    </div>
+
+    <div 
+        class="w-[20%] flex items-center gap-[4px] justify-center"
+        hx-get="{% url 'set_product_prices' %}?index={{ index }}"
+        hx-trigger="load once, change from:#product-{{ index }}, change from:#discount-{{ index }}, change from:#profit_margin-{{ index }}, change from:#quantity-{{ index }}"
+        hx-include="#pk-{{ index }}, #product-{{ index }}, #discount-{{ index }}, #profit_margin-{{ index }}, #quantity-{{ index }}"
+        hx-target="this"
+        hx-swap="innerHTML">
+        <p></p>
+    </div>
+
+    <div class="w-[10%]">
+        <button 
+            hx-get="{% url 'remove_product_form' %}"
+            hx-target="#product_form-{{ index }}" 
+            hx-swap="outerHTML"
+            class="w-[24px] h-[24px] bg-red-500 hover:bg-red-700 duration-300">
+            <p class="align middle text-white font-black">✕</p>
+        </button>
+    </div>
+</div>

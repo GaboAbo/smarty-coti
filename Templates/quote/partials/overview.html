@@ -1,0 +1,67 @@
+{% load static %}
+
+<div id="quote_view" class="w-full h-full flex flex-col">
+    <div class="w-full h-1/12 mb-[10px] bg-slate-50 flex justify-center items-center text-xl font-bold">
+        <p>Detalle de Cotizacion #{{ quote.public_id }}</p>
+    </div>
+    <div class="w-full h-2/12 mb-[10px] bg-slate-50 flex flex-row">
+        <div class="w-full h-full grid grid-cols-6 p-4 gap-x-4">
+            <div class="h-[24px] px-2 text-sm col-span-2"><b>Cliente</b>: {{ quote.client.entity.name }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-2"><b>Fecha</b>: {{ quote.date }}</div>
+            <div class="h-[24px] px-2 text-sm"><b>Total Neto</b>: {{ quote.total }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-2"><b>Rep. Ventas</b>: {{ quote.salesRep.name }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-2"></div>
+            <div class="h-[24px] px-2 text-sm"><b>IVA</b>: {{ iva }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-4"></div>
+            <div class="h-[24px] px-2 text-sm"><b>Total con IVA</b>: {{ final }}</div>
+            <div class="flex flex-row justify-around items-center row-start-1 row-span-2 col-start-6">
+                <a href="{% url "generate_pdf" quote.pk %}">
+                    <button
+                        class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-slate-500 duration-300"
+                        type="button">
+                        <img src="{% static "icons/pdf.svg" %}" width="30" height="30" alt="generate_pdf" />
+                    </button>
+                </a>
+                <button
+                    hx-get="{% url "update_quote" quote.pk %}"
+                    hx-target="#quote_view"
+                    hx-swap="outerHTML transition:true"
+                    class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-blue-500 duration-300"
+                    type="button">
+                    <img src="{% static "icons/edit.svg" %}" width="30" height="30" alt="edit" />
+                </button>
+                <button
+                    hx-confirm="Esta seguro de que desea eliminar la cotizacion {{ quote.public_id }}?"
+                    hx-target="#quote_view"
+                    hx-swap="innerHTML transition:true"
+                    class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-red-500  duration-300"
+                    type="button">
+                    <img src="{% static "icons/delete.svg" %}" width="30" height="30" alt="delete" />
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="w-full h-9/12 bg-slate-50 overflow-y-scroll">
+        <table id="product_table" class="table-auto w-full h-full text-sm">
+            <thead class="sticky top-0 bg-slate-50">
+                <tr class="h-[68px]">
+                    <th style="width:20%">Grupo</th>
+                    <th style="width:20%">Producto</th>
+                    <th style="width:10%">Descuento</th>
+                    <th style="width:10%">Margen</th>
+                    <th style="width:10%">Cantidad</th>
+                    <th style="width:10%">Precio unitario</th>
+                    <th style="width:10%">Precio venta</th>
+                    <th style="width:10%"></th>
+                </tr>
+            </thead>
+            <tbody
+                id="table_data"
+                class="text-center text-sm"
+                hx-get="{% url "products_by_quote" quote.pk %}"
+                hx-trigger="load"
+                hx-swap="innerHTML">
+            </tbody>
+        </table>
+    </div>
+</div>
