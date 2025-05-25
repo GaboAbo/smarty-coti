@@ -42,10 +42,6 @@ jobs:
         env:
           ENV: production
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          
-        env:
-          ENV: production
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
       - name: Push image to ACR
         run: |
