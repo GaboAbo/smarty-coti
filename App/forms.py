@@ -1,5 +1,18 @@
 from django import forms
-from .models import Client, SalesRep, Quote, Product, ProductQuote, Group
+from .models import Client, SalesRep, Quote, Product, ProductQuote, Template
+
+
+class TemplateForm(forms.ModelForm):
+
+    class Meta:
+        model = Template
+        fields = ['name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({
+            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
+        })
 
 
 class QuoteForm(forms.ModelForm):
@@ -10,9 +23,9 @@ class QuoteForm(forms.ModelForm):
     client = forms.ModelChoiceField(
         queryset=Client.objects.all(),
         required=True,
-        empty_label="Sin cliente",
+        empty_label="Seleccione Institución",
         widget=forms.Select(attrs={
-            'class': 'border-2 border-[#B6B6B6] rounded px-2 py-1 w-48',
+            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
             'list': 'client-list',
         })
     )
@@ -20,9 +33,9 @@ class QuoteForm(forms.ModelForm):
     salesRep = forms.ModelChoiceField(
         queryset=SalesRep.objects.all(),
         required=True,
-        empty_label="Sin representante",
+        empty_label="Seleccione Rep. de Ventas",
         widget=forms.Select(attrs={
-            'class': 'border-2 border-[#B6B6B6] rounded px-2 py-1 w-48',
+            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
             'list': 'client-list',
         })
     )
@@ -43,16 +56,6 @@ class QuoteForm(forms.ModelForm):
 
 
 class ProductQuoteForm(forms.ModelForm):
-    group = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
-        required=False,
-        empty_label="Sin grupo",
-        widget=forms.Select(attrs={
-            'class': 'w-full border-2 border-[#B6B6B6] rounded px-1',
-            'list': 'group-list',
-        })
-    )
-
     product = forms.ModelChoiceField(
         queryset=Product.objects.all(),
         required=True,
@@ -94,7 +97,7 @@ class ProductQuoteForm(forms.ModelForm):
 
     class Meta:
         model = ProductQuote
-        fields = ['group', 'product', 'discount', 'profit_margin', 'quantity']
+        fields = ['product', 'discount', 'profit_margin', 'quantity']
 
     def __init__(self, *args, index=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -139,7 +142,6 @@ class PricingForm(forms.ModelForm):
 
 
 class ProductQuoteFullForm(forms.ModelForm):
-    group = ProductQuoteForm.base_fields['group']
     product = ProductQuoteForm.base_fields['product']
     discount = ProductQuoteForm.base_fields['discount']
     profit_margin = ProductQuoteForm.base_fields['profit_margin']
@@ -150,7 +152,7 @@ class ProductQuoteFullForm(forms.ModelForm):
     class Meta:
         model = ProductQuote
         fields = [
-            'quote', 'group', 'product', 'discount', 'profit_margin',
+            'quote', 'product', 'discount', 'profit_margin',
             'quantity', 'unit_price', 'subtotal'
         ]
 

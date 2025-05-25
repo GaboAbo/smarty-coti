@@ -1,0 +1,10 @@
+{% for pk in products_pks %}
+    <input
+        id="product-form"
+        name="product-form"
+        value="{{ pk }}"
+        hx-trigger="load delay:{{ forloop.counter0|add:"1" }}00ms"
+        hx-swap="outerHTML"
+        hx-get="{% url 'product_form_from_template' %}?index={{ forloop.counter0 }}"
+        hx-target="this" />
+{% endfor %}

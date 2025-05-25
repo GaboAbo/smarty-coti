@@ -1,98 +1,99 @@
 {% load static %}
 
-<div class="w-full h-full p-4 flex flex-col gap-2 bg-slate-50/50 rounded-sm justify-center items-center text-sm">
-    <div id="quote_info" class="w-full mb-4 flex gap-4">
-        {{ quote_form.public_id }}
-        <div class="w-1/6">
-            {{ quote_form.client }}
-            <datalist id="client-list">
-                {% for client in clients %}
-                    <option value="{{ client.id }}">{{ client.name }}</option>
-                {% endfor %}
-            </datalist>
-        </div>
-        <div class="w-1/6">
-            {{ quote_form.salesRep }}
-            <datalist id="salesRep-list">
-                {% for salesRep in salesReps %}
-                    <option value="{{ salesRep.id }}">{{ salesRep.name }}</option>
-                {% endfor %}
-            </datalist>
-        </div>
-        <div
-            hx-get="{% url "set_total_prices" %}"
-            hx-trigger="change from:#quote_items delay:100ms"
-            hx-target="this"
-            hx-swap="innerHTML"
-            class="w-2/3 flex flex-row justify-evenly items-center gap-2">
-            <div class="flex-row w-1/3 border-2 border-[#B6B6B6]">
-                <p class="w-1/2 px-2 text-left">TOTAL NETO: </p>
-                <p class="w-1/2 px-2 text-right"></p>
-            </div>
-            <div class="flex-row w-1/3 border-2 border-[#B6B6B6]">
-                <p class="w-1/2 px-2 text-left">IVA:  </p>
-                <p class="w-1/2 px-2 text-right"></p>    
-            </div>
-            <div class="flex-row w-1/3 border-2 border-[#B6B6B6]">
-                <p class="w-1/2 px-2 text-left">TOTAL CON IVA: </p>
-                <p class="w-1/2 px-2 text-right"></p>
-            </div>
-        </div>
+<div id="quote_edit" class="w-full h-full p-4 flex flex-col gap-2 bg-slate-50/50 rounded-sm justify-center items-center text-sm">
+    <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
+        <p>Crear Cotizacion</p>
     </div>
 
-    <!-- Table Header -->
-    <div id="quote_head" class="w-full h-[48px] flex flex-row gap-[4px] bg-zinc-200 text-sm font-semibold text-center border border-gray-300">
-        <div class="w-[20%] flex items-center justify-center">Grupo</div>
-        <div class="w-[20%] flex items-center justify-center">Producto</div>
+    <div id="quote_head" class="w-full h-[10%] flex flex-row text-sm px-2 pr-[30px] bg-slate-50 font-semibold border-2 border-[#B6B6B6]">
+        <div class="w-[50%] flex items-center justify-center">Producto - Descripcion</div>
         <div class="w-[10%] flex items-center justify-center">Descuento</div>
-        <div class="w-[10%] flex items-center justify-center">Margen</div>
         <div class="w-[10%] flex items-center justify-center">Cantidad</div>
         <div class="w-[10%] flex items-center justify-center">Precio unitario</div>
         <div class="w-[10%] flex items-center justify-center">Precio venta</div>
         <div class="w-[10%]"></div>
     </div>
 
-    <!-- Product List Area -->
-    <div class="w-full h-[364px] max-h-[364px] my-2 text-sm" id="quote_items">
+    <div id="quote_items" class="w-full h-[70%] text-sm border-2 border-[#B6B6B6] overflow-y-scroll">
         {% for pk in product_pks %}
             <input
                 id="product-form"
                 name="product-form"
                 value="{{ pk }}"
-                hx-trigger="load"
+                hx-trigger="load delay:{{ forloop.counter0|add:"1" }}00ms"
                 hx-swap="outerHTML"
-                hx-get="{% url 'load_product_form' %}?index={{ forloop.counter0 }}"
+                hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}"
                 hx-target="this" />
         {% endfor %}
     </div>
 
-    <!-- Action Buttons -->
+    <div id="quote_info" class="w-full h-[10%] p-4 bg-slate-50 flex gap-x-4">
+        {{ quote_form.public_id }}
+        <div class="w-2/5 flex gap-1">
+            <div class="w-1/2">
+                {{ quote_form.client }}
+                </datalist>
+            </div>
+            <div class="w-1/2">
+                {{ quote_form.salesRep }}
+            </div>
+        </div>
+        <div
+            hx-get="{% url "update_quote_totals" %}"
+            hx-trigger="load once delay:2000ms, change from:#quote_items delay:1000ms, click from:#quote_items target:.remove_product delay:100ms"
+            hx-target="this"
+            hx-swap="innerHTML"
+            class="w-3/5 h-[24px] flex flex-row justify-evenly items-center gap-x-1">
+            <div class="flex flex-row items-center w-1/3 border-2 h-full rounded-sm border-slate-300">
+                <p class="w-1/2 px-2 text-left">Total Neto</p>
+                <p class="w-1/2 px-2 text-right"></p>
+            </div>
+            <div class="flex flex-row items-center w-1/3 border-2 h-full rounded-sm border-slate-300">
+                <p class="w-1/2 px-2 text-left">IVA</p>
+                <p class="w-1/2 h-full px-2 text-right"></p>    
+            </div>
+            <div class="flex flex-row items-center w-1/3 border-2 h-full rounded-sm border-slate-300">
+                <p class="w-1/2 px-2 text-left">Total con IVA</p>
+                <p class="w-1/2 px-2 text-right"></p>
+            </div>
+        </div>
+    </div>
+    
     <div class="w-full flex justify-evenly gap-4 mt-4">
         <button
-            hx-get="{% url 'load_product_form' %}?index={{ index }}"
+            hx-get="{% url 'product_form' %}?index={{ index }}"
             hx-target="#quote_items"
             hx-swap="beforeend transition:true"
-            class="w-[256px] bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 duration-300">
+            class="w-[256px] h-[32px] bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 duration-300">
             Agregar Producto
         </button>
         <button
-            {% comment %}hx-get="{% url 'load_form' %}"{% endcomment %}
+            hx-get="{% url 'template_selector' %}"
             hx-target="#quote_items"
             hx-swap="beforeend transition:true"
-            class="w-[256px] bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 duration-300">
-            Agregar Grupo
+            class="w-[256px] h-[32px] bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 duration-300">
+            Agregar Plantilla
         </button>
     </div>
 
-    <!-- Fixed Bottom CTA -->
     <div class="fixed bottom-4 right-4">
         <button
             hx-post="{% url 'update_quote' pk  %}"
             hx-target="body"
             hx-include="#quote_info, #quote_items"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-            class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 duration-300">
+            class="w-[256px] h-[32px] flex justify-center items-center bg-green-500 text-white rounded-sm shadow hover:bg-green-600 duration-300">
             Actualizar Cotización
+        </button>
+    </div>
+    <div class="fixed bottom-4 left-4">
+        <button
+            hx-get="{% url "list_layout" %}"
+            hx-target="#quote_edit"
+            hx-swap="innerHTML transition:true"
+            class="w-[256px] h-[32px] flex justify-center items-center bg-slate-500 text-white rounded-sm shadow hover:bg-slate-600 duration-300"
+            type="button">
+            Atras
         </button>
     </div>
 </div>

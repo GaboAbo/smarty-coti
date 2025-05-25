@@ -2,7 +2,7 @@ import random, time
 
 from django.core.cache import cache
 
-from ..models import Product, Group
+from ..models import Product, Quote
 
 
 def get_all_products():
@@ -13,12 +13,12 @@ def get_all_products():
     return products
 
 
-def get_all_groups():
-    groups = cache.get("all_groups")
-    if groups is None:
-        groups = Group.objects.all()
-        cache.set("all_groups", groups, timeout=None)
-    return groups
+def get_all_quotes():
+    quotes = cache.get("all_quotes")
+    if quotes is None:
+        quotes = Quote.objects.all()
+        cache.set("all_quotes", quotes, timeout=None)
+    return quotes
 
 
 def generate_temp_id():

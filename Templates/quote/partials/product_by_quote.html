@@ -1,11 +1,10 @@
 {% load static %}
 
 {% for product in products %}
-<tr class="h-[68px]">
-    <th class="font-normal">{{ product.product.group.get_group_gen_display }}</th>
+<tr style="height:32px; max-height:32px;">
     <th class="font-normal">{{ product.product.code }}</th>
+    <th class="font-normal">{{ product.product.description }}</th>
     <th class="font-normal">{{ product.discount }}</th>
-    <th class="font-normal">{{ product.profit_margin }}</th>
     <th class="font-normal">{{ product.quantity }}</th>
     <th class="font-normal">{{ product.unit_price }}</th>
     <th class="font-normal">{{ product.subtotal }}</th>

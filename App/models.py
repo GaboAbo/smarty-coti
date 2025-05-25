@@ -44,7 +44,7 @@ class Client(models.Model):
     email_address = models.CharField("Correo", max_length=255)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.entity.name}"
     
 
 class SalesRep(models.Model):
@@ -53,47 +53,16 @@ class SalesRep(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-    
-
-class Group(models.Model):
-    GENERATION_CHOICES = [
-        ("OPT", "Optera (170)"),
-        ("EX3", "Exera III (190)"),
-        ("EX2", "Exera II (180)"),
-        ("EX1", "Exera I (160)"),
-        ("LUC", "Evis Lucera (270)"),
-        ("LUE", "Evis Lucera Elite (290)"),
-        ("EV3", "Evis Exera III (190)"),
-        ("EV2", "Evis Exera II (180)"),
-        ("VSR", "Visera (150/160)"),
-        ("VSP", "Visera Pro"),
-        ("VSE", "Visera Elite"),
-        ("VS2", "Visera Elite II"),
-        ("CV1", "Serie CV-100"),
-        ("CV2", "Serie CV-200"),
-        ("CV3", "Serie CV-300"),
-        ("CV4", "Serie CV-400"),
-    ]
-    group_gen = models.CharField("Generacion", max_length=100, choices=GENERATION_CHOICES)
-
-    def __str__(self):
-        return f"{self.group_gen}"
 
 
 class Product(models.Model):
-    group = models.ForeignKey(
-        Group,
-        verbose_name="Grupo",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     code = models.CharField("Codigo", max_length=50, unique=True)
+    material_number = models.CharField(max_length=50, null=True, blank=True)
     description = models.CharField("Descripcion", max_length=255)
-    price = models.PositiveIntegerField("Precio unitario dealer")
+    price = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.code}"
+        return f"{self.code[:20]}: {self.description[:40]}..."
 
 
 class Quote(models.Model):
@@ -108,7 +77,6 @@ class Quote(models.Model):
 
 
 class ProductQuote(models.Model):
-    group = models.ForeignKey("Group", verbose_name="Grupo", on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey("Product", verbose_name="Producto", on_delete=models.CASCADE)
     quote = models.ForeignKey("Quote", verbose_name="Cotizacion", on_delete=models.CASCADE, related_name='products')
     discount = models.PositiveIntegerField("Descuento", default=0)
@@ -118,8 +86,25 @@ class ProductQuote(models.Model):
     subtotal = models.PositiveIntegerField("Subtotal")
 
     def __str__(self):
-        return f"{self.product.code}: {self.subtotal}"
+        return f"{self.product.code}: {self.product.description}"
     
     @property
     def computed_subtotal(self):
         return self.quantity * self.unit_price
+
+
+class Template(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class TemplateProduct(models.Model):
+    template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name='template_products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.product.code} x{self.quantity} in template {self.template.name}"
+    

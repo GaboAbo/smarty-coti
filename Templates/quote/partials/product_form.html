@@ -1,50 +1,34 @@
 {% load static %}
 
-<div id="product_form-{{ index }}" class="flex gap-[4px] items-center border-b text-center w-full h-[32px]">
-    <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ product_pk }}" />
-    <div class="w-[20%]">
-        {{ product_form.group }}
-        <datalist id="group-list">
-            {% for group in groups %}
-            <option value="{{ group.group_gen }}">
-            {% endfor %}
-        </datalist>
-    </div>
-    <div class="w-[20%]">
+<div id="product_form-{{ index }}" class="flex gap-[4px] px-1 items-center border-b-2 border-[#B6B6B6] text-center w-full h-[32px]">
+    <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ index }}" />
+    <div class="w-[50%]">
         {{ product_form.product }}
-        <datalist id="product-list">
-            {% for product in products %}
-            <option value="{{ product.code }}">
-            {% endfor %}
-        </datalist>
     </div>
     <div class="w-[10%] flex items-center justify-center">
         {{ product_form.discount }}
     </div>
     <div class="w-[10%] flex items-center justify-center">
-        {{ product_form.profit_margin }}
-    </div>
-    <div class="w-[10%] flex items-center justify-center">
         {{ product_form.quantity }}
     </div>
 
-    <div 
+    <div
         class="w-[20%] flex items-center gap-[4px] justify-center"
-        hx-get="{% url 'set_product_prices' %}?index={{ index }}"
-        hx-trigger="load once, change from:#product-{{ index }}, change from:#discount-{{ index }}, change from:#profit_margin-{{ index }}, change from:#quantity-{{ index }}"
+        hx-get="{% url 'update_product_prices' %}?index={{ index }}"
+        hx-trigger="load once, change from:#product-{{ index }} delay:100ms, change from:#discount-{{ index }} delay:100ms, change from:#profit_margin-{{ index }} delay:100ms, change from:#quantity-{{ index }} delay:100ms"
         hx-include="#pk-{{ index }}, #product-{{ index }}, #discount-{{ index }}, #profit_margin-{{ index }}, #quantity-{{ index }}"
         hx-target="this"
         hx-swap="innerHTML">
-        <p></p>
     </div>
 
     <div class="w-[10%]">
-        <button 
+        <button
             hx-get="{% url 'remove_product_form' %}"
-            hx-target="#product_form-{{ index }}" 
+            hx-target="#product_form-{{ index }}"
+            hx-include="#product_pk-{{ index }}"
             hx-swap="outerHTML"
-            class="w-[24px] h-[24px] bg-red-500 hover:bg-red-700 duration-300">
-            <p class="align middle text-white font-black">✕</p>
+            class="remove_product w-full h-[24px] rounded-sm bg-slate-500 hover:bg-slate-600 duration-300 text-white">
+            Descartar
         </button>
     </div>
 </div>

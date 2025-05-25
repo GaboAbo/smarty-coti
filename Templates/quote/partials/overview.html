@@ -1,7 +1,7 @@
 {% load static %}
 
-<div id="quote_view" class="w-full h-full flex flex-col">
-    <div class="w-full h-1/12 mb-[10px] bg-slate-50 flex justify-center items-center text-xl font-bold">
+<div id="quote_view" class="w-full h-full p-4 flex flex-col gap-2">
+    <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
         <p>Detalle de Cotizacion #{{ quote.public_id }}</p>
     </div>
     <div class="w-full h-2/12 mb-[10px] bg-slate-50 flex flex-row">
@@ -14,41 +14,15 @@
             <div class="h-[24px] px-2 text-sm"><b>IVA</b>: {{ iva }}</div>
             <div class="h-[24px] px-2 text-sm col-span-4"></div>
             <div class="h-[24px] px-2 text-sm"><b>Total con IVA</b>: {{ final }}</div>
-            <div class="flex flex-row justify-around items-center row-start-1 row-span-2 col-start-6">
-                <a href="{% url "generate_pdf" quote.pk %}">
-                    <button
-                        class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-slate-500 duration-300"
-                        type="button">
-                        <img src="{% static "icons/pdf.svg" %}" width="30" height="30" alt="generate_pdf" />
-                    </button>
-                </a>
-                <button
-                    hx-get="{% url "update_quote" quote.pk %}"
-                    hx-target="#quote_view"
-                    hx-swap="outerHTML transition:true"
-                    class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-blue-500 duration-300"
-                    type="button">
-                    <img src="{% static "icons/edit.svg" %}" width="30" height="30" alt="edit" />
-                </button>
-                <button
-                    hx-confirm="Esta seguro de que desea eliminar la cotizacion {{ quote.public_id }}?"
-                    hx-target="#quote_view"
-                    hx-swap="innerHTML transition:true"
-                    class="w-[32px] h-[32px] flex justify-center rounded-sm bg-slate-200 hover:bg-red-500  duration-300"
-                    type="button">
-                    <img src="{% static "icons/delete.svg" %}" width="30" height="30" alt="delete" />
-                </button>
-            </div>
         </div>
     </div>
-    <div class="w-full h-9/12 bg-slate-50 overflow-y-scroll">
-        <table id="product_table" class="table-auto w-full h-full text-sm">
+    <div class="w-full h-8/12 bg-slate-50 overflow-y-scroll">
+        <table id="product_table" class="table-fixed w-full h-full text-sm">
             <thead class="sticky top-0 bg-slate-50">
                 <tr class="h-[68px]">
-                    <th style="width:20%">Grupo</th>
                     <th style="width:20%">Producto</th>
+                    <th style="width:30%">Descripcion</th>
                     <th style="width:10%">Descuento</th>
-                    <th style="width:10%">Margen</th>
                     <th style="width:10%">Cantidad</th>
                     <th style="width:10%">Precio unitario</th>
                     <th style="width:10%">Precio venta</th>
@@ -58,10 +32,45 @@
             <tbody
                 id="table_data"
                 class="text-center text-sm"
-                hx-get="{% url "products_by_quote" quote.pk %}"
+                hx-get="{% url "quote_products" quote.pk %}"
                 hx-trigger="load"
                 hx-swap="innerHTML">
             </tbody>
         </table>
+    </div>
+    <div class="w-full h-1/12 flex flex-row justify-around items-center text-sm">
+        <button
+            hx-get="{% url "list_layout" %}"
+            hx-target="#quote_view"
+            hx-swap="outerHTML transition:true"
+            class="w-1/5 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 hover:bg-slate-600 duration-300"
+            type="button">
+            Atras
+        </button>
+        <a
+            class="w-1/5 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 hover:bg-slate-600 duration-300"
+            href="{% url "generate_pdf" quote.pk %}">
+            <button
+                type="button">
+                Crear Documento
+            </button>
+        </a>
+        <button
+            hx-get="{% url "update_quote" quote.pk %}"
+            hx-target="#quote_view"
+            hx-swap="outerHTML transition:true"
+            class="w-1/5 h-[32px] text-white flex justify-center items-center rounded-sm bg-blue-500 hover:bg-blue-600 duration-300"
+            type="button">
+            Editar
+        </button>
+        <button
+            hx-get="{% url "delete_quote" quote.pk %}"
+            hx-confirm="Esta seguro de que desea eliminar la cotizacion {{ quote.public_id }}?"
+            hx-target="#quote_view"
+            hx-swap="outerHTML transition:true"
+            class="w-1/5 h-[32px] text-white flex justify-center items-center rounded-sm bg-red-500 hover:bg-red-600  duration-300"
+            type="button">
+            Eliminar
+        </button>
     </div>
 </div>

@@ -1,72 +1,57 @@
 from weasyprint import HTML
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db import transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
+from django.core.cache import cache
 
-from .services.session_cache import get_all_products, get_all_groups, generate_temp_id
+from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
+from .services.utils import calcultate_subtotal, remove_item_from_subtotal
 
-from .models import Quote, Product, ProductQuote
+from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
 from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullForm
 
 from .Constants.logo import OLYMPUS_LOGO
 
-FREIGHT = 0.04
-INSURANCE = 0.02
-CUSTOMS = 0.02
-WARRANT_AND_MAINTENANCE = 0.03
 
-
-def calcultate_subtotal(request, index, product, discount, profit_margin, quantity):
-    price_after_discount = round(product.price * ((100 - discount) / 100))
-    price_after_percentages = round(price_after_discount * (1 + FREIGHT + INSURANCE + CUSTOMS + WARRANT_AND_MAINTENANCE))
-    unit_price = round(price_after_percentages * ((100 + profit_margin) / 100))
-    subtotal = unit_price * quantity
-
-    total_net = request.session.get("total_net", {})
-    total_net[f"total_net-{index}"] = subtotal
-    request.session["total_net"] = total_net
-
-    return unit_price, subtotal
-
-
-def home_view(request):
+def dashboard_view(request):
     return render(request, "home.html", {})
 
 
-def list_quotes(request):
+def list_layout_view(request):
     return render(request, "quote/list_layout.html")
 
 
-def filter_quote(request):
-    quotes = Quote.objects.all()
+def quote_list_view(request):
+    quotes = get_all_quotes()
+
     id = request.GET.get("public_id")
     client = request.GET.get("client")
     date = request.GET.get("date")
+
     if id:
-        quotes = quotes.filter(pk=id)
+        quotes = quotes.filter(public_id__icontains=id)
     if client:
-        quotes = quotes.filter(client__name__icontains=client)
+        quotes = quotes.filter(client__entity__name__icontains=client)
     if date:
         quotes = quotes.filter(date=date)
-    return render(request, "quote/partials/filtered_list.html", {'quotes': quotes})
+
+    return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
 
 
-def products_by_quote(request, pk):
+def quote_products_view(request, pk):
     products = ProductQuote.objects.filter(quote__pk=pk)
     return render(request, "quote/partials/product_by_quote.html", {"products": products})
 
 
-def load_product_form(request):
+def product_form_view(request):
     pk = request.GET.get("product-form")
-    index = request.GET.get("index", None)
     
-    if not index:
-        index = request.session.get("form_counter")
-        request.session["form_counter"] += 1
+    index = request.session["form_counter"]
+    request.session["form_counter"] += 1
 
     if int(index) >= 10:
         return HttpResponse("")
@@ -77,31 +62,63 @@ def load_product_form(request):
         instance = None
 
     product_form = ProductQuoteForm(index=index, instance=instance) 
-    groups = get_all_groups()
     products = get_all_products()
 
     context = {
         "index": index,
         "product_pk": pk,
         "product_form": product_form,
-        "groups": groups,
         "products": products
     }
 
     return render(request, "quote/partials/product_form.html", context=context)
 
 
-def remove_product_form(request):
+def product_form_from_template_view(request):
+    pk = request.GET.get("product-form")
+    
+    index = request.session["form_counter"]
+    request.session["form_counter"] += 1
+
+    if int(index) >= 10:
+        return HttpResponse("")
+    
+    if pk:
+        try:
+            product = TemplateProduct.objects.get(pk=pk).product
+            initial = {
+                'product': product,
+                'unit_price': product.price,
+            }
+        except Product.DoesNotExist:
+            initial = None
+
+    product_form = ProductQuoteForm(index=index, initial=initial) 
+    products = get_all_products()
+    context = {
+        "index": index,
+        "product_pk": pk,
+        "product_form": product_form,
+        "products": products
+    }
+
+    return render(request, "quote/partials/product_form.html", context=context)
+
+
+def remove_product_form_view(request):
     request.session["form_counter"] -= 1
+    index = request.GET.get("product_pk")
+    remove_item_from_subtotal(request, index)
+    
     return HttpResponse("")
 
 
-def set_product_prices(request):
+def update_product_prices_view(request):
     form_counter = request.GET.get("index", 0)
     product = request.GET.get("product")
     discount = int(request.GET.get("discount"))
-    profit_margin = int(request.GET.get("profit_margin"))
     quantity = int(request.GET.get("quantity"))
+    profit_margin = 35
 
     if not product:
         return HttpResponse("")
@@ -114,43 +131,52 @@ def set_product_prices(request):
 
     context = {
         "index": form_counter,
-        "pricing_form": pricing_form
+        "pricing_form": pricing_form,
+        "subtotal": subtotal
     }
     return render(request, "quote/partials/prices.html", context=context)
 
 
-def set_total_prices(request):
-    total_net = sum(int(total) for total in request.session["total_net"].values())
+def update_quote_totals_view(request):
+    # The burst is too fast, we need another logic
+    # Actually, the view is called too fast, so it doesn't let it load properly
+    current_total = cache.get('total_net', {})
+
+    total_net = sum([value for value in current_total.values()])
+
     iva = round(total_net * 0.19)
     final = total_net + iva
 
     context = {
         'total_net': total_net,
         'iva': iva,
-        'final': final
+        'final': final,
     }
     
     return render(request, "quote/partials/total_prices.html", context=context)
 
 
-def get_quote(request, pk):
+def quote_detail_view(request, pk):
     quote = Quote.objects.get(pk=pk)
     iva = round(quote.total * 0.19)
     final = quote.total + iva
     return render(request, 'quote/partials/overview.html', {'quote': quote, 'iva': iva, 'final': final,})
 
 
-def create_quote(request):
+def quote_create_view(request):
+    cache.set('total_net', {})
+    context = {}
     if request.method == "POST":
         public_id = request.POST.get("public_id")
-        client = request.POST.get("client")
-        salesRep = request.POST.get("salesRep")
+        client = request.POST.get("client") or 1
+        salesRep = request.POST.get("salesRep") or 1
         items = []
-        keys = ['group', 'product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
+        keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal']
         length = len(request.POST.getlist('product'))
 
         for i in range(length):
             item = {key: request.POST.getlist(key)[i] for key in keys}
+            item['profit_margin'] = 35
             items.append(item)
 
         try:
@@ -168,7 +194,7 @@ def create_quote(request):
                         product_quote = product_quote_form.save()
                         print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
             
-            return redirect("home")
+            return redirect("dashboard")
 
         except Exception as e:
             print("Transaction failed:", e)
@@ -176,12 +202,13 @@ def create_quote(request):
 
     request.session["form_counter"] = 0
     request.session["total_net"] = {}
-    groups = get_all_groups()
     quote_form = QuoteForm(initial={'public_id': generate_temp_id()})
-    return render(request, "quote/partials/create.html", {"groups": groups, 'quote_form': quote_form})
+    context['quote_form'] = quote_form
+    return render(request, "quote/partials/create.html", context=context)
 
 
-def update_quote(request, pk):
+def quote_update_view(request, pk):
+    cache.set('total_net', {})
     quote = get_object_or_404(
         Quote.objects.prefetch_related(
             Prefetch(
@@ -196,11 +223,12 @@ def update_quote(request, pk):
         client = request.POST.get("client")
         salesRep = request.POST.get("salesRep")
         items = []
-        keys = ['group', 'product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal', 'product_pk']
+        keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal', 'product_pk']
         length = len(request.POST.getlist('product'))
 
         for i in range(length):
             item = {key: request.POST.getlist(key)[i] for key in keys}
+            item['profit_margin'] = 35
             items.append(item)
 
         try:
@@ -223,20 +251,18 @@ def update_quote(request, pk):
                         product_quote = product_quote_form.save()
                         print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
             
-            return redirect("home")
+            return redirect("dashboard")
 
         except Exception as e:
             print("Transaction failed:", e)
             print("Changes reverted.")
 
     
-    request.session["form_counter"] = (len(quote.products.all()))
+    request.session["form_counter"] = 0
     request.session["total_net"] = {}
-    groups = get_all_groups()
     quote_form = QuoteForm(instance=quote)
     products_pks = list(quote.products.values_list("pk", flat=True))
     context = {
-        "groups": groups,
         'quote_form': quote_form,
         'pk': pk,
         'product_pks': products_pks
@@ -244,7 +270,25 @@ def update_quote(request, pk):
     return render(request, "quote/partials/update.html", context=context)
 
 
-def generate_pdf(request, quote_id):
+def quote_delete_view(request, pk):
+    quote = get_object_or_404(Quote, pk=pk).delete()
+    print(f"Quote #{quote} deleted")
+    return redirect("list_layout")
+
+
+def template_selector_view(request):
+    templates = Template.objects.all()
+    return render(request, "quote/partials/template_selector.html", {'templates': templates})
+
+
+def template_products_view(request):
+    template = request.GET.get("template")
+    template = Template.objects.get(pk=template)
+    products_pks = list(template.template_products.values_list("pk", flat=True))
+    return render(request, "quote/partials/template_products.html", {'products_pks': products_pks})
+
+
+def generate_quote_pdf_view(request, quote_id):
     quote = Quote.objects.get(id=quote_id)
     products = ProductQuote.objects.filter(quote=quote)
     iva = round(quote.total * 0.19)
@@ -262,5 +306,5 @@ def generate_pdf(request, quote_id):
     )
     pdf = HTML(string=html_string_pdf).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="cotizacion_prueba.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote.public_id} - {quote.client.entity.name}.pdf"'
     return response

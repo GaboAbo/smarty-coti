@@ -10,9 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
+import os, environ
 
 from pathlib import Path
+
+from django.core.management.utils import get_random_secret_key
+
+
+env = environ.Env()
+
+environ.Env().read_env()
+
+ENV = env('ENV', default='development')
+
+if ENV == 'production':
+    SECRET_KEY = env('DJANGO_SECRET_KEY')
+    if not SECRET_KEY:
+        raise ValueError("Production requires DJANGO_SECRET_KEY to be set!")
+    DEBUG = False
+    print("Using production SECRET_KEY. DEBUG set to False")
+else:
+    SECRET_KEY = env('DJANGO_SECRET_KEY', default=get_random_secret_key())
+    DEBUG = True
+    print("⚠️ Using a default development SECRET_KEY. DEBUG set to True. Do not use this in production!")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +47,23 @@ SECRET_KEY = 'django-insecure-e+8aov8db6+rsty=@q6ckxn7v2i9$s*zg(g78qt+6^ixacs(55
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS = ["https://axion-b6fke8edgahaecgq.eastus2-01.azurewebsites.net/"]
+ALLOWED_HOSTS = [
+    "axion-b6fke8edgahaecgq.eastus2-01.azurewebsites.net",
+    "169.254.129.2",
+    "169.254.129.3",
+    "169.254.129.4",
+    "169.254.129.5"
+]
+ALLOWED_REDIRECT_HOSTS = ["axion"]
 
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
 
 # Application definition
 
@@ -39,8 +74,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     'App',
+    'MicrosoftAuth',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +114,24 @@ WSGI_APPLICATION = 'Coti.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if ENV == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('DB_NAME', default=""),
+            'USER': env('DB_USER', default=""),
+            'PASSWORD': env('DB_PASSWORD', default=""),
+            'HOST': env('DB_HOST', default=""),
+            'PORT': env('DB_PORT', default=""),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -122,8 +171,52 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'MicrosoftAuth.authentication.microsoftOauth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'rmendoza.abd@gmail.com'
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default="")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "Axion": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}

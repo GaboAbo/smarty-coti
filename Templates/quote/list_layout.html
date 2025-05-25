@@ -1,68 +1,67 @@
 {% load static %}
 
-<div id="quote_list" class="w-full h-full flex flex-col items-start p-2">
-    <div class="basic-container w-full h-[48px] mb-[10px] bg-slate-50 text-xl font-bold">
+<div id="quote_list" class="w-full h-full flex flex-col items-start p-4 bg-slate-50/50 rounded-sm text-sm">
+    <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
         <p>Listado de Cotizaciones</p>
     </div>
-    <div class="w-full h-[92px] mb-[10px] bg-slate-50 flex flex-row">
-        <form
-            id="filter"
-            class="w-11/12 h-full grid grid-cols-5 p-4 gap-x-4 gap-y-1"
-            hx-get="{% url "filter_quote" %}"
-            hx-trigger="change delay:250ms"
-            hx-target="#table_data"
-            hx-swap="innerHTML"
-            hx-include="this">
-            <input
-                class="h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
-                name="public_id"
-                placeholder="Buscar por ID">
-            <input
-                class="h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
-                name="client"
-                placeholder="Buscar por Cliente">
-            <input
-                class="h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
-                name="date"
-                type="date">
-            <input
-                class="row-start-1 col-start-5 ml-[148px] w-[58px] h-[58px] row-span-2 rounded-sm bg-slate-200 hover:bg-slate-500 duration-150 text-white text-5xl"
-                hx-get="{% url "filter_quote" %}"
-                hx-trigger="click delay:250ms"
-                hx-target="#table_data"
-                hx-swap="innerHTML"
-                type="reset"
-                value="↺">
-        </form>
-        <div class="w-1/12 h-full p-4 gap-y-1">
-            <button
-                class="w-[58px] h-[58px] flex justify-center rounded-sm bg-slate-200 hover:bg-green-500 duration-150 text-white text-sm"
-                hx-get="{% url "create_quote" %}"
-                hx-target="#quote_list"
-                hx-swap="outerHTML transition:true"
-                type="button">
-                <img src="{% static "icons/add.svg" %}" width="48" height="48" alt="add" />
-            </button>
-        </div>
-    </div>
     
-    <div class="w-full overflow-y-auto">
+    <div class="w-full h-[80%] overflow-y-auto">
         <table id="order_table" class="table-auto w-full text-sm px-2">
             <thead class="sticky top-0 bg-slate-50">
                 <tr class="h-[48px] my-2">
                     <th style="width:12%">ID</th>
-                    <th style="width:65%">Cliente</th>
+                    <th style="width:64%">Cliente</th>
                     <th style="width:8%">Fecha</th>
-                    <th style="width:15%">Acciones</th>
+                    <th style="width:16%">Acciones</th>
                 </tr>
             </thead>
             <tbody
                 id="table_data"
                 class="text-center text-sm"
-                hx-get="{% url "filter_quote" %}"
+                hx-get="{% url "quote_list" %}"
                 hx-trigger="load"
                 hx-swap="innerHTML">
             </tbody>
         </table>
+    </div>
+
+    <div class="w-full h-[10%] mb-4 bg-slate-50 flex gap-2 px-2">
+        <form
+            id="filter"
+            class="w-full h-full flex flex-row justify-center items-center gap-x-1"
+            hx-get="{% url "quote_list" %}"
+            hx-trigger="change delay:250ms"
+            hx-target="#table_data"
+            hx-swap="innerHTML"
+            hx-include="this">
+            <input
+                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="public_id"
+                placeholder="Buscar por ID">
+            <input
+                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="client"
+                placeholder="Buscar por Cliente">
+            <input
+                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="date"
+                type="date">
+            <input
+                class="w-[8%] h-[24px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
+                hx-get="{% url "quote_list" %}"
+                hx-trigger="click delay:100ms"
+                hx-target="#table_data"
+                hx-swap="innerHTML transition:true"
+                type="reset"
+                value="Refrescar">
+            <button
+                class="w-[8%] h-[24px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
+                hx-get="{% url "create_quote" %}"
+                hx-target="#quote_list"
+                hx-swap="outerHTML transition:true"
+                type="button">
+                Agregar
+            </button>
+        </form>
     </div>
 </div>
