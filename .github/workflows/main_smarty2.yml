@@ -57,7 +57,11 @@ jobs:
             -e DJANGO_SUPERUSER_EMAIL=${{ secrets.SUPERUSER_EMAIL }} \
             -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.SUPERUSER_PASSWORD }} \
             -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
-            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            -e DB_NAME="${{ secrets.DB_NAME }}" \
+            -e DB_USER="${{ secrets.DB_USER }}" \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            -e DB_HOST="${{ secrets.DB_HOST }}" \
+            -e DB_PORT=5432 \
             ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
             python manage.py createsuperuser --noinput
 
