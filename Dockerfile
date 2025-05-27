@@ -41,4 +41,4 @@ USER appuser
 EXPOSE 80
 
 # Start Gunicorn
-CMD ["sh", "-c", "gunicorn Main.wsgi:application --bind 0.0.0.0:${PORT}"]
+CMD ["sh", "-c", "gunicorn Coti.wsgi:application --bind 0.0.0.0:${PORT}"]
