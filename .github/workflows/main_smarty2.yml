@@ -53,10 +53,10 @@ jobs:
         run: |
           docker run --rm \
             -e ENV=production \
-            -e DJANGO_SUPERUSER_USERNAME=${{ secrets.SUPERUSER_NAME }} \
-            -e DJANGO_SUPERUSER_EMAIL=${{ secrets.SUPERUSER_EMAIL }} \
-            -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.SUPERUSER_PASSWORD }} \
-            -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
+            -e DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_NAME }} \
+            -e DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} \
+            -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
+            -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
             -e DB_NAME="${{ secrets.DB_NAME }}" \
             -e DB_USER="${{ secrets.DB_USER }}" \
             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
