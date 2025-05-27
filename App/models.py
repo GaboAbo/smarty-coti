@@ -56,8 +56,8 @@ class SalesRep(models.Model):
 
 
 class Product(models.Model):
-    code = models.CharField("Codigo", max_length=50, unique=True)
-    material_number = models.CharField(max_length=50, null=True, blank=True)
+    code = models.CharField("Codigo", max_length=255, unique=True)
+    material_number = models.CharField(max_length=255, null=True, blank=True)
     description = models.CharField("Descripcion", max_length=255)
     price = models.PositiveIntegerField()
 
