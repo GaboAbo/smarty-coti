@@ -26,11 +26,14 @@ class Command(BaseCommand):
 
         created = 0
         for row in df.itertuples(index=False):
-            Product.objects.create(
+            Product.objects.get_or_create(
                 code=list(row)[0],
-                material_number=list(row)[1],
-                description=list(row)[2],
-                price=random.randrange(5000, 50000)
+                defaults={
+                    'code': list(row)[0],
+                    'material_number': list(row)[1],
+                    'description': list(row)[2],
+                    'price': random.randrange(5000, 50000)
+                }
             )
             created += 1
 
