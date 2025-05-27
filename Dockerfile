@@ -31,6 +31,7 @@ COPY . .
 
 # Collect static files
 RUN mkdir -p /app/staticfiles && chmod 777 /app/staticfiles
+RUN chmod -R a+w /app/App/migrations/
 RUN python manage.py collectstatic --noinput
 
 # Create non-root user and switch to it
