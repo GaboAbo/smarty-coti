@@ -42,6 +42,13 @@ jobs:
           ENV: production
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
+      - name: Migrations
+        run: |
+          docker run --rm ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest python manage.py migrate --noinput
+        env:
+          ENV: production
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
       - name: Push image to ACR
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest
