@@ -49,7 +49,7 @@ jobs:
             ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
             python manage.py migrate
 
-      - name: Run custom Django shell command
+      - name: Import products from Excel
         run: |
           docker run --rm \
             -e ENV=production \
@@ -60,23 +60,7 @@ jobs:
             -e DB_HOST="${{ secrets.DB_HOST }}" \
             -e DB_PORT=5432 \
             ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
-            python manage.py shell -c \
-          'from App.models import Product
-          import pandas as pd
-          import random
-
-          df = pd.read_excel("src/list.xlsx")
-
-          for index, item in df.iterrows():
-              Product.objects.create(
-                  code=item.item,
-                  material_number=item.mat,
-                  description=item.des,
-                  price=random.randrange(5000, 50000)
-              )
-          '
-
-
+            python manage.py import_products --file=src/list.xlsx
 
       - name: Collect static files
         run: |
