@@ -28,7 +28,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_33BC796571494326AEBF6DEC1FFD28B3 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AEE2666CC32945A39ED2F99C415A359D }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C7C4A16EEBD048AE90053A3AEBE4134F }}
-          audience: api://AzureADTokenExchange
 
       - name: Log in to ACR
         run: |
