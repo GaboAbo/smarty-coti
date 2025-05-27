@@ -9,7 +9,7 @@ from django.contrib.auth import login, logout
 
 from .functions import validate_microsoft_token
 
-from AuthUser.models import Engineer
+from App.models import SalesRep
 
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -106,7 +106,7 @@ def microsoft_callback(request):
         messages.error(request, f"Error al validar el token: {str(e)}")
         return redirect("/")
 
-    user = Engineer.objects.filter(email=user_email).first()
+    user = SalesRep.objects.filter(email=user_email).first()
     if user:
         request.session["user_email"] = user_email
         request.session["full_name"] = full_name
@@ -114,7 +114,7 @@ def microsoft_callback(request):
 
         login(request, user)
 
-        return redirect("home")
+        return redirect("dashboard")
 
 
 def microsoft_logout(request: HttpRequest, app_type: str = "server"):

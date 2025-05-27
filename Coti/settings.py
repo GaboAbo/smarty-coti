@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'App',
+    'AuthUser',
     'MicrosoftAuth',
 ]
 

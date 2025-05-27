@@ -17,6 +17,26 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 from .Constants.logo import OLYMPUS_LOGO
 
 
+def Index(request):
+    """
+    Entry view for the web app.
+
+    Redirects authenticated users to the home dashboard,
+    otherwise renders the index page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Redirect or rendered HTML page.
+    """
+    email = request.session.get("user_email")
+    name = request.session.get("full_name")
+    if name and email:
+        return redirect("dashboard")
+    return render(request, 'index.html')
+
+
 def dashboard_view(request):
     return render(request, "home.html", {})
 

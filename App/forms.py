@@ -1,5 +1,7 @@
 from django import forms
-from .models import Client, SalesRep, Quote, Product, ProductQuote, Template
+from .models import Quote, Product, ProductQuote, Template
+
+from AuthUser.models import Client, SalesRep
 
 
 class TemplateForm(forms.ModelForm):

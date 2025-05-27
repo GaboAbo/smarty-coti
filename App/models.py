@@ -1,60 +1,9 @@
 from django.db import models
 
-
-regions = [
-    ("I", "Region de Tarapaca"),
-    ("II", "Region de Antofagasta"),
-    ("III", "Region de Atacama"),
-    ("IV", "Region de Coquimbo"),
-    ("V", "Region de Valparaiso"),
-    ("RM", "Region Metropolitana de Santiago"),
-    ("VI", "Region del Libertador General Bernardo OHiggins"),
-    ("VII", "Region del Maule"),
-    ("VIII", "Region del Biobio"),
-    ("IX", "Region de La Araucania"),
-    ("X", "Region de Los Lagos"),
-    ("XI", "Region de Aysen del General Carlos Ibanez del Campo"),
-    ("XII", "Region de Magallanes y de la Antartica Chilena"),
-    ("XIV", "Region de Los Rios"),
-    ("XV", "Region de Arica y Parinacota"),
-    ("XVI", "Region de Nuble")
-]
+from AuthUser.models import Client, SalesRep
 
 
-class Entity(models.Model):
-    """
-    Hospital/Clinic/Institute, stores its information
-    name: Entity's name
-    address: Entity's address
-    """
-    name = models.CharField("Nombre", max_length=255)
-    address = models.CharField("Direccion", max_length=255, choices=regions)
-
-    class Meta:
-        verbose_name = "Entidad"
-        verbose_name_plural = "Entidades"
-
-    def __str__(self):
-        return self.name
-
-
-class Client(models.Model):
-    entity = models.ForeignKey("Entity", verbose_name="Entidad", on_delete=models.CASCADE)
-    name = models.CharField("Nombre", max_length=255)
-    email_address = models.CharField("Correo", max_length=255)
-
-    def __str__(self):
-        return f"{self.entity.name}"
-    
-
-class SalesRep(models.Model):
-    name = models.CharField("Nombre", max_length=255)
-    email_address = models.CharField("Correo", max_length=255)
-
-    def __str__(self):
-        return f"{self.name}"
-
-
+# Create your models here.
 class Product(models.Model):
     code = models.CharField("Codigo", max_length=255, unique=True)
     material_number = models.CharField(max_length=255, null=True, blank=True)
@@ -67,8 +16,8 @@ class Product(models.Model):
 
 class Quote(models.Model):
     public_id = models.PositiveIntegerField("Numero", unique=True)
-    client = models.ForeignKey("Client", verbose_name="Cliente", on_delete=models.CASCADE)
-    salesRep = models.ForeignKey("SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
+    client = models.ForeignKey("AuthUser.Client", verbose_name="Cliente", on_delete=models.CASCADE)
+    salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
     date = models.DateField("Fecha", auto_now=True)
     total = models.PositiveIntegerField("Total", default=0)
 
