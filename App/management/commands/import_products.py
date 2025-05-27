@@ -36,5 +36,6 @@ class Command(BaseCommand):
                 }
             )
             created += 1
+            print(f"Row for {list(row)[0]}, {list(row)[1]}, {len(list(row)[2])}  created")
 
         self.stdout.write(self.style.SUCCESS(f"Successfully imported {created} products."))
