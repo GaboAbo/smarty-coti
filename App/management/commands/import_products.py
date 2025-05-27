@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 defaults={
                     'code': list(row)[0],
                     'material_number': list(row)[1],
-                    'description': list(row)[2],
+                    'description': list(row)[2][:255],
                     'price': random.randrange(5000, 50000)
                 }
             )
