@@ -49,21 +49,29 @@ jobs:
             ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
             python manage.py migrate
 
-      - name: Create Django superuser (one-time)
+      - name: Run custom Django shell command
         run: |
           docker run --rm \
-            -e ENV=production \
-            -e DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_NAME }} \
-            -e DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} \
-            -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
-            -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
-            -e DB_NAME="${{ secrets.DB_NAME }}" \
-            -e DB_USER="${{ secrets.DB_USER }}" \
-            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-            -e DB_HOST="${{ secrets.DB_HOST }}" \
-            -e DB_PORT=5432 \
+            -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
+            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
-            python manage.py createsuperuser --noinput
+            python manage.py shell -c '
+            from App.models import Product
+            import pandas as pd
+            import random
+
+            df = pd.read_excel("src/list.xlsx")
+
+            for index, item in df.iterrows():
+                Product.objects.create(
+                    code=item.item,
+                    material_number=item.mat,
+                    description=item.des,
+                    price=random.randrange(5000, 50000)
+                )
+            '
+
+
 
       - name: Collect static files
         run: |
