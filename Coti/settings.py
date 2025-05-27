@@ -47,13 +47,9 @@ SECRET_KEY = 'django-insecure-e+8aov8db6+rsty=@q6ckxn7v2i9$s*zg(g78qt+6^ixacs(55
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = ["https://axion-b6fke8edgahaecgq.eastus2-01.azurewebsites.net/"]
+CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net/"]
 ALLOWED_HOSTS = [
-    "axion-b6fke8edgahaecgq.eastus2-01.azurewebsites.net",
-    "169.254.129.2",
-    "169.254.129.3",
-    "169.254.129.4",
-    "169.254.129.5"
+    "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
 ]
 ALLOWED_REDIRECT_HOSTS = ["axion"]
 
