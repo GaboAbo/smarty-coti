@@ -25,11 +25,11 @@ class Command(BaseCommand):
         df = pd.read_excel(file_path)
 
         created = 0
-        for _, item in df.iterrows():
+        for row in df.itertuples(index=False):
             Product.objects.create(
-                code=item.item,
-                material_number=item.mat,
-                description=item.des,
+                code=list(row)[0],
+                material_number=list(row)[1],
+                description=list(row)[2],
                 price=random.randrange(5000, 50000)
             )
             created += 1
