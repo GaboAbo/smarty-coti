@@ -33,12 +33,16 @@ def Index(request):
     email = request.session.get("user_email")
     name = request.session.get("full_name")
     if name and email:
-        return redirect("dashboard")
+        return redirect("home")
     return render(request, 'index.html')
 
 
 def dashboard_view(request):
-    return render(request, "home.html", {})
+    context = {
+        "user_email": request.session.get("user_email"),
+        "full_name": request.session.get("full_name")
+    }
+    return render(request, 'home.html', context=context)
 
 
 def list_layout_view(request):
