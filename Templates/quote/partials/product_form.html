@@ -15,7 +15,7 @@
     <div
         class="w-[20%] flex items-center gap-[4px] justify-center"
         hx-get="{% url 'update_product_prices' %}?index={{ index }}"
-        hx-trigger="load once, change from:#product-{{ index }} delay:100ms, change from:#discount-{{ index }} delay:100ms, change from:#profit_margin-{{ index }} delay:100ms, change from:#quantity-{{ index }} delay:100ms"
+        hx-trigger="load once, change from:#product-{{ index }}, change from:#discount-{{ index }}, change from:#profit_margin-{{ index }}, change from:#quantity-{{ index }}"
         hx-include="#pk-{{ index }}, #product-{{ index }}, #discount-{{ index }}, #profit_margin-{{ index }}, #quantity-{{ index }}"
         hx-target="this"
         hx-swap="innerHTML">
