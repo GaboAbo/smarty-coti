@@ -5,10 +5,13 @@ from django.core.cache import cache
 from ..models import Product, Quote
 
 
-def get_all_products():
+def get_all_products(pk=None, role="REP"):
     products = cache.get("all_products")
     if products is None:
-        products = Product.objects.all()
+        if role == "ADM":
+            products = Product.objects.all()
+        else:
+            products = Product.objects.filter(salesRep__pk=pk)
         cache.set("all_products", products, timeout=None)
     return products
 

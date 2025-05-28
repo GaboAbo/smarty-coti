@@ -108,9 +108,10 @@ def microsoft_callback(request):
 
     user = SalesRep.objects.filter(email=user_email).first()
     if user:
+        request.session["pk"] = user.pk
+        request.session["role"] = user.role
         request.session["user_email"] = user_email
         request.session["full_name"] = full_name
-        request.session["role"] = user.role
         request.session["token"] = result["refresh_token"]
 
         login(request, user)

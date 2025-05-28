@@ -55,7 +55,7 @@ def sidebar(request):
     Returns:
         HttpResponse: Rendered sidebar partial.
     """
-    tab = request.GET.get("tab", "order")
+    tab = request.GET.get("tab", "quotes")
     return render(request, "partials/sidebar.html", {"active_tab": tab})
 
 
@@ -64,7 +64,10 @@ def list_layout_view(request):
 
 
 def quote_list_view(request):
-    quotes = get_all_quotes()
+    pk = request.session.get("pk")
+    role = request.session.get("role")
+
+    quotes = get_all_quotes(pk, role)
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")
