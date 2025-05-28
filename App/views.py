@@ -208,7 +208,7 @@ def quote_create_view(request):
     cache.set('total_net', {})
     context = {}
     if request.method == "POST":
-        public_id = request.POST.get("public_id")
+        public_id = request.POST.get("public_id") or 1
         client = request.POST.get("client") or 1
         salesRep = request.POST.get("salesRep") or 1
         items = []
@@ -222,6 +222,7 @@ def quote_create_view(request):
 
         try:
             with transaction.atomic():
+                print(public_id, client, salesRep)
                 quote_form = QuoteForm({"public_id":public_id, "client":client, "salesRep": salesRep})
                 if quote_form.is_valid():
                     quote = quote_form.save()
