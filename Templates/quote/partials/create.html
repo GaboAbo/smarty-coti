@@ -53,7 +53,7 @@
             hx-get="{% url "list_layout" %}"
             hx-target="#quote_creation"
             hx-swap="outerHTML transition:true"
-            class="w-[256px] h-[32px] bg-slate-500 text-white rounded-sm px-4 py-2 shadow hover:bg-slate-600 duration-300"
+            class="w-[256px] h-[32px] bg-slate-500 text-white rounded-sm flex justify-center items-center shadow hover:bg-slate-600 duration-300"
             type="button">
             Atras
         </button>
@@ -61,14 +61,14 @@
             hx-get="{% url 'product_form' %}?index={{ index }}"
             hx-target="#quote_items"
             hx-swap="beforeend transition:true"
-            class="w-[256px] h-[32px] bg-blue-500 text-white rounded-sm px-4 py-2 hover:bg-blue-600 duration-300">
+            class="w-[256px] h-[32px] bg-blue-500 text-white rounded-sm flex justify-center items-center hover:bg-blue-600 duration-300">
             Agregar Producto
         </button>
         <button
             hx-get="{% url 'template_selector' %}"
             hx-target="#quote_items"
             hx-swap="beforeend transition:true"
-            class="w-[256px] h-[32px] bg-teal-500 text-white rounded-sm px-4 py-2 hover:bg-teal-600 duration-300">
+            class="w-[256px] h-[32px] bg-teal-500 text-white rounded-sm flex justify-center items-center hover:bg-teal-600 duration-300">
             Agregar Plantilla
         </button>
         <button
@@ -77,7 +77,7 @@
             hx-target="body"
             hx-include="#quote_info, #quote_items"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-            class="w-[256px] h-[32px] bg-green-500 text-white rounded-sm px-4 py-2 shadow hover:bg-green-600 duration-300">
+            class="w-[256px] h-[32px] bg-green-600 text-white rounded-sm flex justify-center items-center shadow hover:bg-green-700 duration-300">
             Crear Cotización
         </button>
     </div>
