@@ -17,7 +17,7 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 from .Constants.logo import OLYMPUS_LOGO
 
 
-def Index(request):
+def index(request):
     """
     Entry view for the web app.
 
@@ -45,7 +45,7 @@ def dashboard_view(request):
     return render(request, 'home.html', context=context)
 
 
-def Sidebar(request):
+def sidebar(request):
     """
     Renders the sidebar with active tab highlight.
 

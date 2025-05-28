@@ -1,7 +1,8 @@
 from django.urls import path
 
 from App.views import (
-    Index,
+    index,
+    sidebar,
 
     dashboard_view,
     list_layout_view,
@@ -22,8 +23,9 @@ from App.views import (
 )
 
 urlpatterns = [
-    path('', Index, name='index'),
+    path('', index, name='index'),
     path('dashboard', dashboard_view, name='dashboard'),
+    path('sidebar', sidebar, name='sidebar'),
 
     path('list-layout/', list_layout_view, name='list_layout'),
     path('quotes/', quote_list_view, name='quote_list'),
