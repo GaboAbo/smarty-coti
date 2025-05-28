@@ -30,17 +30,15 @@ def Index(request):
     Returns:
         HttpResponse: Redirect or rendered HTML page.
     """
-    email = request.session.get("user_email")
-    name = request.session.get("full_name")
-    if name and email:
+    user = request.session.get("user")
+    if user:
         return redirect("home")
     return render(request, 'index.html')
 
 
 def dashboard_view(request):
     context = {
-        "user_email": request.session.get("user_email"),
-        "full_name": request.session.get("full_name")
+        "user": request.session.get("user_email")
     }
     return render(request, 'home.html', context=context)
 
