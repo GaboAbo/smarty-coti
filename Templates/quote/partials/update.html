@@ -40,7 +40,7 @@
         </div>
         <div
             hx-get="{% url "update_quote_totals" %}"
-            hx-trigger="load once delay:2000ms, change from:#quote_items delay:100ms, click from:#quote_items target:.remove_product delay:100ms"
+            hx-trigger="load once delay:2000ms, change from:#quote_items delay:1000ms, click from:#quote_items target:.remove_product delay:100ms"
             hx-target="this"
             hx-swap="innerHTML"
             class="w-3/5 h-[24px] flex flex-row justify-evenly items-center gap-x-1">
