@@ -43,6 +43,20 @@ def dashboard_view(request):
     return render(request, 'home.html', context=context)
 
 
+def Sidebar(request):
+    """
+    Renders the sidebar with active tab highlight.
+
+    Args:
+        request (HttpRequest): The HTTP request object. May contain `tab` GET param.
+
+    Returns:
+        HttpResponse: Rendered sidebar partial.
+    """
+    tab = request.GET.get("tab", "order")
+    return render(request, "partials/sidebar.html", {"active_tab": tab})
+
+
 def list_layout_view(request):
     return render(request, "quote/list_layout.html")
 
