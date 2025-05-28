@@ -38,7 +38,7 @@ def Index(request):
 
 def dashboard_view(request):
     context = {
-        "user": request.session.get("user_email")
+        "user": request.session.get("user")
     }
     return render(request, 'home.html', context=context)
 
