@@ -1,2 +1,8 @@
 {{ pricing_form.unit_price }}
 {{ pricing_form.subtotal }}
+<div
+    hx-get="{% url "update_quote_totals" %}"
+    hx-trigger="load"
+    hx-target="#quote_totals"
+    hx-swap="innerHTML">
+</div>
