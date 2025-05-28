@@ -91,8 +91,8 @@ def quote_products_view(request, pk):
 def product_form_view(request):
     pk = request.GET.get("product-form")
     
-    index = request.session["form_counter"]
-    request.session["form_counter"] += 1
+    index = cache.get("form_counter", 0)
+    cache.set("form_counter", index + 1)
 
     if int(index) >= 10:
         return HttpResponse("")
@@ -118,8 +118,8 @@ def product_form_view(request):
 def product_form_from_template_view(request):
     pk = request.GET.get("product-form")
     
-    index = request.session["form_counter"]
-    request.session["form_counter"] += 1
+    index = cache.get("form_counter", 0)
+    cache.set("form_counter", index + 1)
 
     if int(index) >= 10:
         return HttpResponse("")
@@ -147,7 +147,7 @@ def product_form_from_template_view(request):
 
 
 def remove_product_form_view(request):
-    request.session["form_counter"] -= 1
+    cache.set("form_counter", cache.get("form_counter", 0) + 1)
     index = request.GET.get("product_pk")
     remove_item_from_subtotal(request, index)
     
@@ -241,7 +241,7 @@ def quote_create_view(request):
             print("Transaction failed:", e)
             print("Changes reverted.")
 
-    request.session["form_counter"] = 0
+    cache.set('form_counter', 0)
     request.session["total_net"] = {}
     quote_form = QuoteForm(initial={'public_id': generate_temp_id()})
     context['quote_form'] = quote_form
