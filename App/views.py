@@ -32,7 +32,7 @@ def index(request):
     """
     user = request.session.get("user")
     if user:
-        return redirect("home")
+        return redirect("dashboard")
     return render(request, 'index.html')
 
 

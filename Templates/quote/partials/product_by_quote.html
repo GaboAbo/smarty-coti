@@ -5,6 +5,7 @@
     <th class="font-normal">{{ product.product.code }}</th>
     <th class="font-normal">{{ product.product.description }}</th>
     <th class="font-normal">{{ product.discount }}</th>
+    <th class="font-normal">{% if role == "MAN" %}{{ product.profit_margin }}{% endif %}</th>
     <th class="font-normal">{{ product.quantity }}</th>
     <th class="font-normal">{{ product.unit_price }}</th>
     <th class="font-normal">{{ product.subtotal }}</th>
