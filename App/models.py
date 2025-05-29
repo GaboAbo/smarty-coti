@@ -15,7 +15,7 @@ class Product(models.Model):
 
 
 class Quote(models.Model):
-    public_id = models.PositiveIntegerField("Numero", unique=True)
+    public_id = models.BigIntegerField("Numero", unique=True)
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
     date = models.DateField("Fecha", auto_now=True)
