@@ -1,7 +1,7 @@
 from django import forms
 from .models import Quote, Product, ProductQuote, Template
 
-from AuthUser.models import Client, SalesRep
+from AuthUser.models import Entity, SalesRep
 
 
 class TemplateForm(forms.ModelForm):
@@ -23,7 +23,7 @@ class QuoteForm(forms.ModelForm):
     )
 
     client = forms.ModelChoiceField(
-        queryset=Client.objects.all(),
+        queryset=Entity.objects.all(),
         required=True,
         empty_label="Seleccione Institución",
         widget=forms.Select(attrs={

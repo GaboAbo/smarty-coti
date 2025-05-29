@@ -12,7 +12,7 @@ from .services.utils import calcultate_subtotal, remove_item_from_subtotal
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
-from AuthUser.models import SalesRep, Client
+from AuthUser.models import SalesRep, Entity
 
 from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullForm
 
@@ -210,7 +210,7 @@ def quote_create_view(request):
     context = {}
     if request.method == "POST":
         public_id = request.POST.get("public_id") or 1
-        client = request.POST.get("client") or Client.objects.first().id
+        client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
         items = []
         keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal']
@@ -227,6 +227,8 @@ def quote_create_view(request):
                 if quote_form.is_valid():
                     quote = quote_form.save()
                     print(f"Quote #{quote.public_id} saved!")
+                else:
+                    print(quote_form.errors)
 
                 for item in items:
                     item["quote"] = quote.pk
