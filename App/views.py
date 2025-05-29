@@ -12,6 +12,8 @@ from .services.utils import calcultate_subtotal, remove_item_from_subtotal
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
+from AuthUser.models import SalesRep, Client
+
 from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullForm
 
 from .Constants.logo import OLYMPUS_LOGO
@@ -205,12 +207,11 @@ def quote_detail_view(request, pk):
 
 
 def quote_create_view(request):
-    cache.set('total_net', {})
     context = {}
     if request.method == "POST":
         public_id = request.POST.get("public_id") or 1
-        client = request.POST.get("client") or 1
-        salesRep = request.POST.get("salesRep") or 1
+        client = request.POST.get("client") or Client.objects.first().id
+        salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
         items = []
         keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal']
         length = len(request.POST.getlist('product'))
@@ -222,12 +223,10 @@ def quote_create_view(request):
 
         try:
             with transaction.atomic():
-                print(public_id, client, salesRep)
                 quote_form = QuoteForm({"public_id":public_id, "client":client, "salesRep": salesRep})
                 if quote_form.is_valid():
                     quote = quote_form.save()
                     print(f"Quote #{quote.public_id} saved!")
-
 
                 for item in items:
                     item["quote"] = quote.pk
@@ -235,14 +234,15 @@ def quote_create_view(request):
                     if product_quote_form.is_valid():
                         product_quote = product_quote_form.save()
                         print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
-            
-            return redirect("dashboard")
 
         except Exception as e:
             print("Transaction failed:", e)
             print("Changes reverted.")
+        
+        return redirect("dashboard")
 
     cache.set('form_counter', 0)
+    cache.set('total_net', {})
     request.session["total_net"] = {}
     quote_form = QuoteForm(initial={'public_id': generate_temp_id()})
     context['quote_form'] = quote_form
