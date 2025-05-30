@@ -27,7 +27,6 @@
             hx-target="#product_form-{{ index }}"
             hx-include="#product_pk-{{ index }}"
             hx-swap="outerHTML"
-            onclick="htmx.ajax('GET', '{% url 'update_quote_totals' %}', '#quote_totals')"
             class="remove_product w-full h-[24px] rounded-sm bg-slate-500 hover:bg-slate-600 duration-300 text-white">
             Descartar
         </button>
