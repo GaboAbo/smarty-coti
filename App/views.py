@@ -153,7 +153,7 @@ def remove_product_form_view(request):
     index = request.GET.get("product_pk")
     remove_item_from_subtotal(request, index)
     
-    return HttpResponse(status=204)
+    return HttpResponse("")
 
 
 def update_product_prices_view(request):
