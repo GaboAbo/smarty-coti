@@ -17,6 +17,7 @@ from AuthUser.models import SalesRep, Entity
 from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullForm
 
 from .Constants.logo import OLYMPUS_LOGO
+from .Constants.bg import BACKGROUND
 
 
 def index(request):
@@ -35,7 +36,7 @@ def index(request):
     user = request.session.get("user")
     if user:
         return redirect("dashboard")
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'bg': BACKGROUND})
 
 
 def dashboard_view(request):
