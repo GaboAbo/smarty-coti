@@ -25,3 +25,15 @@ def remove_item_from_subtotal(request, index):
     cache.set('total_net', current_total)
 
     pass
+
+
+def calculate_quote_totals():
+    current_total = cache.get('total_net', {})
+    total_net = sum([value for value in current_total.values()])
+    iva = round(total_net * 0.19)
+    final = total_net + iva
+    return {
+        'total_net': total_net,
+        'iva': iva,
+        'final': final,
+    }

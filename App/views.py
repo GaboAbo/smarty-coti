@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
-from .services.utils import calcultate_subtotal, remove_item_from_subtotal
+from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
@@ -153,7 +153,8 @@ def remove_product_form_view(request):
     index = request.GET.get("product_pk")
     remove_item_from_subtotal(request, index)
     
-    return HttpResponse("")
+    context = calculate_quote_totals()
+    return render(request, "quote/partials/total_prices.html", context=context)
 
 
 def update_product_prices_view(request):
@@ -181,21 +182,7 @@ def update_product_prices_view(request):
 
 
 def update_quote_totals_view(request):
-    # The burst is too fast, we need another logic
-    # Actually, the view is called too fast, so it doesn't let it load properly
-    current_total = cache.get('total_net', {})
-
-    total_net = sum([value for value in current_total.values()])
-
-    iva = round(total_net * 0.19)
-    final = total_net + iva
-
-    context = {
-        'total_net': total_net,
-        'iva': iva,
-        'final': final,
-    }
-    
+    context = calculate_quote_totals()
     return render(request, "quote/partials/total_prices.html", context=context)
 
 
