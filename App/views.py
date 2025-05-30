@@ -149,7 +149,7 @@ def product_form_from_template_view(request):
 
 
 def remove_product_form_view(request):
-    cache.set("form_counter", cache.get("form_counter", 0) + 1)
+    cache.set("form_counter", cache.get("form_counter", 0) - 1)
     index = request.GET.get("product_pk")
     remove_item_from_subtotal(request, index)
     
@@ -350,5 +350,5 @@ def generate_quote_pdf_view(request, quote_id):
     )
     pdf = HTML(string=html_string_pdf).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote.public_id} - {quote.client.entity.name}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote.public_id} - {quote.client.name}.pdf"'
     return response
