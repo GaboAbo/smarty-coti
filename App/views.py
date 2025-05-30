@@ -153,8 +153,7 @@ def remove_product_form_view(request):
     index = request.GET.get("product_pk")
     remove_item_from_subtotal(request, index)
     
-    context = calculate_quote_totals()
-    return render(request, "quote/partials/total_prices.html", context=context)
+    return HttpResponse(status=204)
 
 
 def update_product_prices_view(request):
