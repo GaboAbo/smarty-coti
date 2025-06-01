@@ -118,9 +118,9 @@ def quote_view(request, pk):
 def set_quote_status_view(request, pk, status):
     quote = Quote.objects.get(pk=pk)
     quote.status = status
-    quote.save()
+    updated_quote = quote.save()
 
-    return render(request)
+    return render(request, "quote/partials/quote.html", {"quote": updated_quote})
 
 
 def quote_products_view(request, pk):
