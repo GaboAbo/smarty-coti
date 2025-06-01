@@ -7,7 +7,8 @@ from App.views import (
     dashboard_view,
     list_layout_view,
     quote_list_view,
-    approved_quote_list_view,
+    pending_quote_list_view,
+    set_quote_status_view,
     product_form_view,
     product_form_from_template_view,
     remove_product_form_view,
@@ -30,7 +31,8 @@ urlpatterns = [
 
     path('list-layout/', list_layout_view, name='list_layout'),
     path('quotes/', quote_list_view, name='quote_list'),
-    path('approved_quotes/', approved_quote_list_view, name='approved_quote_list'),
+    path('pending_quotes/', pending_quote_list_view, name='pending_quote_list'),
+    path('set_quote_status/<int:pk>/<str:status>', set_quote_status_view, name='set_status'),
 
     path('product-form/', product_form_view, name='product_form'),
     path('product-form-from-template/', product_form_from_template_view, name='product_form_from_template'),

@@ -86,7 +86,7 @@ def quote_list_view(request):
     return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
 
 
-def approved_quote_list_view(request):
+def pending_quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
 
@@ -104,6 +104,14 @@ def approved_quote_list_view(request):
         quotes = quotes.filter(date=date)
 
     return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
+
+
+def set_quote_status_view(request, pk, status):
+    quote = Quote.objects.get(pk=pk)
+    quote.status = status
+    quote.save()
+
+    return HttpResponse("")
 
 
 def quote_products_view(request, pk):

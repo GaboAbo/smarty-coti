@@ -15,10 +15,15 @@ class Product(models.Model):
 
 
 class Quote(models.Model):
+    status_choices = [
+        ("AP", "Aprobada"),
+        ("RJ", "Rechazada"),
+        ("WT", "En espera")
+    ]
     public_id = models.BigIntegerField("Numero", unique=True)
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
-    approved = models.BooleanField(default=True)
+    status = models.CharField("Estado", max_length=50, choices=status_choices, default="WT")
     date = models.DateField("Fecha", auto_now=True)
     total = models.PositiveIntegerField("Total", default=0)
 
