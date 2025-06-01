@@ -236,6 +236,8 @@
                 height: 100%;
             }
             .fit-image {
+                max-width: 100%;
+                max-height: 100%;
                 object-fit: contain;
             }
             .negative-t-1 {
@@ -419,7 +421,7 @@
     <div class="end-bar mt-4"></div>
     <div class="logo-bar mt-4">
         <div class="img-container">
-            <img src="{{ logo }}" alt="Olympus Logo" class="fit-image">
+            <img src="{{ logo }}" alt="Olympus Logo" style="max-width: 100%; height: auto;">
         </div>
     </div>
 </body>
