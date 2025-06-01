@@ -32,7 +32,6 @@
 
   .basic-text {
     font-weight: 300;
-    color: #1e293b;
     font-size: clamp(1rem, 1vw + 0.25rem, 1.25rem);
   }
 
