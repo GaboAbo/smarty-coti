@@ -5,13 +5,13 @@
     id="product_quote-{{ product.pk }}"
     style="height:32px; max-height:32px;"
     class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10 hover:bg-slate-600/20 duration-300">
-    <th class="font-normal px-1">{{ product.product.code }}</th>
-    <th class="font-normal px-1">{{ product.product.description }}</th>
-    <th class="font-normal px-1">{{ product.discount }}</th>
-    <th class="font-normal px-1">{% if role == "MAN" %}{{ product.profit_margin }}{% endif %}</th>
-    <th class="font-normal px-1">{{ product.quantity }}</th>
-    <th class="font-normal px-1">{{ product.unit_price }}</th>
-    <th class="font-normal px-1">{{ product.subtotal }}</th>
+    <th class="font-normal">{{ product.product.code }}</th>
+    <th class="font-normal">{{ product.product.description }}</th>
+    <th class="font-normal">{{ product.discount }}</th>
+    <th class="font-normal">{% if role == "MAN" %}{{ product.profit_margin }}{% endif %}</th>
+    <th class="font-normal">{{ product.quantity }}</th>
+    <th class="font-normal">{{ product.unit_price }}</th>
+    <th class="font-normal">{{ product.subtotal }}</th>
     <th></th>
 </tr>
 {% endfor %}
