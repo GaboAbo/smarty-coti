@@ -120,7 +120,7 @@ def set_quote_status_view(request, pk, status):
     quote.status = status
     quote.save()
 
-    return render(request, "quote/partials/overview.html", {"quote": quote})
+    return render(request, "quote/list_layout.html")
     
 
 def quote_products_view(request, pk):
@@ -363,7 +363,8 @@ def quote_update_view(request, pk):
 def quote_delete_view(request, pk):
     quote = get_object_or_404(Quote, pk=pk).delete()
     print(f"Quote #{quote} deleted")
-    return redirect("list_layout")
+    
+    return render(request, "quote/list_layout.html")
 
 
 def template_selector_view(request):
