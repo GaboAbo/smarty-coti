@@ -2,11 +2,23 @@
 
 <div id="product_form-{{ index }}" class="flex gap-[4px] px-1 items-center border-b-2 border-[#B6B6B6] text-center w-full h-[32px]">
     <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ index }}" />
-    <div class="w-[50%]">
+    <div class="w-[40%]">
         {{ product_form.product }}
     </div>
     <div class="w-[10%] flex items-center justify-center">
         {{ product_form.discount }}
+    </div>
+    <div class="w-[10%] flex items-center justify-center">
+    {% if if role == "MAN" or role == "ADM" %}
+        {{ product_form.profit_margin }}
+    {% else %}
+        <input type="number"
+            type="hidden"
+            name="profit_margin"
+            value="35"
+            readonly
+            class="w-full pl-[4px] border-2 border-[#B6B6B6] rounded-sm bg-gray-100" />
+    {% endif %}
     </div>
     <div class="w-[10%] flex items-center justify-center">
         {{ product_form.quantity }}

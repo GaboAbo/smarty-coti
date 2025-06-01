@@ -87,11 +87,17 @@ def quote_list_view(request):
 
 
 def quote_products_view(request, pk):
+    role = request.session.get("role")
     products = ProductQuote.objects.filter(quote__pk=pk)
-    return render(request, "quote/partials/product_by_quote.html", {"products": products})
+    context = {
+        "role": role,
+        "products": products
+    }
+    return render(request, "quote/partials/product_by_quote.html", context=context)
 
 
 def product_form_view(request):
+    role = request.session.get("role")
     pk = request.GET.get("product-form")
     
     index = cache.get("form_counter", 0)
@@ -109,6 +115,7 @@ def product_form_view(request):
     products = get_all_products()
 
     context = {
+        "role": role,
         "index": index,
         "product_pk": pk,
         "product_form": product_form,
@@ -119,6 +126,7 @@ def product_form_view(request):
 
 
 def product_form_from_template_view(request):
+    role = request.session.get("role")
     pk = request.GET.get("product-form")
     
     index = cache.get("form_counter", 0)
@@ -140,6 +148,7 @@ def product_form_from_template_view(request):
     product_form = ProductQuoteForm(index=index, initial=initial) 
     products = get_all_products()
     context = {
+        "role": role,
         "index": index,
         "product_pk": pk,
         "product_form": product_form,
@@ -208,14 +217,13 @@ def quote_create_view(request):
         public_id = request.POST.get("public_id") or 1
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
+        
         items = []
-        keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal']
+        keys = ['product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
         length = len(request.POST.getlist('product'))
 
         for i in range(length):
             item = {key: request.POST.getlist(key)[i] for key in keys}
-            item['profit_margin'] = 35
-            items.append(item)
 
         try:
             with transaction.atomic():
