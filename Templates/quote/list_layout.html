@@ -37,19 +37,19 @@
             hx-swap="innerHTML"
             hx-include="this">
             <input
-                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[28%] h-[32px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="public_id"
                 placeholder="Buscar por ID">
             <input
-                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[28%] h-[32px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="client"
                 placeholder="Buscar por Cliente">
             <input
-                class="w-[28%] h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[28%] h-[32px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="date"
                 type="date">
             <input
-                class="w-[8%] h-[24px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
+                class="w-[8%] h-[32px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
                 hx-get="{% url "quote_list" %}"
                 hx-trigger="click delay:100ms"
                 hx-target="#table_data"
@@ -57,7 +57,7 @@
                 type="reset"
                 value="Refrescar">
             <button
-                class="w-[8%] h-[24px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
+                class="w-[8%] h-[32px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
                 hx-get="{% url "create_quote" %}"
                 hx-target="#quote_list"
                 hx-swap="outerHTML transition:true"
