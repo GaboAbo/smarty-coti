@@ -1,14 +1,14 @@
 from weasyprint import HTML
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.db import transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
-from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
+from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals, check_template_path
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
@@ -18,6 +18,11 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 
 from .Constants.logo import OLYMPUS_LOGO
 from .Constants.bg import BACKGROUND
+
+TEMPLATE_MAP = {
+    "quote": "quote/partials/quote.html",
+    "overview": "quote/partials/overview.html",
+}
 
 
 def index(request):
@@ -115,13 +120,18 @@ def quote_view(request, pk):
     return render(request, "quote/partials/quote.html", {"quote": quote})
 
 
-def set_quote_status_view(request, pk, status):
+def set_quote_status_view(request, pk, status, place):
     quote = Quote.objects.get(pk=pk)
     quote.status = status
     quote.save()
 
-    return render(request, "quote/partials/quote.html", {"quote": quote})
+    template = TEMPLATE_MAP.get(place)
 
+    if not template:
+        return HttpResponseBadRequest("Plantilla invalida")
+
+    return render(request, template, {"quote": quote})
+    
 
 def quote_products_view(request, pk):
     role = request.session.get("role")

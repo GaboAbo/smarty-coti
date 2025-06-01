@@ -436,8 +436,14 @@
   .resize {
     resize: both;
   }
+  .grid-flow-col {
+    grid-auto-flow: column;
+  }
   .grid-cols-6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .grid-rows-3 {
+    grid-template-rows: repeat(3, minmax(0, 1fr));
   }
   .flex-col {
     flex-direction: column;
