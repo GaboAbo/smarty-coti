@@ -9,7 +9,7 @@
         {{ product_form.discount }}
     </div>
     <div class="w-[10%] flex items-center justify-center">
-    {% if if role == "MAN" or role == "ADM" %}
+    {% if role == "MAN" or role == "ADM" %}
         {{ product_form.profit_margin }}
     {% else %}
         <input type="number"
