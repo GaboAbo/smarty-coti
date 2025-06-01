@@ -86,6 +86,26 @@ def quote_list_view(request):
     return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
 
 
+def approved_quote_list_view(request):
+    pk = request.session.get("pk")
+    role = request.session.get("role")
+
+    quotes = get_all_quotes(pk, role).filter(approved=False)
+
+    id = request.GET.get("public_id")
+    client = request.GET.get("client")
+    date = request.GET.get("date")
+
+    if id:
+        quotes = quotes.filter(public_id__icontains=id)
+    if client:
+        quotes = quotes.filter(client__entity__name__icontains=client)
+    if date:
+        quotes = quotes.filter(date=date)
+
+    return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
+
+
 def quote_products_view(request, pk):
     role = request.session.get("role")
     products = ProductQuote.objects.filter(quote__pk=pk)
@@ -171,7 +191,7 @@ def update_product_prices_view(request):
     product = request.GET.get("product")
     discount = int(request.GET.get("discount"))
     quantity = int(request.GET.get("quantity"))
-    profit_margin = 35
+    profit_margin = int(request.GET.get("profit_margin")) or 35
 
     if not product:
         return HttpResponse("")

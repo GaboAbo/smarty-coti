@@ -18,6 +18,7 @@ class Quote(models.Model):
     public_id = models.BigIntegerField("Numero", unique=True)
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
+    approved = models.BooleanField(default=True)
     date = models.DateField("Fecha", auto_now=True)
     total = models.PositiveIntegerField("Total", default=0)
 
