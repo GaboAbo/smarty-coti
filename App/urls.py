@@ -33,7 +33,7 @@ urlpatterns = [
     path('list-layout/', list_layout_view, name='list_layout'),
     path('quotes/', quote_list_view, name='quote_list'),
     path('pending_quotes/', pending_quote_list_view, name='pending_quote_list'),
-    path('set_quote_status/<int:pk>/<str:status>/<place:str>', set_quote_status_view, name='set_status'),
+    path('set_quote_status/<int:pk>/<str:status>/<str:place>', set_quote_status_view, name='set_status'),
     path('quote/<int:pk>', quote_view, name='quote'),
 
     path('product-form/', product_form_view, name='product_form'),
