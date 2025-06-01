@@ -15,8 +15,28 @@ class Entity(models.Model):
     name: Entity's name
     address: Entity's address
     """
+    regions = [
+        ("I", "Region de Tarapaca"),
+        ("II", "Region de Antofagasta"),
+        ("III", "Region de Atacama"),
+        ("IV", "Region de Coquimbo"),
+        ("V", "Region de Valparaiso"),
+        ("RM", "Region Metropolitana de Santiago"),
+        ("VI", "Region del Libertador General Bernardo OHiggins"),
+        ("VII", "Region del Maule"),
+        ("VIII", "Region del Biobio"),
+        ("IX", "Region de La Araucania"),
+        ("X", "Region de Los Lagos"),
+        ("XI", "Region de Aysen del General Carlos Ibanez del Campo"),
+        ("XII", "Region de Magallanes y de la Antartica Chilena"),
+        ("XIV", "Region de Los Rios"),
+        ("XV", "Region de Arica y Parinacota"),
+        ("XVI", "Region de Nuble")
+    ]
+    
     name = models.CharField("Nombre", max_length=255)
     address = models.CharField("Direccion", max_length=255)
+    region = models.CharField("Region", max_length=255, default="RM")
 
     class Meta:
         verbose_name = "Entidad"

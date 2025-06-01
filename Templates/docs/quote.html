@@ -238,6 +238,7 @@
             .fit-image {
                 width: 100%;
                 height: 100%;
+                object-fit: contain;
             }
             .negative-t-1 {
                 margin-top: -1px;
@@ -267,7 +268,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Región</th>
-            <td class="text-left" colspan="20">{{ quote.client.address }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.get_region_display }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"></th>
             <td class="text-left" colspan="20"></td>
@@ -420,7 +421,7 @@
     <div class="end-bar mt-4"></div>
     <div class="logo-bar mt-4">
         <div class="img-container">
-            <img src="{{ logo }}" alt="Olympus Logo">
+            <img src="{{ logo }}" alt="Olympus Logo" class="fit-image">
         </div>
     </div>
 </body>
