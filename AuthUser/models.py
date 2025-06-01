@@ -36,7 +36,7 @@ class Entity(models.Model):
     
     name = models.CharField("Nombre", max_length=255)
     address = models.CharField("Direccion", max_length=255)
-    region = models.CharField("Region", max_length=255, default="RM")
+    region = models.CharField("Region", max_length=255, choices=regions, default="RM")
 
     class Meta:
         verbose_name = "Entidad"
