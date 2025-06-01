@@ -5,7 +5,7 @@
         <p>Detalle de Cotizacion #{{ quote.public_id }}</p>
     </div>
     <div class="w-full h-2/12 mb-[10px] bg-slate-50 flex flex-row">
-        <div class="w-full h-full grid grid-flow-col grid-rows-3 p-4 gap-x-4">
+        <div class="w-full h-full grid grid-flow-col grid-rows-3 grid-cols-3 p-4 gap-x-4">
             <div class="px-2 text-sm"><b>Cliente</b>: {{ quote.client.name }}</div>
             <div class="px-2 text-sm"><b>Rep. Ventas</b>: {{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</div>
             <div class="px-2 text-sm"><b>Fecha</b>: {{ quote.date }}</div>
@@ -38,8 +38,8 @@
         </div>
     </div>
     <div class="w-full h-8/12 bg-slate-50 overflow-y-auto">
-        <table id="product_table" class="table-auto w-full text-sm px-2">
-            <thead class="sticky top-0 bg-slate-50 border-2 border-[#B6B6B6]">
+        <table id="product_table" class="table-auto w-full text-sm px-2 border-2 border-[#B6B6B6]">
+            <thead class="sticky top-0 bg-slate-50">
                 <tr class="h-[48px] my-2">
                     <th style="width:10%">Producto</th>
                     <th style="width:30%">Descripcion</th>
@@ -53,7 +53,7 @@
             </thead>
             <tbody
                 id="table_data"
-                class="text-center text-sm border-2 border-[#B6B6B6]"
+                class="text-center text-sm"
                 hx-get="{% url "quote_products" quote.pk %}"
                 hx-trigger="load"
                 hx-swap="innerHTML">
