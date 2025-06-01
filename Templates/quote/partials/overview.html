@@ -59,7 +59,7 @@
         <button
             {% if quote.status == "AP" %}disabled{% endif %}
             hx-get="{% url "set_status" quote.pk "AP" %}"
-            hx-target="#quote-{{ quote.pk }}"
+            hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-sm text-white bg-amber-500 {% if quote.status != "AP" %}hover:bg-amber-600 duration-300{% endif %}"
             type="button">
@@ -68,7 +68,7 @@
         <button
             {% if quote.status == "RJ" %}disabled{% endif %}
             hx-get="{% url "set_status" quote.pk "RJ" %}"
-            hx-target="#quote-{{ quote.pk }}"
+            hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-sm text-white bg-slate-500 {% if quote.status != "RJ" %}hover:bg-slate-600 duration-300{% endif %}"
             type="button">
