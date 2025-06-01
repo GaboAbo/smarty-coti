@@ -6,7 +6,7 @@
     <td>{{ quote.client.name }}</td>
     <td>{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
     <td>{{ quote.date }}</td>
-    <td>{% if role == "MAN" or role == "ADM" %}{{ quote.approved|yesno:"Si,No" }}{% endif %}</td>
+    <td>{{ quote.approved|yesno:"Si,No" }}</td>
     <td>
         <div class="flex justify-center items-center">
             <button
