@@ -267,7 +267,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Región</th>
-            <td class="text-left" colspan="20">{{ quote.client.get_address_display }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.address }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"></th>
             <td class="text-left" colspan="20"></td>
@@ -418,8 +418,10 @@
     </table>
 
     <div class="end-bar mt-4"></div>
-    <div class="img-container">
-        <img src="{{ logo }}" alt="Olympus Logo" class="fit-image">
+    <div class="logo-bar mt-4">
+        <div class="img-container">
+            <img src="{{ logo }}" alt="Olympus Logo">
+        </div>
     </div>
 </body>
 </html>
