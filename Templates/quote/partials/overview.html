@@ -6,10 +6,10 @@
     </div>
     <div class="w-full h-2/12 mb-[10px] bg-slate-50 flex flex-row">
         <div class="w-full h-full grid grid-cols-6 p-4 gap-x-4">
-            <div class="h-[24px] px-2 text-sm col-span-2"><b>Cliente</b>: {{ quote.client.entity.name }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-2"><b>Cliente</b>: {{ quote.client.name }}</div>
             <div class="h-[24px] px-2 text-sm col-span-2"><b>Fecha</b>: {{ quote.date }}</div>
             <div class="h-[24px] px-2 text-sm"><b>Total Neto</b>: {{ quote.total }}</div>
-            <div class="h-[24px] px-2 text-sm col-span-2"><b>Rep. Ventas</b>: {{ quote.salesRep.name }}</div>
+            <div class="h-[24px] px-2 text-sm col-span-2"><b>Rep. Ventas</b>: {{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</div>
             <div class="h-[24px] px-2 text-sm col-span-2"></div>
             <div class="h-[24px] px-2 text-sm"><b>IVA</b>: {{ iva }}</div>
             <div class="h-[24px] px-2 text-sm col-span-4"></div>
