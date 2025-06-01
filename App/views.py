@@ -187,10 +187,19 @@ def update_quote_totals_view(request):
 
 
 def quote_detail_view(request, pk):
+    role = request.session.get("role")
     quote = Quote.objects.get(pk=pk)
     iva = round(quote.total * 0.19)
     final = quote.total + iva
-    return render(request, 'quote/partials/overview.html', {'quote': quote, 'iva': iva, 'final': final,})
+
+    context = {
+        "role": role,
+        "quote": quote,
+        "iva": iva,
+        "final": final
+    }
+
+    return render(request, 'quote/partials/overview.html', context=context)
 
 
 def quote_create_view(request):

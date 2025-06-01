@@ -16,7 +16,7 @@ def get_all_products():
 def get_all_quotes(pk=None, role="REP"):
     quotes = cache.get("all_quotes")
     if quotes is None:
-        if role == "ADM":
+        if role == "MAN" or role == "ADM":
             quotes = Quote.objects.all()
         else:
             quotes = Quote.objects.filter(salesRep__pk=pk)
