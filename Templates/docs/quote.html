@@ -251,7 +251,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Institución</th>
-            <td class="text-left" colspan="20">{{ quote.entity.name }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.name }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Fecha</th>
             <td class="text-left" colspan="20">{{ quote.date }}</td>
@@ -259,7 +259,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"> Rep. Ventas</th>
-            <td class="text-left" colspan="20">{{ quote.salesRep.full_name }}</td>
+            <td class="text-left" colspan="20">{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"></th>
             <td class="text-left" colspan="20"></td>
@@ -267,7 +267,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Región</th>
-            <td class="text-left" colspan="20">{{ quote.entity.get_address_display }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.get_address_display }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"></th>
             <td class="text-left" colspan="20"></td>
@@ -418,10 +418,8 @@
     </table>
 
     <div class="end-bar mt-4"></div>
-    <div class="logo-bar mt-4">
-        <div class="img-container">
-            <img src="{{ logo }}" alt="Olympus Logo" class="fit-image">
-        </div>
+    <div class="img-container">
+        <img src="{{ logo }}" alt="Olympus Logo" class="fit-image">
     </div>
 </body>
 </html>
