@@ -40,10 +40,13 @@ def index(request):
 
 
 def dashboard_view(request):
+    role = request.session.get("role")
+    role_display = dict(SalesRep.ROLE_CHOICES).get(role, "Unknown")
     context = {
         "user_email": request.session.get("user_email"),
         "full_name": request.session.get("full_name"),
-        "role": request.session.get("role")
+        "role": request.session.get("role"),
+        "role_display": role_display
     }
     return render(request, 'home.html', context=context)
 

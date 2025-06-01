@@ -15,7 +15,7 @@
                 Revisar
             </button>
             <button
-                {% if status = "AP" %}disabled{% endif %}
+                {% if status == "AP" %}disabled{% endif %}
                 hx-get="{% url "set_status" quote.pk "AP" %}"
                 hx-target="#{{ quote.pk }}"
                 hx-swap="outerHTML transition:true"
