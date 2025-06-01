@@ -212,12 +212,11 @@ def quote_detail_view(request, pk):
 
 
 def quote_create_view(request):
-    context = {}
     if request.method == "POST":
         public_id = request.POST.get("public_id") or 1
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
-        
+
         items = []
         keys = ['product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
         length = len(request.POST.getlist('product'))
@@ -251,7 +250,11 @@ def quote_create_view(request):
     cache.set('total_net', {})
     request.session["total_net"] = {}
     quote_form = QuoteForm(initial={'public_id': generate_temp_id()})
-    context['quote_form'] = quote_form
+    role = request.session.get("role")
+    context = {
+        "role": role,
+        "quote_form": quote_form
+    }
     return render(request, "quote/partials/create.html", context=context)
 
 
@@ -310,7 +313,9 @@ def quote_update_view(request, pk):
     request.session["total_net"] = {}
     quote_form = QuoteForm(instance=quote)
     products_pks = list(quote.products.values_list("pk", flat=True))
+    role = request.session.get("role")
     context = {
+        "role": role,
         'quote_form': quote_form,
         'pk': pk,
         'product_pks': products_pks
