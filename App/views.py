@@ -90,7 +90,7 @@ def pending_quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
 
-    quotes = get_all_quotes(pk, role).filter(approved=False)
+    quotes = get_all_quotes(pk, role).filter(status="WT")
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")

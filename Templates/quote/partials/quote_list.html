@@ -6,7 +6,7 @@
     <td>{{ quote.client.name }}</td>
     <td>{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
     <td>{{ quote.date }}</td>
-    <td>{{ quote.get_approved_display }}</td>
+    <td>{{ quote.get_status_display }}</td>
     <td>
         <div class="flex flex-row justify-center items-center gap-1">
             <button
@@ -18,7 +18,7 @@
                 Revisar
             </button>
             <button
-                hx-get="{% url "approve" quote.pk "AP" %}"
+                hx-get="{% url "set_status" quote.pk "AP" %}"
                 hx-target="#{{ quote.pk }}"
                 hx-swap="outerHTML transition:true"
                 hx-confirm="Desea aprobar cotizacion #{{ quote.public_id }}"
@@ -27,7 +27,7 @@
                 Aprobar
             </button>
             <button
-                hx-get="{% url "approve" quote.pk "RJ" %}"
+                hx-get="{% url "set_status" quote.pk "RJ" %}"
                 hx-target="#{{ quote.pk }}"
                 hx-swap="outerHTML transition:true"
                 hx-confirm="Desea rechazar cotizacion #{{ quote.public_id }}"
