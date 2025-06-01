@@ -8,6 +8,7 @@ from App.views import (
     list_layout_view,
     quote_list_view,
     pending_quote_list_view,
+    quote_view,
     set_quote_status_view,
     product_form_view,
     product_form_from_template_view,
@@ -33,6 +34,7 @@ urlpatterns = [
     path('quotes/', quote_list_view, name='quote_list'),
     path('pending_quotes/', pending_quote_list_view, name='pending_quote_list'),
     path('set_quote_status/<int:pk>/<str:status>', set_quote_status_view, name='set_status'),
+    path('quote/<int:pk>', quote_view, name='quote'),
 
     path('product-form/', product_form_view, name='product_form'),
     path('product-form-from-template/', product_form_from_template_view, name='product_form_from_template'),

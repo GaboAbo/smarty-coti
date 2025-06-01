@@ -106,12 +106,18 @@ def pending_quote_list_view(request):
     return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
 
 
+def quote_view(request, pk):
+    quote = Quote.objects.get(pk=pk)
+
+    return render(request, "quote/partials/quote.html", {"quote": quote})
+
+
 def set_quote_status_view(request, pk, status):
     quote = Quote.objects.get(pk=pk)
     quote.status = status
     quote.save()
 
-    return HttpResponse("")
+    return render(request)
 
 
 def quote_products_view(request, pk):

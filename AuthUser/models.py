@@ -58,7 +58,7 @@ class EnterpriseUser(models.Model):
     ROLE_CHOICES = [
         ("MAN", "Gerente"),
         ("ENG", "Ingeniero/a"),
-        ("REP", "Representante de ventas"),
+        ("REP", "Rep. Ventas"),
         ("ADM", "Administrativo"),
         ("BOS", "Jefe/a de unidad"),
         ("SUP", "Supervisor/a"),
