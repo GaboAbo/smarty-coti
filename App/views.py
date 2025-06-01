@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
-from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals, check_template_path
+from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
