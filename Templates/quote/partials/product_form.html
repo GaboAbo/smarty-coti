@@ -1,6 +1,6 @@
 {% load static %}
 
-<div id="product_form-{{ index }}" class="flex gap-[4px] px-1 items-center border-b-2 border-[#B6B6B6] text-center w-full h-[32px]">
+<div id="product_form-{{ index }}" class="flex gap-1 px-1 items-center border-b-2 border-[#B6B6B6] text-center w-full h-[32px]">
     <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ index }}" />
     <div class="w-[40%]">
         {{ product_form.product }}

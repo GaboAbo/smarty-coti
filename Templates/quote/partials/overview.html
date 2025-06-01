@@ -15,18 +15,17 @@
             <div class="px-2 text-sm"><b>Estado</b>: {{ quote.get_status_display }}</div>
         </div>
     </div>
-    <div class="w-full h-8/12 bg-slate-50 overflow-y-auto">
+    <div class="w-full h-8/12 overflow-y-auto">
         <table id="product_table" class="table-auto w-full text-sm border-separate border-spacing-2 border-2 border-[#B6B6B6]">
             <thead class="sticky top-0 bg-slate-50">
                 <tr class="h-[48px] my-2">
                     <th style="width:10%">Producto</th>
-                    <th style="width:30%">Descripcion</th>
+                    <th style="width:40%">Descripcion</th>
                     <th style="width:10%">Descuento</th>
                     <th style="width:10%">{% if role == "MAN" %}Margen{% endif %}</th>
                     <th style="width:10%">Cantidad</th>
                     <th style="width:10%">Precio unitario</th>
                     <th style="width:10%">Precio venta</th>
-                    <th style="width:10%"></th>
                 </tr>
             </thead>
             <tbody
