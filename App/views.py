@@ -19,11 +19,6 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 from .Constants.logo import OLYMPUS_LOGO
 from .Constants.bg import BACKGROUND
 
-TEMPLATE_MAP = {
-    "quote": "quote/partials/quote.html",
-    "overview": "quote/partials/overview.html",
-}
-
 
 def index(request):
     """
@@ -120,17 +115,12 @@ def quote_view(request, pk):
     return render(request, "quote/partials/quote.html", {"quote": quote})
 
 
-def set_quote_status_view(request, pk, status, place):
+def set_quote_status_view(request, pk, status):
     quote = Quote.objects.get(pk=pk)
     quote.status = status
     quote.save()
 
-    template = TEMPLATE_MAP.get(place)
-
-    if not template:
-        return HttpResponseBadRequest("Plantilla invalida")
-
-    return render(request, template, {"quote": quote})
+    return render(request, "quote/partials/overview.html", {"quote": quote})
     
 
 def quote_products_view(request, pk):

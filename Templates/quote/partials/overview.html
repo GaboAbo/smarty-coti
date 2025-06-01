@@ -17,7 +17,7 @@
     </div>
     <div class="w-full h-8/12 bg-slate-50 overflow-y-auto">
         <table id="product_table" class="table-auto w-full text-sm px-2 border-2 border-[#B6B6B6]">
-            <thead class="sticky top-0 bg-slate-50">
+            <thead class="sticky top-0 bg-slate-50 px-2">
                 <tr class="h-[48px] my-2">
                     <th style="width:10%">Producto</th>
                     <th style="width:30%">Descripcion</th>
@@ -31,7 +31,7 @@
             </thead>
             <tbody
                 id="table_data"
-                class="text-center text-sm"
+                class="text-center text-sm px-2"
                 hx-get="{% url "quote_products" quote.pk %}"
                 hx-trigger="load"
                 hx-swap="innerHTML">
@@ -48,16 +48,17 @@
             Atras
         </button>
         <a
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 hover:bg-slate-600 duration-300"
-            href="{% url "generate_pdf" quote.pk %}">
+            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 {% if quote.status != "AP" %}hover:bg-slate-600 duration-300{% endif %}"
+            href={% if quote.status == "AP" %}"{% url "generate_pdf" quote.pk %}"{% else %}""{% endif %}>
             <button
                 type="button">
                 Crear Documento
             </button>
         </a>
+        {% if role == "MAN" or role == "ADM" %}
         <button
             {% if quote.status == "AP" %}disabled{% endif %}
-            hx-get="{% url "set_status" quote.pk "AP" "overview" %}"
+            hx-get="{% url "set_status" quote.pk "AP" %}"
             hx-target="#quote-{{ quote.pk }}"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-sm text-white bg-amber-500 {% if quote.status != "AP" %}hover:bg-amber-600 duration-300{% endif %}"
@@ -66,18 +67,21 @@
         </button>
         <button
             {% if quote.status == "RJ" %}disabled{% endif %}
-            hx-get="{% url "set_status" quote.pk "RJ" "overview" %}"
+            hx-get="{% url "set_status" quote.pk "RJ" %}"
             hx-target="#quote-{{ quote.pk }}"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-sm text-white bg-slate-500 {% if quote.status != "RJ" %}hover:bg-slate-600 duration-300{% endif %}"
             type="button">
             Rechazar
         </button>
+        {% else %}
+        <div class="w-2/6"></div>
+        {% endif %}
         <button
             hx-get="{% url "update_quote" quote.pk %}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-blue-500 hover:bg-blue-600 duration-300"
+            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 hover:bg-blue-600 duration-300"
             type="button">
             Editar
         </button>
@@ -86,7 +90,7 @@
             hx-confirm="Esta seguro de que desea eliminar la cotizacion {{ quote.public_id }}?"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-red-500 hover:bg-red-600  duration-300"
+            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-sm bg-slate-500 hover:bg-red-600  duration-300"
             type="button">
             Eliminar
         </button>
