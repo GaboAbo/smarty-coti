@@ -1,36 +1,39 @@
 {% load static %}
 
+{% with current_filters|safe as filters %}
 <tr>
-    <td colspan="6">
-        <div class="flex flex-row justify-center gap-2 mt-2">
-            <button
-                {% if page_obj.has_previous %}
-                hx-get="{% url 'quote_list' %}?page={{ page_obj.previous_page_number }}"
-                hx-target="#table_data"
-                hx-swap="innerHTML transition:true"
-                class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white hover:bg-teal-600 duration-300"
-                {% else %}
-                disabled
-                class="w-[256px] h-full flex justify-center items-center rounded bg-slate-500 text-white cursor-not-allowed">
-                {% endif %}
-                Anterior
-            </button>
-            <span class="px-2 py-1">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-            <button
-                {% if page_obj.has_next %}
-                hx-get="{% url 'quote_list' %}?page={{ page_obj.next_page_number }}"
-                hx-target="#table_data"
-                hx-swap="innerHTML transition:true"
-                class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white hover:bg-teal-600 duration-300"
-                {% else %}
-                disabled
-                class="w-[256px] h-full flex justify-center items-center rounded bg-slate-500 text-white cursor-not-allowed">
-                {% endif %}
-                Siguiente
-            </button>
-        </div>
-    </td>
+  <td colspan="6">
+    <div class="flex justify-center gap-2 mt-2">
+      <button
+        {% if page_obj.has_previous %}
+        hx-get="{% url 'quote_list' %}?page={{ page_obj.previous_page_number }}&{{ filters }}"
+        hx-target="#table_data"
+        hx-swap="innerHTML transition:true"
+        {% else %}
+        disabled
+        {% endif %}
+        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
+               {% if page_obj.has_previous %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
+        Anterior
+      </button>
+      <span class="px-2 py-1">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      <button
+        {% if page_obj.has_next %}
+        hx-get="{% url 'quote_list' %}?page={{ page_obj.next_page_number }}&{{ filters }}"
+        hx-target="#table_data"
+        hx-swap="innerHTML transition:true"
+        {% else %}
+        disabled
+        {% endif %}
+        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
+               {% if page_obj.has_next %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
+        Siguiente
+      </button>
+    </div>
+  </td>
 </tr>
+{% endwith %}
+
 {% for quote in quotes %}
 <div
     hx-get="{% url "quote" quote.pk %}"
