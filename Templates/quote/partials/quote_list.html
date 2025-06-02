@@ -1,20 +1,8 @@
 {% load static %}
 
-{% for quote in quotes %}
-<div
-    hx-get="{% url "quote" quote.pk %}"
-    hx-trigger="load delay:{{ forloop.counter0|add:"5" }}0ms"
-    hx-swap="outerHTML transition:true">
-</div>
-{% empty %}
 <tr>
-  <td colspan="6">No hay cotizaciones disponibles.</td>
-</tr>
-{% endfor %}
-
-<tr class="sticky bottom-0 bg-slate-50 z-10" style="height:40px; max-height:40px;">
     <td colspan="6">
-        <div class="flex justify-center gap-2 mt-2">
+        <div class="flex flex-row justify-center gap-2 mt-2">
             <button
                 {% if page_obj.has_previous %}
                 hx-get="{% url 'quote_list' %}?page={{ page_obj.previous_page_number }}"
@@ -43,3 +31,14 @@
         </div>
     </td>
 </tr>
+{% for quote in quotes %}
+<div
+    hx-get="{% url "quote" quote.pk %}"
+    hx-trigger="load delay:{{ forloop.counter0|add:"5" }}0ms"
+    hx-swap="outerHTML transition:true">
+</div>
+{% empty %}
+<tr>
+    <td colspan="6">No hay cotizaciones disponibles.</td>
+</tr>
+{% endfor %}
