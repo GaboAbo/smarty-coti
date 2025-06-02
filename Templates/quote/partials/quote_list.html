@@ -11,32 +11,3 @@
   <td colspan="6">No hay cotizaciones disponibles.</td>
 </tr>
 {% endfor %}
-
-<tr>
-  <td colspan="6">
-    <div class="flex justify-center gap-2 mt-2">
-      <button
-        {% if not page_obj.has_previous %}
-        disabled
-        hx-get="{% url 'quote_list' %}?page={{ page_obj.previous_page_number }}"
-        hx-target="#table_data"
-        hx-swap="innerHTML transition:true"
-        {% endif %}
-        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
-               {% if page_obj.has_previous %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
-        Anterior
-      </button>
-      <span class="px-2 py-1">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-      <button
-        {% if not page_obj.has_next %}disabled
-        hx-get="{% url 'quote_list' %}?page={{ page_obj.next_page_number }}"
-        hx-target="#table_data"
-        hx-swap="innerHTML transition:true"
-        {% endif %}
-        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
-               {% if page_obj.has_next %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
-        Siguiente
-      </button>
-    </div>
-  </td>
-</tr>
