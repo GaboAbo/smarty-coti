@@ -348,6 +348,9 @@
   .h-\[32px\] {
     height: 32px;
   }
+  .h-\[40px\] {
+    height: 40px;
+  }
   .h-\[44px\] {
     height: 44px;
   }
@@ -362,6 +365,9 @@
   }
   .h-\[80\%\] {
     height: 80%;
+  }
+  .h-\[400px\] {
+    height: 400px;
   }
   .h-full {
     height: 100%;
@@ -446,6 +452,11 @@
   }
   .border-separate {
     border-collapse: separate;
+  }
+  .border-spacing-1 {
+    --tw-border-spacing-x: calc(var(--spacing) * 1);
+    --tw-border-spacing-y: calc(var(--spacing) * 1);
+    border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
   }
   .border-spacing-2 {
     --tw-border-spacing-x: calc(var(--spacing) * 2);

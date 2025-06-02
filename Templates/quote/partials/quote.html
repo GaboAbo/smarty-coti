@@ -1,6 +1,6 @@
 <tr
     id="quote-{{ quote.pk }}"
-    style="height:32px; max-height:32px;"
+    style="height:40px; max-height:40px;"
     class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10 hover:bg-slate-600/20 duration-300">
     <td>{{ quote.public_id }}</td>
     <td>{{ quote.client.name }}</td>
@@ -12,7 +12,7 @@
             hx-get="{% url "quote_detail" quote.pk %}"
             hx-target="#quote_list"
             hx-swap="outerHTML transition:true"
-            class="w-full h-[32px] flex justify-center items-center rounded-sm text-white bg-blue-500 hover:bg-blue-600 duration-300"
+            class="w-full h-[40px] flex justify-center items-center rounded-sm text-white bg-blue-500 hover:bg-blue-600 duration-300"
             type="button">
             Revisar
         </button>

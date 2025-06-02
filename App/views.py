@@ -88,7 +88,7 @@ def quote_list_view(request):
     if date:
         quotes = quotes.filter(date=date)
 
-    paginator = Paginator(quotes, 8)
+    paginator = Paginator(quotes, 7)
 
     try:
         page_number = int(page_number)
