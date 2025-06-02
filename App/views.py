@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.db import transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
+from django.core import paginator
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
@@ -72,8 +73,9 @@ def list_layout_view(request):
 def quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
+    page_number = request.GET.get("page", 1)
 
-    quotes = get_all_quotes(pk, role)
+    quotes = get_all_quotes(pk, role).order_by("pk", "status")
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")
@@ -86,7 +88,16 @@ def quote_list_view(request):
     if date:
         quotes = quotes.filter(date=date)
 
-    return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
+    paginator = paginator(quotes, 8)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'quotes': quotes,
+        'page_obj': page_obj,
+        'pages': paginator.num_pages
+    }
+
+    return render(request, "quote/partials/quote_list.html", context=context)
 
 
 def pending_quote_list_view(request):
