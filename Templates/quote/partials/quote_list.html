@@ -15,25 +15,33 @@
 <tr>
   <td colspan="6">
     <div class="flex justify-center gap-2 mt-2">
+      {% if page_obj.has_previous %}
       <button
         {% if not page_obj.has_previous %}disabled{% endif %}
         hx-get="{% url 'quote_list' %}?page={{ page_obj.previous_page_number }}"
         hx-target="#table_data"
         hx-swap="innerHTML transition:true"
-        class="px-4 py-1 rounded bg-teal-500 text-white 
+        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
                {% if page_obj.has_previous %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
         Anterior
       </button>
+      {% else %}
+      <div class="w-[256px]"></div>
+      {% endif %}
       <span class="px-2 py-1">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
       <button
         {% if not page_obj.has_next %}disabled{% endif %}
         hx-get="{% url 'quote_list' %}?page={{ page_obj.next_page_number }}"
         hx-target="#table_data"
         hx-swap="innerHTML transition:true"
-        class="px-4 py-1 rounded bg-teal-500 text-white 
+        class="w-[256px] h-full flex justify-center items-center rounded bg-teal-500 text-white 
                {% if page_obj.has_next %}hover:bg-teal-600 duration-300{% else %}bg-gray-500 cursor-not-allowed{% endif %}">
         Siguiente
       </button>
+      {% else %}
+      <div class="w-[256px]"></div>
+      {% endif %}
     </div>
   </td>
 </tr>

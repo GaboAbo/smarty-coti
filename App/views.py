@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.db import transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
@@ -89,7 +89,11 @@ def quote_list_view(request):
         quotes = quotes.filter(date=date)
 
     paginator = Paginator(quotes, 8)
-    page_obj = paginator.get_page(page_number)
+
+    try:
+        page_obj = paginator.get_page(page_number)
+    except EmptyPage:
+        page_obj = paginator.get_page(1)
 
     context = {
         'quotes': page_obj.object_list,
