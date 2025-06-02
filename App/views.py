@@ -92,7 +92,7 @@ def quote_list_view(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'quotes': quotes,
+        'quotes': page_obj.object_list,
         'page_obj': page_obj,
         'pages': paginator.num_pages
     }

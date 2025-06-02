@@ -25,25 +25,6 @@
                 hx-swap="innerHTML transition:true">
             </tbody>
         </table>
-        <div class="w-full h-[32px] flex gap-2 justify-center">
-            <button
-                {% if not page_obj.has_previous %}disabled{% endif %}
-                hx-get="?page={{ page_obj.previous_page_number }}"
-                hx-target="#table_data"
-                hx-swap="innerHTML transition:true"
-                class="w-[256px] h-full bg-teal-400 hover:bg-teal-500 text-white {% if page_obj.has_previous %}bg-slate-500{% endif %}">
-                Anterior
-            </button>
-            <p class="flex items-center">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</p>
-            <button
-                {% if not page_obj.has_next %}disabled{% endif %}
-                hx-get="?page={{ page_obj.next_page_number }}"
-                hx-target="#table_data"
-                hx-swap="innerHTML transition:true"
-                class="w-[256px] h-full bg-teal-400 hover:bg-teal-500 text-white {% if page_obj.has_next %}}bg-slate-500{% endif %}">
-                Siguiente
-            </button>
-        </div>
     </div>
 
     <div class="w-full h-[10%] mb-4 bg-slate-50 flex gap-2 px-2">
