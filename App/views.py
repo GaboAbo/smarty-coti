@@ -102,7 +102,8 @@ def quote_list_view(request):
     context = {
         'quotes': page_obj.object_list,
         'page_obj': page_obj,
-        'pages': paginator.num_pages
+        'pages': paginator.num_pages,
+        'current_filters': request.GET.urlencode()
     }
 
     return render(request, "quote/partials/quote_list.html", context=context)

@@ -1,5 +1,6 @@
 {% load static %}
 
+{% with current_filters|safe as filters %}
 <div id="quote_list" class="w-full h-full flex flex-col items-start p-4 bg-slate-50/50 rounded-sm text-sm">
     <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
         <p>Listado de Cotizaciones</p>
@@ -67,3 +68,4 @@
         </form>
     </div>
 </div>
+{% endwith %}
