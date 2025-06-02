@@ -91,9 +91,13 @@ def quote_list_view(request):
     paginator = Paginator(quotes, 8)
 
     try:
-        page_obj = paginator.get_page(page_number)
-    except EmptyPage:
-        page_obj = paginator.get_page(1)
+        page_number = int(page_number)
+        if page_number < 1:
+            raise ValueError
+    except (ValueError, TypeError):
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
 
     context = {
         'quotes': page_obj.object_list,
