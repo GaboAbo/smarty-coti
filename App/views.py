@@ -100,7 +100,7 @@ def quote_list_view(request):
     page_obj = paginator.get_page(page_number)
 
     for i in page_obj:
-        print(i)
+        print(f"quote: {i.pk}")
 
     context = {
         'page_obj': page_obj,
