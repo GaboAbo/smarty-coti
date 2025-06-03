@@ -13,10 +13,10 @@
 <tr><td colspan="6">No hay cotizaciones disponibles.</td></tr>
 {% endfor %}
 
-<tr style="height:10%; max-height:10%;" class="border-t-2 border-[#B6B6B6]">
-    <td class="flex align-bottom">
+<tr style="height:10%; max-height:10%;">
+    <td>
         <button
-            class="w-full h-[10%] rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
+            class="flex align-bottom w-full h-[10%] rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %} hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_previous %}
             hx-get="{% url "quote_list" %}?page={{ page_obj.previous_page_number }}"
             hx-target="#table_data"
@@ -27,14 +27,14 @@
             Anterior
         </button>
     </td>
-    <td class="flex align-bottom text-center mx-4" colspan="4">
-        <div class="w-full h-[10%]">
+    <td class="text-center mx-4" colspan="4">
+        <div class="flex align-bottom w-full h-[10%]">
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
         </div>
     </td>
-    <td class="flex align-bottom">
+    <td>
         <button
-            class="w-full h-[10%] rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_next %}hover:bg-teal-600 duration-150{% endif %}"
+            class="flex align-bottom w-full h-[10%] rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_next %} hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_next %}
             hx-get="{% url "quote_list" %}?page={{ page_obj.next_page_number }}"
             hx-target="#table_data"
