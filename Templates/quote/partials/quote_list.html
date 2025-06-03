@@ -1,11 +1,12 @@
 {% load static %}
 
-{% for quote in page_obj %}
+{% for quote in quotes %}
 <tr
     hx-get="{% url 'quote' quote.pk %}"
     hx-trigger="load delay:{{ forloop.counter0|add:'5' }}0ms"
-    hx-swap="outerHTML transition:true">
-    <span class="text-gray-400">Cargando cotización...</span>
+    hx-swap="outerHTML transition:true"
+    hx-target="this">
+    <td colspan="6">Cargando cotización...</td>
 </tr>
 {% empty %}
     <tr><td colspan="6">No hay cotizaciones disponibles.</td></tr>

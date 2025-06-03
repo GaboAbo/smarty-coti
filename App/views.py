@@ -87,18 +87,12 @@ def quote_list_view(request):
     if date:
         quotes = quotes.filter(date=date)
 
-    paginator = Paginator(quotes, 7)
-
-    print("no paginator template nor view")
-
     context = {
-        'page_obj': quotes,
+        'quotes': quotes,
     }
 
     return render(request, "quote/partials/quote_list.html", context=context)
     
-
-
 
 def pending_quote_list_view(request):
     pk = request.session.get("pk")
