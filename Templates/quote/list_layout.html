@@ -6,10 +6,10 @@
         <p>Listado de Cotizaciones</p>
     </div>
     
-    <div class="w-full h-[348px] max-h-[548px] border-2 border-[#B6B6B6]">
+    <div class="w-full h-[80%] border-2 border-[#B6B6B6]">
         <table id="quote_table" class="w-full h-full table-auto text-sm border-separate border-spacing-1">
-            <thead class="sticky top-0 bg-slate-50 z-10">
-                <tr class="h-[48px]">
+            <thead class="h-[10%] bg-slate-50">
+                <tr class="h-full">
                     <th style="width:16%">ID</th>
                     <th style="width:32%">Cliente</th>
                     <th style="width:16%">Rep. Ventas</th>
@@ -20,7 +20,7 @@
             </thead>
             <tbody
                 id="table_data"
-                class="h-[300px] max-h-[500px] text-center text-sm"
+                class="h-[90%] text-center text-sm"
                 hx-get="{% url "quote_list" %}"
                 hx-trigger="load delay:200ms"
                 hx-swap="innerHTML transition:true">
