@@ -107,6 +107,8 @@ def quote_list_view(request):
     }
 
     return render(request, "quote/partials/quote_list.html", context=context)
+    
+
 
 
 def pending_quote_list_view(request):

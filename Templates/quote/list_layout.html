@@ -33,7 +33,7 @@
             id="filter"
             class="w-full h-full flex flex-row justify-center items-center gap-x-1"
             hx-get="{% url "quote_list" %}"
-            hx-trigger="change delay:250ms"
+            hx-trigger="change delay:50ms"
             hx-target="#table_data"
             hx-swap="innerHTML"
             hx-include="this">
@@ -52,7 +52,7 @@
             <input
                 class="w-[8%] h-[32px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
                 hx-get="{% url "quote_list" %}"
-                hx-trigger="click delay:100ms"
+                hx-trigger="click delay:50ms"
                 hx-target="#table_data"
                 hx-swap="innerHTML transition:true"
                 type="reset"
@@ -61,8 +61,7 @@
                 class="w-[8%] h-[32px] flex justify-center items-center rounded-sm bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
                 hx-get="{% url "create_quote" %}"
                 hx-target="#quote_list"
-                hx-swap="outerHTML transition:true"
-                type="button">
+                hx-swap="outerHTML transition:true">
                 Agregar
             </button>
         </form>
