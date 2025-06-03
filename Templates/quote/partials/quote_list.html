@@ -19,7 +19,7 @@
         <button
             class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_previous %}
-            hx-get="?page={{ page_obj.previous_page_number }}"
+            hx-get="{% url "quote_list" %}?page={{ page_obj.previous_page_number }}"
             hx-target="#table_data"
             hx-swap="innerHTML transition:true"
             {% else %}
@@ -35,7 +35,7 @@
         <button
             class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_next %}
-            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-get="{% url "quote_list" %}?page={{ page_obj.next_page_number }}"
             hx-target="#table_data"
             hx-swap="innerHTML transition:true"
             {% else %}
