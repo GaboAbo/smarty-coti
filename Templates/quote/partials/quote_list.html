@@ -13,8 +13,7 @@
 <tr><td colspan="6">No hay cotizaciones disponibles.</td></tr>
 {% endfor %}
 
-{% if page_obj.has_next %}
-<tr style="height:10%; max-height:10%;">
+<tr style="height:10%; max-height:10%;" class="border-1 border-[#B6B6B6]">
     <td>
         <button
             class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
@@ -33,7 +32,7 @@
     </td>
     <td style="height:100%; max-height:100%;">
         <button
-            class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
+            class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_next %}hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_next %}
             hx-get="{% url "quote_list" %}?page={{ page_obj.next_page_number }}"
             hx-target="#table_data"
@@ -45,4 +44,3 @@
         </button>
     </td>
 </tr>
-{% endif %}
