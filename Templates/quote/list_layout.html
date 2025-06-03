@@ -22,7 +22,7 @@
                 id="table_data"
                 class="text-center text-sm"
                 hx-get="{% url "quote_list" %}"
-                hx-trigger="load delay:50ms"
+                hx-trigger="load delay:200ms"
                 hx-swap="innerHTML transition:true">
             </tbody>
         </table>
@@ -33,7 +33,7 @@
             id="filter"
             class="w-full h-full flex flex-row justify-center items-center gap-x-1"
             hx-get="{% url "quote_list" %}"
-            hx-trigger="change delay:50ms"
+            hx-trigger="change delay:200ms"
             hx-target="#table_data"
             hx-swap="innerHTML"
             hx-include="this">
