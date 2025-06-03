@@ -1,7 +1,7 @@
 {% load static %}
 
 <tr style="height:40px; max-height:40px;">
-    <td colspan="2" class="text-center py-4">
+    <td class="h-full">
         <button
             class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_previous %}
@@ -14,10 +14,10 @@
             Anterior
         </button>
     </td>
-    <td colspan="2" class="text-center mx-4">
+    <td colspan="4" class="text-center mx-4">
         Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
     </td>
-    <td colspan="2" class="text-center py-4">
+    <td class="h-full">
         <button
             class="w-full h-full rounded-sm bg-teal-500 text-white text-sm{% if page_obj.has_previous %}hover:bg-teal-600 duration-150{% endif %}"
             {% if page_obj.has_next %}
