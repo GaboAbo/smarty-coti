@@ -96,7 +96,7 @@ def quote_list_view(request):
         "current_filters": request.GET.urlencode(),
     }
 
-    print("Paginator added back to quote list 2")
+    print("Paginator added back to quote list 3")
 
     return render(request, "quote/partials/quote_list.html", context=context)
     
