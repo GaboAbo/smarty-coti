@@ -91,12 +91,17 @@ def quote_list_view(request):
     page_number = request.GET.get("page", 1) or 1
     page_obj = paginator.get_page(page_number)
 
+    real_quotes = quotes.exists()
+
+    quotes = list(page_obj.object_list)
+    quotes += [None] * (10 - len(quotes))
+
     context = {
+        "quotes": quotes,
+        "real_quotes": real_quotes,
         "page_obj": page_obj,
         "current_filters": request.GET.urlencode(),
     }
-
-    print("styles reworked")
 
     return render(request, "quote/partials/quote_list.html", context=context)
     

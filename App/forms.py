@@ -13,7 +13,7 @@ class TemplateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({
-            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
+            'class': 'w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
         })
 
 
@@ -27,7 +27,7 @@ class QuoteForm(forms.ModelForm):
         required=True,
         empty_label="Seleccione Institución",
         widget=forms.Select(attrs={
-            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
+            'class': 'w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
             'list': 'client-list',
         })
     )
@@ -37,7 +37,7 @@ class QuoteForm(forms.ModelForm):
         required=True,
         empty_label="Seleccione Rep. de Ventas",
         widget=forms.Select(attrs={
-            'class': 'w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
+            'class': 'w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
             'list': 'client-list',
         })
     )
@@ -62,7 +62,7 @@ class ProductQuoteForm(forms.ModelForm):
         queryset=Product.objects.all(),
         required=True,
         widget=forms.Select(attrs={
-            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-sm',
+            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'list': 'product-list',
         })
     )
@@ -72,7 +72,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=100,
         initial=0,
         widget=forms.NumberInput(attrs={
-            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-sm',
+            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',
         })
     )
@@ -82,7 +82,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=100,
         initial=35,
         widget=forms.NumberInput(attrs={
-            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-sm',
+            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',
         })
     )
@@ -92,7 +92,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=500,
         initial=1,
         widget=forms.NumberInput(attrs={
-            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-sm',
+            'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',
         })
     )

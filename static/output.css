@@ -38,6 +38,7 @@
     --font-weight-normal: 400;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --radius-xs: 0.125rem;
     --radius-sm: 0.25rem;
     --radius-lg: 0.5rem;
     --default-font-family: var(--font-sans);
@@ -506,11 +507,17 @@
   .overflow-y-scroll {
     overflow-y: scroll;
   }
+  .rounded-\[2px\] {
+    border-radius: 2px;
+  }
   .rounded-lg {
     border-radius: var(--radius-lg);
   }
   .rounded-sm {
     border-radius: var(--radius-sm);
+  }
+  .rounded-xs {
+    border-radius: var(--radius-xs);
   }
   .border {
     border-style: var(--tw-border-style);
@@ -578,6 +585,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-slate-50) 50%, transparent);
     }
+  }
+  .bg-slate-300 {
+    background-color: var(--color-slate-300);
   }
   .bg-slate-400 {
     background-color: var(--color-slate-400);

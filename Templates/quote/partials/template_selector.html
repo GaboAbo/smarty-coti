@@ -6,7 +6,7 @@
         hx-include="this"
         hx-swap="outerHTML"
         hx-target="#template-selector"
-        class="w-full h-[24px] border-2 rounded-sm border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm">
+        class="w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm">
         <option id="0" value="0">Seleccione Plantilla</option>
         {% for template in templates %}
             <option id="{{ template.pk }}" value="{{ template.pk }}">{{ template.name }}</option>
