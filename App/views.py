@@ -100,10 +100,10 @@ def quote_list_view(request):
 
     page_obj = paginator.get_page(page_number)
 
-    print("refreshed")
+    print("quotes refreshed")
 
     context = {
-        'page_obj': page_obj,
+        'page_obj': quotes,
     }
 
     return render(request, "quote/partials/quote_list.html", context=context)
