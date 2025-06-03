@@ -74,8 +74,6 @@ def quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
 
-    page_number = request.GET.get("page", 1) or 1
-
     quotes = get_all_quotes(pk, role).order_by("pk")
 
     id = request.GET.get("public_id")
@@ -91,16 +89,7 @@ def quote_list_view(request):
 
     paginator = Paginator(quotes, 7)
 
-    try:
-        page_number = int(page_number)
-        if page_number < 1:
-            raise ValueError
-    except (ValueError, TypeError):
-        page_number = 1
-
-    page_obj = paginator.get_page(page_number)
-
-    print("no paginator template")
+    print("no paginator template nor view")
 
     context = {
         'page_obj': quotes,
