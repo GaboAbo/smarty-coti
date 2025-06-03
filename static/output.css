@@ -524,6 +524,10 @@
     border-style: var(--tw-border-style);
     border-width: 2px;
   }
+  .border-t-2 {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 2px;
+  }
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
@@ -660,6 +664,9 @@
   }
   .text-right {
     text-align: right;
+  }
+  .align-bottom {
+    vertical-align: bottom;
   }
   .font-roboto {
     font-family: var(--font-roboto);
