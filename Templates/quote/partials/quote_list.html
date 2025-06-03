@@ -1,7 +1,11 @@
 {% load static %}
 
 {% if not real_quotes %}
-<tr><td colspan="6">No hay cotizaciones disponibles.</td></tr>
+<tr>
+    <td colspan="6" class="text-center text-slate-400 italic">
+        No hay cotizaciones disponibles.
+    </td>
+</tr>
 {% else %}
     {% for quote in quotes %}
         {% if quote %}
@@ -13,7 +17,9 @@
             <td colspan="6">Cargando cotización...</td>
         </tr>
         {% else %}
-        <tr class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10"><td colspan="6"> </td></tr>
+        <tr class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
+            <td colspan="6" class="h-12"></td>
+        </tr>
         {% endif %}
     {% endfor %}
 {% endif %}

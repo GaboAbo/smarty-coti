@@ -297,6 +297,9 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
@@ -708,11 +711,17 @@
   .text-\[\#1e293b\] {
     color: #1e293b;
   }
+  .text-slate-400 {
+    color: var(--color-slate-400);
+  }
   .text-slate-700 {
     color: var(--color-slate-700);
   }
   .text-white {
     color: var(--color-white);
+  }
+  .italic {
+    font-style: italic;
   }
   .underline {
     text-decoration-line: underline;
