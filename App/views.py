@@ -87,9 +87,20 @@ def quote_list_view(request):
     if date:
         quotes = quotes.filter(date=date)
 
+    paginator = Paginator(quotes, 7)
+    page_number = request.GET.get("page", 1) or 1
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "current_filters": request.GET.urlencode(),
+    }
+
     context = {
         'quotes': quotes,
     }
+
+    print("Paginator added back to quote list")
 
     return render(request, "quote/partials/quote_list.html", context=context)
     
