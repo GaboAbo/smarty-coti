@@ -99,9 +99,11 @@ def quote_list_view(request):
 
     page_obj = paginator.get_page(page_number)
 
+    for i in page_obj:
+        print(i)
+
     context = {
         'page_obj': page_obj,
-        'current_filters': request.GET.urlencode()
     }
 
     return render(request, "quote/partials/quote_list.html", context=context)
