@@ -100,7 +100,7 @@ def quote_list_view(request):
 
     page_obj = paginator.get_page(page_number)
 
-    print("quotes refreshed")
+    print("no paginator template")
 
     context = {
         'page_obj': quotes,
