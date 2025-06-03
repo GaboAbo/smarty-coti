@@ -1,5 +1,33 @@
 {% load static %}
 
+<tr>
+    <td colspan="2" class="text-center py-4">
+        {% if page_obj.has_previous %}
+        <button
+            class="w-full h-full rounded-sm bg-teal-500 hover:bg-teal-600 duration-150 text-white text-sm"
+            hx-get="?page={{ page_obj.previous_page_number }}"
+            hx-target="#table_data"
+            hx-swap="innerHTML transition:true">
+            Anterior
+        </button>
+        {% endif %}
+    </td>
+    <td colspan="2" class="text-center mx-4">
+        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+    </td>
+    <td colspan="2" class="text-center py-4">
+        {% if page_obj.has_next %}
+        <button
+            class="w-full h-full rounded-sm bg-teal-500 hover:bg-teal-600 duration-150 text-white text-sm"
+            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-target="#table_data"
+            hx-swap="innerHTML transition:true">
+            Siguiente
+        </button>
+        {% endif %}
+    </td>
+</tr>
+
 {% for quote in page_obj %}
 <tr
     hx-get="{% url 'quote' quote.pk %}"
