@@ -312,15 +312,18 @@ def quote_create_view(request):
                 if quote_form.is_valid():
                     quote = quote_form.save()
                     print(f"Quote #{quote.public_id} saved!")
+
+                    for item in items:
+                        item["quote"] = quote.pk
+                        product_quote_form = ProductQuoteFullForm(item)
+                        if product_quote_form.is_valid():
+                            product_quote = product_quote_form.save()
+                            print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
+
+                        else:
+                            print("Quote item storage failed.")
                 else:
                     print(quote_form.errors)
-
-                for item in items:
-                    item["quote"] = quote.pk
-                    product_quote_form = ProductQuoteFullForm(item)
-                    if product_quote_form.is_valid():
-                        product_quote = product_quote_form.save()
-                        print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
 
         except Exception as e:
             print("Transaction failed:", e)
