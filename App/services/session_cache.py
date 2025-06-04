@@ -5,17 +5,17 @@ from django.core.cache import cache
 from ..models import Product, Quote
 
 
-def get_all_products():
+def get_all_products(refresh=None):
     products = cache.get("all_products")
-    if products is None:
+    if products is None or refresh:
         products = Product.objects.all()
         cache.set("all_products", products, timeout=None)
     return products
 
 
-def get_all_quotes(pk=None, role="REP"):
+def get_all_quotes(pk=None, role="REP", refresh=None):
     quotes = cache.get("all_quotes")
-    if quotes is None:
+    if quotes is None or refresh:
         if role == "MAN" or role == "ADM":
             quotes = Quote.objects.all()
         else:

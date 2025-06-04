@@ -73,8 +73,9 @@ def list_layout_view(request):
 def quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
+    refresh = request.GET.get("refresh") or None
 
-    quotes = get_all_quotes(pk, role).order_by("date")
+    quotes = get_all_quotes(pk, role, refresh).order_by("date")
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")
