@@ -565,6 +565,9 @@
       border-bottom-color: color-mix(in oklab, var(--color-white) 70%, transparent);
     }
   }
+  .bg-\[\#E8B126\] {
+    background-color: #E8B126;
+  }
   .bg-amber-500 {
     background-color: var(--color-amber-500);
   }
@@ -747,6 +750,13 @@
   .duration-300 {
     --tw-duration: 300ms;
     transition-duration: 300ms;
+  }
+  .hover\:bg-\[\#E8B126\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #E8B126;
+      }
+    }
   }
   .hover\:bg-amber-500 {
     &:hover {
