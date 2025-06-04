@@ -21,8 +21,11 @@ def calcultate_subtotal(request, index, product, discount, profit_margin, quanti
 
 def remove_item_from_subtotal(request, index):
     current_total = cache.get('total_net', {})
-    current_total.pop(str(index))
-    cache.set('total_net', current_total)
+    item_subtotal = current_total.get(str(index))
+    
+    if item_subtotal:
+        current_total.pop(str(index))
+        cache.set('total_net', current_total)
 
     pass
 
