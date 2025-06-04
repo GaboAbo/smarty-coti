@@ -127,9 +127,11 @@ def pending_quote_list_view(request):
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
     if sales_rep:
-        quotes = quotes.filter(salesRep__name__icontains=client)
+        quotes = quotes.filter(salesRep__name__icontains=sales_rep)
     if date:
         quotes = quotes.filter(date=date)
+    if status:
+        quotes = quotes.filter(status=status)
 
     paginator = Paginator(quotes, 10)
     page_number = request.GET.get("page", 1) or 1
