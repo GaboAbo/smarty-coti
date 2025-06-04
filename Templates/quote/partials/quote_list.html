@@ -27,7 +27,7 @@
 <tr>
     <td>
         <button
-            class="flex justify-center align-bottom w-full h-full rounded-xs text-white text-sm
+            class="flex justify-center items-center w-full h-full rounded-xs text-white text-sm
             {% if page_obj.has_previous %}
                 bg-teal-500 hover:bg-teal-600
             {% else %}
@@ -44,13 +44,13 @@
         </button>
     </td>
     <td class="text-center mx-4" colspan="4">
-        <div class="flex justify-center align-bottom w-full">
+        <div class="flex justify-center items-center w-full">
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
         </div>
     </td>
     <td>
         <button
-            class="flex justify-center align-bottom w-full h-full rounded-xs text-white text-sm
+            class="flex justify-center items-center w-full h-full rounded-xs text-white text-sm
             {% if page_obj.has_next %}
                 bg-teal-500 hover:bg-teal-600
             {% else %}
