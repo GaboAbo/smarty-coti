@@ -53,7 +53,7 @@
             {% else %}
                 bg-slate-300
             {% endif %} duration-300"
-            href="{% if quote.status == "AP" %}{% url "generate_pdf" quote.pk %}{% endif %}">
+            {% if quote.status == "AP" %}href="{% url "generate_pdf" quote.pk %}"{% endif %}>
             <button
                 type="button">
                 Crear Documento
