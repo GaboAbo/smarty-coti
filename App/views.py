@@ -305,6 +305,7 @@ def quote_create_view(request):
 
         for i in range(length):
             item = {key: request.POST.getlist(key)[i] for key in keys}
+            items.append(item)
 
         try:
             with transaction.atomic():
