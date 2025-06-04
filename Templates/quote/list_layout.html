@@ -38,17 +38,29 @@
             hx-swap="innerHTML"
             hx-include="this">
             <input
-                class="w-[28%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[16%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="public_id"
                 placeholder="Buscar por ID">
             <input
-                class="w-[28%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[32%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="client"
                 placeholder="Buscar por Cliente">
             <input
-                class="w-[28%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[16%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="sales_rep"
+                placeholder="Buscar por Rep. Ventas">
+            <input
+                class="w-[10%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="date"
                 type="date">
+            <select
+                class="w-[10%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="status">
+                <option value=""></option>
+                <option value="AP">Aprobada</option>
+                <option value="RJ">Rechazada</option>
+                <option value="WT">En espera</option>
+            </select>
             <input
                 class="w-[8%] h-[32px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
                 hx-get="{% url "quote_list" %}"

@@ -74,16 +74,20 @@ def quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
 
-    quotes = get_all_quotes(pk, role).order_by("pk")
+    quotes = get_all_quotes(pk, role).order_by("date")
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")
+    sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
+    status = request.GET.get("status")
 
     if id:
         quotes = quotes.filter(public_id__icontains=id)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
+    if sales_rep:
+        quotes = quotes.filter(salesRep__name__icontains=client)
     if date:
         quotes = quotes.filter(date=date)
 
@@ -110,20 +114,40 @@ def pending_quote_list_view(request):
     pk = request.session.get("pk")
     role = request.session.get("role")
 
-    quotes = get_all_quotes(pk, role).filter(status="WT")
+    quotes = get_all_quotes(pk, role).filter(status="WT").order_by("date")
 
     id = request.GET.get("public_id")
     client = request.GET.get("client")
+    sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
+    status = request.GET.get("status")
 
     if id:
         quotes = quotes.filter(public_id__icontains=id)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
+    if sales_rep:
+        quotes = quotes.filter(salesRep__name__icontains=client)
     if date:
         quotes = quotes.filter(date=date)
 
-    return render(request, "quote/partials/quote_list.html", {'quotes': quotes})
+    paginator = Paginator(quotes, 10)
+    page_number = request.GET.get("page", 1) or 1
+    page_obj = paginator.get_page(page_number)
+
+    real_quotes = quotes.exists()
+
+    quotes = list(page_obj.object_list)
+    quotes += [None] * (10 - len(quotes))
+
+    context = {
+        "quotes": quotes,
+        "real_quotes": real_quotes,
+        "page_obj": page_obj,
+        "current_filters": request.GET.urlencode(),
+    }
+
+    return render(request, "quote/partials/quote_list.html", context=context)
 
 
 def quote_view(request, pk):
