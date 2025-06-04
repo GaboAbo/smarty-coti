@@ -47,8 +47,13 @@
             Atras
         </button>
         <a
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs bg-slate-500 {% if quote.status != "AP" %}hover:bg-slate-600 duration-300{% endif %}"
-            href={% if quote.status == "AP" %}"{% url "generate_pdf" quote.pk %}"{% else %}""{% endif %}>
+            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs
+            {% if quote.status == "AP" %}
+                bg-slate-500 hover:bg-slate-600
+            {% else %}
+                bg-slate-300
+            {% endif %} duration-300"
+            href="{% if quote.status == "AP" %}{% url "generate_pdf" quote.pk %}{% endif %}">
             <button
                 type="button">
                 Crear Documento
@@ -60,7 +65,12 @@
             hx-get="{% url "set_status" quote.pk "AP" %}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white bg-amber-500 {% if quote.status != "AP" %}hover:bg-amber-600 duration-300{% endif %}"
+            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
+            {% if quote.status == "AP" %}
+                bg-slate-300
+            {% else %}
+                bg-blue-500 hover:bg-blue-600
+            {% endif %} duration-300"
             type="button">
             Aprobar
         </button>
@@ -69,7 +79,12 @@
             hx-get="{% url "set_status" quote.pk "RJ" %}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white bg-slate-500 {% if quote.status != "RJ" %}hover:bg-slate-600 duration-300{% endif %}"
+            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
+            {% if quote.status == "RJ" %}
+                bg-slate-300
+            {% else %}
+                bg-amber-500 hover:bg-amber-600
+            {% endif %} duration-300"
             type="button">
             Rechazar
         </button>
@@ -80,7 +95,7 @@
             hx-get="{% url "update_quote" quote.pk %}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs bg-slate-500 hover:bg-blue-600 duration-300"
+            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs bg-slate-500 hover:bg-slate-600 duration-300"
             type="button">
             Editar
         </button>
