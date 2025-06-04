@@ -18,7 +18,7 @@
         </tr>
         {% else %}
         <tr class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
-            <td colspan="6"> </td>
+            <td colspan="6" style="empty-cells: show;">&nbsp;</td>
         </tr>
         {% endif %}
     {% endfor %}
@@ -27,7 +27,7 @@
 <tr>
     <td>
         <button
-            class="flex justify-center align-bottom w-full rounded-xs text-white text-sm
+            class="flex justify-center align-bottom w-full h-full rounded-xs text-white text-sm
             {% if page_obj.has_previous %}
                 bg-teal-500 hover:bg-teal-600
             {% else %}
@@ -50,7 +50,7 @@
     </td>
     <td>
         <button
-            class="flex justify-center align-bottom w-full rounded-xs text-white text-sm
+            class="flex justify-center align-bottom w-full h-full rounded-xs text-white text-sm
             {% if page_obj.has_next %}
                 bg-teal-500 hover:bg-teal-600
             {% else %}
