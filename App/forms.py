@@ -18,10 +18,6 @@ class TemplateForm(forms.ModelForm):
 
 
 class QuoteForm(forms.ModelForm):
-    public_id = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'type': 'hidden'})
-    )
-
     client = forms.ModelChoiceField(
         queryset=Entity.objects.all(),
         required=True,
@@ -44,17 +40,7 @@ class QuoteForm(forms.ModelForm):
 
     class Meta:
         model = Quote
-        fields = ['public_id', 'client', 'salesRep']
-
-    def __init__(self, *args, public_id=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        if public_id is not None:
-            for name, field in self.fields.items():
-                field.widget.attrs.update({
-                    "id": f"{name}-{public_id}",
-                    "name": name,
-                })
-
+        fields = ['client', 'salesRep']
 
 
 class ProductQuoteForm(forms.ModelForm):

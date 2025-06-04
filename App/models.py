@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from AuthUser.models import Client, SalesRep
 
@@ -20,7 +21,6 @@ class Quote(models.Model):
         ("RJ", "Rechazada"),
         ("WT", "En espera")
     ]
-    public_id = models.BigIntegerField("Numero", unique=True)
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
     status = models.CharField("Estado", max_length=50, choices=status_choices, default="WT")
@@ -28,7 +28,7 @@ class Quote(models.Model):
     total = models.PositiveIntegerField("Total", default=0)
 
     def __str__(self):
-        return f"Cotizacion #{self.pk}: {self.client.name} {self.total}"
+        return f"{timezone.now().year}-{self.pk:04d}"
 
 
 class ProductQuote(models.Model):

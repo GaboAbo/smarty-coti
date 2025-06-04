@@ -1,11 +1,11 @@
 from weasyprint import HTML
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.db import transaction
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator
 from django.core.cache import cache
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
@@ -77,14 +77,14 @@ def quote_list_view(request):
 
     quotes = get_all_quotes(pk, role, refresh).order_by("date")
 
-    id = request.GET.get("public_id")
+    id = request.GET.get("pk")
     client = request.GET.get("client")
     sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
     status = request.GET.get("status")
 
     if id:
-        quotes = quotes.filter(public_id__icontains=id)
+        quotes = quotes.filter(pk__icontains=pk)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
     if sales_rep:
@@ -119,14 +119,14 @@ def pending_quote_list_view(request):
 
     quotes = get_all_quotes(pk, role).filter(status="WT").order_by("date")
 
-    id = request.GET.get("public_id")
+    id = request.GET.get("pk")
     client = request.GET.get("client")
     sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
     status = request.GET.get("status")
 
     if id:
-        quotes = quotes.filter(public_id__icontains=id)
+        quotes = quotes.filter(pk__icontains=pk)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
     if sales_rep:
@@ -296,7 +296,6 @@ def quote_detail_view(request, pk):
 
 def quote_create_view(request):
     if request.method == "POST":
-        public_id = request.POST.get("public_id") or 1
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
 
@@ -310,17 +309,17 @@ def quote_create_view(request):
 
         try:
             with transaction.atomic():
-                quote_form = QuoteForm({"public_id":public_id, "client":client, "salesRep": salesRep})
+                quote_form = QuoteForm({"client":client, "salesRep": salesRep})
                 if quote_form.is_valid():
                     quote = quote_form.save()
-                    print(f"Quote #{quote.public_id} saved!")
+                    print(f"Quote #{quote} saved!")
 
                     for item in items:
                         item["quote"] = quote.pk
                         product_quote_form = ProductQuoteFullForm(item)
                         if product_quote_form.is_valid():
                             product_quote = product_quote_form.save()
-                            print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
+                            print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
 
                         else:
                             print("Quote item storage failed.")
@@ -336,7 +335,7 @@ def quote_create_view(request):
     cache.set('form_counter', 0)
     cache.set('total_net', {})
     request.session["total_net"] = {}
-    quote_form = QuoteForm(initial={'public_id': generate_temp_id()})
+    quote_form = QuoteForm()
     role = request.session.get("role")
     context = {
         "role": role,
@@ -357,7 +356,6 @@ def quote_update_view(request, pk):
         pk=pk
     )
     if request.method == "POST":
-        public_id = request.POST.get("public_id")
         client = request.POST.get("client")
         salesRep = request.POST.get("salesRep")
         items = []
@@ -371,10 +369,10 @@ def quote_update_view(request, pk):
 
         try:
             with transaction.atomic():
-                quote_form = QuoteForm({"public_id":public_id, "client":client, "salesRep": salesRep}, instance=quote)
+                quote_form = QuoteForm({"client":client, "salesRep": salesRep}, instance=quote)
                 if quote_form.is_valid():
                     quote = quote_form.save()
-                    print(f"Quote #{quote.public_id} saved!")
+                    print(f"Quote #{quote} saved!")
 
 
                 for item in items:
@@ -387,7 +385,7 @@ def quote_update_view(request, pk):
                     product_quote_form = ProductQuoteFullForm(item, instance=instance)
                     if product_quote_form.is_valid():
                         product_quote = product_quote_form.save()
-                        print(f"Product quote #{product_quote.pk} related to Quote #{quote.public_id} saved!")
+                        print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
             
             return redirect("dashboard")
 
@@ -447,5 +445,5 @@ def generate_quote_pdf_view(request, quote_id):
     )
     pdf = HTML(string=html_string_pdf).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote.public_id} - {quote.client.name}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote} - {quote.client.name}.pdf"'
     return response
