@@ -87,9 +87,11 @@ def quote_list_view(request):
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
     if sales_rep:
-        quotes = quotes.filter(salesRep__name__icontains=client)
+        quotes = quotes.filter(salesRep__name__icontains=sales_rep)
     if date:
         quotes = quotes.filter(date=date)
+    if status:
+        quotes = quotes.filter(status=status)
 
     paginator = Paginator(quotes, 10)
     page_number = request.GET.get("page", 1) or 1
@@ -251,14 +253,14 @@ def update_product_prices_view(request):
     product = request.GET.get("product")
     discount = int(request.GET.get("discount"))
     quantity = int(request.GET.get("quantity"))
-    profit_margin = int(request.GET.get("profit_margin")) or 35
+    profit_margin = request.GET.get("profit_margin") or 35
 
     if not product:
         return HttpResponse("")
     
     product = Product.objects.get(pk=product)
 
-    unit_price, subtotal = calcultate_subtotal(request, form_counter, product, discount, profit_margin, quantity)
+    unit_price, subtotal = calcultate_subtotal(request, form_counter, product, discount, int(profit_margin), quantity)
 
     pricing_form = PricingForm(initial={"unit_price": unit_price, "subtotal": subtotal}, index=form_counter)
 
