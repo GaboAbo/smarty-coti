@@ -516,6 +516,10 @@
   .rounded-xs {
     border-radius: var(--radius-xs);
   }
+  .rounded-l-md {
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;

@@ -12,6 +12,11 @@
                 <th colspan="6">Fecha</th>
                 <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.date }}</td>
                 <th colspan="6">Total Neto</th>
+                    <div class="flex-row w-full bg-slate-600/10 px-2 rounded-md">
+                        <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
+                        <p class="w-1/2 pr-4 pl-4 text-right">{{ total }}</p>
+                    </div>
+                </td>
                 <td colspan="20" class="bg-slate-600/10 px-2 rounded-md text-center">{{ quote.total }}</td>
             </tr>
             <tr>
@@ -20,7 +25,12 @@
                 <th colspan="6">Estado</th>
                 <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.get_status_display }}</td>
                 <th colspan="6">IVA</th>
-                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md text-center">{{ iva }}</td>
+                <td colspan="20" class="bg-slate-600/10 px-2">
+                    <div class="flex-row w-full bg-slate-600/10 px-2 rounded-md">
+                        <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
+                        <p class="w-1/2 pr-4 pl-4 text-right">{{ iva }}</p>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <th colspan="6">Región</th>
@@ -28,7 +38,12 @@
                 <th colspan="6"></th>
                 <td colspan="20"></td>
                 <th colspan="6">Total con IVA</th>
-                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md text-center">{{ final }}</td>
+                <td colspan="20" class="bg-slate-600/10 px-2">
+                    <div class="flex-row w-full bg-slate-600/10 px-2 rounded-md">
+                        <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
+                        <p class="w-1/2 pr-4 pl-4 text-right">{{ final }}</p>
+                    </div>
+                </td>
             </tr>
         </table>
     </div>
