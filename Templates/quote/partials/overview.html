@@ -5,30 +5,30 @@
         <p>Detalle de Cotizacion #{{ quote }}</p>
     </div>
     <div class="w-full h-2/12 mb-[10px] border-2 border-[#B5B5B5]">
-        <table class="w-full h-full table-fixed text-left text-sm border-separate border-spacing-2 bg-slate-50">
+        <table class="w-full h-full table-fixed text-left text-sm border-separate border-spacing-y-1 border-spacing-x-2 bg-slate-50">
             <tr>
-                <th colspan="10">Institución</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.client.name }}</td>
-                <th colspan="10">Fecha</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.date }}</td>
-                <th colspan="10">Total Neto</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.total }}</td>
+                <th colspan="8">Institución</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.client.name }}</td>
+                <th colspan="8">Fecha</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.date }}</td>
+                <th colspan="8">Total Neto</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.total }}</td>
             </tr>
             <tr>
-                <th colspan="10">Rep. Ventas</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
-                <th colspan="10">Estado</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.get_status_display }}</td>
-                <th colspan="10">IVA</th>
-                <td colspan="20" class="bg-slate-600/10">{{ iva }}</td>
+                <th colspan="8">Rep. Ventas</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
+                <th colspan="8">Estado</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.get_status_display }}</td>
+                <th colspan="8">IVA</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ iva }}</td>
             </tr>
             <tr>
-                <th colspan="10">Región</th>
-                <td colspan="20" class="bg-slate-600/10">{{ quote.client.get_region_display }}</td>
-                <th colspan="10"></th>
+                <th colspan="8">Región</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ quote.client.get_region_display }}</td>
+                <th colspan="8"></th>
                 <td colspan="20"></td>
-                <th colspan="10">Total con IVA</th>
-                <td colspan="20" class="bg-slate-600/10">{{ final }}</td>
+                <th colspan="8">Total con IVA</th>
+                <td colspan="20" class="bg-slate-600/10 px-2 rounded-md">{{ final }}</td>
             </tr>
         </table>
     </div>
