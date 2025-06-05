@@ -71,19 +71,19 @@ def list_layout_view(request):
 
 
 def quote_list_view(request):
-    pk = request.session.get("pk")
-    role = request.session.get("role")
+    user_pk = request.session.get("pk")
+    user_role = request.session.get("role")
     refresh = request.GET.get("refresh") or None
 
-    quotes = get_all_quotes(pk, role, refresh).order_by("date")
+    quotes = get_all_quotes(user_pk, user_role, refresh).order_by("date")
 
-    id = request.GET.get("pk")
+    pk = request.GET.get("pk")
     client = request.GET.get("client")
     sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
     status = request.GET.get("status")
 
-    if id:
+    if pk:
         quotes = quotes.filter(pk__icontains=pk)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
@@ -114,18 +114,19 @@ def quote_list_view(request):
     
 
 def pending_quote_list_view(request):
-    pk = request.session.get("pk")
-    role = request.session.get("role")
+    user_pk = request.session.get("pk")
+    user_role = request.session.get("role")
+    refresh = request.GET.get("refresh") or None
 
-    quotes = get_all_quotes(pk, role).filter(status="WT").order_by("date")
+    quotes = get_all_quotes(user_pk, user_role, refresh).filter(status="WT").order_by("date")
 
-    id = request.GET.get("pk")
+    pk = request.GET.get("pk")
     client = request.GET.get("client")
     sales_rep = request.GET.get("sales_rep")
     date = request.GET.get("date")
     status = request.GET.get("status")
 
-    if id:
+    if pk:
         quotes = quotes.filter(pk__icontains=pk)
     if client:
         quotes = quotes.filter(client__entity__name__icontains=client)
