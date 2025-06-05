@@ -48,7 +48,7 @@
         </table>
     </div>
     <div class="w-full h-8/12 border-2 border-[#B6B6B6]">
-        <table id="product_table" class="table-auto w-full text-sm border-separate border-spacing-2">
+        <table id="product_table" class="table-auto w-full h-full text-sm border-separate border-spacing-2">
             <thead class="sticky top-0 bg-slate-50 z-10">
                 <tr class="h-[48px] my-2">
                     <th style="width:10%">Producto</th>
@@ -124,10 +124,16 @@
         <div class="w-2/6"></div>
         {% endif %}
         <button
+            {% if quote.status == "AP" %}disabled{% endif %}
             hx-get="{% url "update_quote" quote.pk %}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs bg-slate-500 hover:bg-slate-600 duration-300"
+            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
+            {% if quote.status == "AP" %}
+                bg-slate-300
+            {% else %}
+                bg-slate-500 hover:bg-slate-600
+            {% endif %} duration-300"
             type="button">
             Editar
         </button>
