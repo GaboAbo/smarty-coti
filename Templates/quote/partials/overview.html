@@ -5,15 +5,41 @@
         <p>Detalle de Cotizacion #{{ quote }}</p>
     </div>
     <div class="w-full h-2/12 mb-[10px] bg-slate-50 flex flex-row">
-        <div class="w-full h-full grid grid-flow-col grid-rows-3 grid-cols-3 p-4 gap-x-4">
-            <div class="px-2 text-sm"><b>Cliente</b>: {{ quote.client.name }}</div>
-            <div class="px-2 text-sm"><b>Rep. Ventas</b>: {{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</div>
-            <div class="px-2 text-sm"><b>Fecha</b>: {{ quote.date }}</div>
-            <div class="px-2 text-sm"><b>Total Neto</b>: {{ quote.total }}</div>
-            <div class="px-2 text-sm"><b>IVA</b>: {{ iva }}</div>
-            <div class="px-2 text-sm"><b>Total con IVA</b>: {{ final }}</div>
-            <div class="px-2 text-sm"><b>Estado</b>: {{ quote.get_status_display }}</div>
-        </div>
+        <table class="w-full h-full table-fixed text-left border-[1px] border-[#B5B5B5] border-collapse">
+            <tr>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Institución</th>
+                <td colspan="20">{{ quote.client.name }}</td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Fecha</th>
+                <td colspan="20">{{ quote.date }}</td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Total Neto</th>
+                <td colspan="20">{{ quote.total }}</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Rep. Ventas</th>
+                <td colspan="20">{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Estado</th>
+                <td colspan="20">{{ quote.get_status_display }}</td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">IVA</th>
+                <td colspan="20">{{ iva }}</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Región</th>
+                <td colspan="20">{{ quote.client.get_region_display }}</td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9"></th>
+                <td colspan="20"></td>
+                <td colspan="1" class="bg-[#B5B5B5]"></td>
+                <th colspan="9">Total con IVA</th>
+                <td colspan="20">{{ final }}</td>
+            </tr>
+        </table>
     </div>
     <div class="w-full h-8/12 border-2 border-[#B6B6B6]">
         <table id="product_table" class="table-auto w-full text-sm border-separate border-spacing-2">
