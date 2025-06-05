@@ -173,10 +173,20 @@ def set_quote_status_view(request, pk, status):
 def quote_products_view(request, pk):
     role = request.session.get("role")
     products = ProductQuote.objects.filter(quote__pk=pk)
+
+    paginator = Paginator(products, 6)
+    page_number = request.GET.get("page", 1) or 1
+    page_obj = paginator.get_page(page_number)
+
+    products = list(page_obj.object_list)
+    products += [None] * (6 - len(products))
+
     context = {
         "role": role,
-        "products": products
+        "products": products,
+        "page_obj": page_obj,
     }
+
     return render(request, "quote/partials/product_by_quote.html", context=context)
 
 
