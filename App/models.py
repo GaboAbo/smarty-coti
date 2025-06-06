@@ -39,19 +39,22 @@ class Quote(models.Model):
             or (self.status == "AP" and self.approved_by == self.salesRep)
         )
     
-    def approve_by_manager(self, manager_user):
-        self.status = "AP"
-        self.approved_by = manager_user
-        self.save()
+    def approve_by_manager(self, manager):
+        if self.status != "CL":
+            self.status = "AP"
+            self.approved_by = manager
+            self.save()
 
-    def reject(self, manager_user):
-        self.status = "RJ"
-        self.approved_by = manager_user
-        self.save()
+    def reject(self, manager):
+        if self.status != "CL":
+            self.status = "RJ"
+            self.approved_by = manager
+            self.save()
 
     def close(self):
-        self.status = "CL"
-        self.save()
+        if self.status != "CL":
+            self.status = "CL"
+            self.save()
     
     def save(self, *args, **kwargs):
         if self.status == "WT":

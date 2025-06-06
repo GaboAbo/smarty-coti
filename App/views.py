@@ -163,9 +163,17 @@ def quote_view(request, pk):
 
 
 def set_quote_status_view(request, pk, status):
+    user_pk = request.session.get("pk")
+    user = get_object_or_404(SalesRep, pk=user_pk)
+    quote = get_object_or_404(Quote, pk=pk)
+
     quote = Quote.objects.get(pk=pk)
-    quote.status = status
-    quote.save()
+    if status == "AP":
+        quote.approve_by_manager(user)
+    elif status == "RJ":
+        quote.reject(user)
+    elif status == "CL":
+        quote.close()
 
     return render(request, "quote/list_layout.html")
     

@@ -80,7 +80,7 @@
         </button>
         <a
             class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs
-            {% if quote.status == "AP" %}
+            {% if quote.status == "AP" or quote.status == "CL" %}
                 bg-slate-500 hover:bg-slate-600
             {% else %}
                 bg-slate-300
@@ -98,7 +98,7 @@
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
-            {% if quote.status == "AP" %}
+            {% if quote.status == "AP" or quote.status == "CL" %}
                 bg-slate-300
             {% else %}
                 bg-blue-500 hover:bg-blue-600
@@ -112,7 +112,7 @@
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
-            {% if quote.status == "RJ" %}
+            {% if quote.status == "RJ" or quote.status == "CL" %}
                 bg-slate-300
             {% else %}
                 bg-amber-500 hover:bg-amber-600
@@ -138,13 +138,18 @@
             Editar
         </button>
         <button
-            hx-get="{% url "delete_quote" quote.pk %}"
-            hx-confirm="Esta seguro de que desea eliminar la cotizacion {{ quote.public_id }}?"
+            hx-get="{% url "set_status" quote.pk "CL" %}"
+            hx-confirm="Esta seguro de que desea cerrar la cotizacion {{ quote.public_id }}?"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
-            class="w-1/6 h-[32px] text-white flex justify-center items-center rounded-xs bg-slate-500 hover:bg-red-600  duration-300"
+            class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
+            {% if quote.status == "CL" %}
+                bg-slate-300
+            {% else %}
+                bg-slate-500 hover:bg-red-500
+            {% endif %} duration-300"
             type="button">
-            Eliminar
+            Cerrar
         </button>
     </div>
 </div>
