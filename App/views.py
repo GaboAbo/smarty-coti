@@ -419,6 +419,7 @@ def quote_update_view(request, pk):
     context = {
         "role": role,
         'quote_form': quote_form,
+        'quote': quote,
         'pk': pk,
         'product_pks': products_pks
     }
