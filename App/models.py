@@ -19,13 +19,46 @@ class Quote(models.Model):
     status_choices = [
         ("AP", "Aprobada"),
         ("RJ", "Rechazada"),
-        ("WT", "En espera")
+        ("WT", "En espera"),
+        ("CL", "Cerrada"),
     ]
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
-    salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE)
+    salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE, related_name='sales_rep')
     status = models.CharField("Estado", max_length=50, choices=status_choices, default="WT")
     date = models.DateField("Fecha", auto_now=True)
+    approved_by = models.ForeignKey("AuthUser.SalesRep", verbose_name="Aprobador", on_delete=models.CASCADE, default=1, related_name='manager')
     total = models.PositiveIntegerField("Total", default=0)
+
+    @property
+    def has_discounted_items(self):
+        return any(pq.discount > 0 for pq in self.products.all())
+    
+    def is_editable(self):
+        return (
+            self.status == "WT"
+            or (self.status == "AP" and self.approved_by == self.salesRep)
+        )
+    
+    def approve_by_manager(self, manager_user):
+        self.status = "AP"
+        self.approved_by = manager_user
+        self.save()
+
+    def reject(self, manager_user):
+        self.status = "RJ"
+        self.approved_by = manager_user
+        self.save()
+
+    def close(self):
+        self.status = "CL"
+        self.save()
+    
+    def save(self, *args, **kwargs):
+        if self.status == "WT":
+            if not self.has_discounted_items:
+                self.status = "AP"
+                self.approved_by = self.salesRep
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{timezone.now().year}-{self.pk:04d}"

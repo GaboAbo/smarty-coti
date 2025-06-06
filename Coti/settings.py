@@ -49,6 +49,8 @@ DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net/"]
 ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
     "169.254.129.1", "169.254.129.2", "169.254.129.3", "169.254.129.4", "169.254.129.5"
 ]
@@ -76,6 +78,8 @@ INSTALLED_APPS = [
     'App',
     'AuthUser',
     'MicrosoftAuth',
+
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

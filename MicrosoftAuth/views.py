@@ -17,19 +17,25 @@ logger = logging.getLogger(__name__)
 
 env = environ.Env()
 
-if env.str('ENV', default='development') != 'production':
+ENVIRONMENT = env.str("ENV", default="development")
+
+if ENVIRONMENT != 'production':
     environ.Env.read_env()
 
 # Environment Variables
 TENANT = env("MICROSOFT_TENANT", default="")
 CLIENT_ID = env("MICROSOFT_CLIENT_ID", default="")
 CLIENT_SECRET = env("MICROSOFT_CLIENT_SECRET", default="")
-REDIRECT_URI = env("MICROSOFT_REDIRECT_URI", default="")
+REDIRECT_URI = env(
+    "MICROSOFT_REDIRECT_URI" if ENVIRONMENT == "production" else "DEVELOPMENT_REDIRECT_URI",
+    default=""
+)
 
 _confidential_client = None
 
 
 def set_client():
+    print(f"ENVIRONMENT = {ENVIRONMENT}")
     global _confidential_client
     if _confidential_client is None:
         _confidential_client = ConfidentialClientApplication(
