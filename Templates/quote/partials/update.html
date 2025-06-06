@@ -1,33 +1,38 @@
 {% load static %}
 
-<div id="quote_edit" class="w-full h-full p-4 flex flex-col gap-2 bg-slate-50/50 rounded-xs justify-center items-center text-sm">
+<div id="quote_edit" class="w-full h-full p-4 flex flex-col gap-2 justify-center items-center text-sm">
     <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
         <p>Actualizar Cotizacion</p>
     </div>
 
-    <div id="quote_head" class="w-full h-[10%] flex flex-row text-sm px-2 pr-[30px] bg-slate-50 font-semibold border-2 border-[#B6B6B6]">
-        <div class="w-[40%] flex items-center justify-center">Producto - Descripcion</div>
-        <div class="w-[10%] flex items-center justify-center">Descuento</div>
-        {% if role == "MAN" or role == "ADM" %}
-        <div class="w-[10%] flex items-center justify-center">Margen</div>
-        {% endif %}
-        <div class="w-[10%] flex items-center justify-center">Cantidad</div>
-        <div class="w-[10%] flex items-center justify-center">Precio unitario</div>
-        <div class="w-[10%] flex items-center justify-center">Precio venta</div>
-        <div class="w-[10%]"></div>
-    </div>
 
-    <div id="quote_items" class="w-full h-[70%] flex flex-col gap-1 text-sm border-2 p-1 border-[#B6B6B6] overflow-y-scroll">
-        {% for pk in product_pks %}
-            <input
-                id="product-form"
-                name="product-form"
-                value="{{ pk }}"
-                hx-trigger="load delay:{{ forloop.counter0|add:"1" }}00ms"
-                hx-swap="outerHTML"
-                hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}"
-                hx-target="this" />
-        {% endfor %}
+    <div id="quote_head" class="w-full h-[80%] flex flex-row text-sm px-2 border-2 border-[#B6B6B6]">
+        <table id="product_table" class="table-fixed w-full h-full text-sm border-separate border-spacing-2">
+            <thead class="sticky top-0 bg-slate-50 z-10">
+                <tr class="h-[48px] my-2">
+                    <th style="width:10%">Producto</th>
+                    <th style="width:30%">Descripcion</th>
+                    <th style="width:10%">Descuento</th>
+                    <th style="width:10%">{% if role == "MAN" %}Margen{% endif %}</th>
+                    <th style="width:10%">Cantidad</th>
+                    <th style="width:10%">Precio unitario</th>
+                    <th style="width:10%">Precio venta</th>
+                    <th style="width:10%">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="quote_items">
+                {% for pk in product_pks %}
+                    <input
+                        id="product-form"
+                        name="product-form"
+                        value="{{ pk }}"
+                        hx-trigger="load delay:{{ forloop.counter0|add:"5" }}0ms"
+                        hx-swap="outerHTML"
+                        hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}"
+                        hx-target="this" />
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <div id="quote_info" class="w-full h-[10%] p-4 bg-slate-50 flex gap-x-4">

@@ -1,5 +1,7 @@
+<td colspan="2">
 {{ pricing_form.unit_price }}
 {{ pricing_form.subtotal }}
+</td>
 <div
     hx-get="{% url "update_quote_totals" %}"
     hx-trigger="load"
