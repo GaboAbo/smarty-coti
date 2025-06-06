@@ -211,15 +211,13 @@ def product_form_view(request):
     else:
         instance = None
 
-    product_form = ProductQuoteForm(index=index, instance=instance) 
-    products = get_all_products()
+    product_form = ProductQuoteForm(index=index, instance=instance)
 
     context = {
         "role": role,
         "index": index,
         "product_pk": pk,
         "product_form": product_form,
-        "products": products
     }
 
     return render(request, "quote/partials/product_form.html", context=context)
