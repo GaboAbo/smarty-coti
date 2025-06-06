@@ -202,12 +202,12 @@ def quote_products_view(request, pk):
 def product_form_view(request):
     role = request.session.get("role")
     pk = request.GET.get("product-form")
+    index = request.GET.get("index") or None
     
-    index = cache.get("form_counter", 0)
+    if not index:
+        index = cache.get("form_counter", 0)
+        
     cache.set("form_counter", index + 1)
-
-    if int(index) >= 10:
-        return HttpResponse("")
     
     if pk:
         instance = ProductQuote.objects.get(pk=pk)
