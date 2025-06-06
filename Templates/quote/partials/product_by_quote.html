@@ -30,7 +30,7 @@
                 bg-slate-300
             {% endif %} duration-150"
             {% if page_obj.has_previous %}
-            hx-get="{% url "quote_products" quote_pk %}?page={{ page_obj.previous_page_number }}"
+            hx-get="{% url "quote_products" pk %}?page={{ page_obj.previous_page_number }}"
             hx-target="#table_data"
             hx-swap="innerHTML transition:true"
             {% else %}
@@ -53,7 +53,7 @@
                 bg-slate-300
             {% endif %} duration-150"
             {% if page_obj.has_next %}
-                hx-get="{% url 'quote_products' quote_pk %}?page={{ page_obj.next_page_number }}"
+                hx-get="{% url 'quote_products' pk %}?page={{ page_obj.next_page_number }}"
                 hx-target="#table_data"
                 hx-swap="innerHTML transition:true"
             {% else %}
