@@ -190,6 +190,7 @@ def quote_products_view(request, pk):
     products += [None] * (6 - len(products))
 
     context = {
+        "pk": pk,
         "role": role,
         "products": products,
         "page_obj": page_obj,
