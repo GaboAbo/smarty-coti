@@ -204,7 +204,7 @@ def product_form_view(request):
     pk = request.GET.get("product-form")
     index = request.GET.get("index") or cache.get("form_counter", 0)
 
-    cache.set("form_counter", index + 1)
+    cache.set("form_counter", int(index) + 1)
     
     if pk:
         instance = ProductQuote.objects.get(pk=pk)
