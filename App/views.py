@@ -201,7 +201,7 @@ def quote_products_view(request, pk):
 
 def product_form_view(request):
     role = request.session.get("role")
-    pk = request.GET.get("product-form")
+    pk = request.GET.get("pk")
     index = request.GET.get("index") or cache.get("form_counter", 0)
 
     cache.set("form_counter", int(index) + 1)

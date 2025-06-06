@@ -22,14 +22,10 @@
             <tbody id="quote_items">
                 {% for pk in product_pks %}
                     <tr
-                        id="product-form"
-                        name="product-form"
-                        value="{{ pk }}"
                         hx-trigger="load delay:{{ forloop.counter0|add:"5" }}0ms"
                         hx-swap="outerHTML"
-                        hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}"
+                        hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}&pk={{ pk }}"
                         hx-target="this"
-                        hx-include="this"
                         class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
                         <td colspan="8">Cargando producto...</td>
                     </tr>
