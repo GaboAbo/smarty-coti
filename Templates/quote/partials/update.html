@@ -5,7 +5,7 @@
         <p>Actualizar Cotizacion #{{ quote }}</p>
     </div>
 
-    <div class="w-full h-[80%] border-2 border-[#B6B6B6]">
+    <div class="w-full h-[80%] border-2 border-[#B6B6B6] overflow-y-auto">
         <table id="product_table" class="table-fixed w-full h-full text-sm border-separate border-spacing-2">
             <thead class="sticky top-0 bg-slate-50 z-10">
                 <tr class="h-[48px] my-2">
@@ -25,7 +25,7 @@
                         hx-swap="outerHTML"
                         hx-get="{% url 'product_form' %}?index={{ forloop.counter0 }}&pk={{ pk }}"
                         hx-target="this"
-                        class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
+                        class="h-1/6 border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
                         <td colspan="8">Cargando producto...</td>
                     </tr>
                 {% endfor %}
