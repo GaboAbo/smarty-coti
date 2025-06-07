@@ -411,31 +411,20 @@ def quote_create_or_update_view(request):
         try:
             with transaction.atomic():
                 quote_form = QuoteForm({"client": client, "salesRep": salesRep}, instance=quote)
-
-                product_forms = []
-                is_valid = True
+                if quote_form.is_valid():
+                    quote = quote_form.save()
+                    messages.success(request, f"Quote #{quote.pk} saved.")
 
                 for item in items:
-                    product_pk = item.pop("product_pk", None)
+                    product_pk = item.pop("product_pk")
                     instance = ProductQuote.objects.filter(pk=product_pk).first() if product_pk else None
-                    form = ProductQuoteFullForm(item, instance=instance)
-                    product_forms.append(form)
-                    if not form.is_valid():
-                        is_valid = False
-
-                if quote_form.is_valid() and is_valid:
-                    quote = quote_form.save(commit=False)
-                    quote.save()
                     
+                    product_quote_form = ProductQuoteFullForm(item, instance=instance)
+                    if product_quote_form.is_valid():
+                        product_quote = product_quote_form.save()
+                        print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
 
-                    for form in product_forms:
-                        product_quote = form.save(commit=False)
-                        product_quote.quote = quote
-                        product_quote.save()
-                        messages.success(request, f"Product quote #{product_quote.pk} saved.")
-
-                    messages.success(request, f"Quote #{quote.pk} saved.")
-                    return redirect("dashboard")
+            return redirect("dashboard")
 
         except Exception as e:
             print("Transaction failed:", e)
