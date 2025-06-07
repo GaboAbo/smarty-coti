@@ -420,8 +420,8 @@ def quote_update_view(request, pk):
     products = quote.products.all()
 
     product_forms = [
-        ProductQuoteForm(instance=product, prefix=f'product_form-{i}')
-        for i, product in enumerate(products)
+        ProductQuoteForm(instance=product)
+        for product in products
     ]
 
     role = request.session.get("role")
