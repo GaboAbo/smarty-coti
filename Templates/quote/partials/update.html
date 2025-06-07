@@ -20,7 +20,7 @@
             </thead>
             <tbody id="quote_items">
                 {% for product_form in product_forms %}
-                    {% include "quote/partials/product_form_row.html" with product_form=product_form index=forloop.counter0 role=role %}
+                    {% include "quote/partials/product_form.html" with product_form=product_form index=forloop.counter0 role=role %}
                 {% endfor %}
             </tbody>
         </table>
