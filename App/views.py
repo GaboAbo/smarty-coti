@@ -371,8 +371,10 @@ def quote_detail_view(request, pk):
 
 def quote_create_or_update_view(request):
     cache.set('total_net', {})
-    pk = request.POST.get('pk')
-    action = request.POST.get('action') or "create"
+
+    if request.method == "GET":
+        pk = request.GET.get('pk')
+        action = request.GET.get('action') or "create"
 
     if pk and action == "update":
         quote = get_object_or_404(
@@ -388,6 +390,9 @@ def quote_create_or_update_view(request):
         quote = None
 
     if request.method == "POST":
+        pk = request.POST.get('pk')
+        action = request.POST.get('action') or "create"
+
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
 
@@ -435,6 +440,15 @@ def quote_create_or_update_view(request):
 
     quote_form = QuoteForm(instance=quote)
 
+    role = request.session.get("role")
+    context = {
+        "role": role,
+        'quote_form': quote_form,
+        'quote': quote,
+        'pk': pk,
+        'action': action,
+    }
+
     if action == "update":
         products = quote.products.all()
 
@@ -443,15 +457,7 @@ def quote_create_or_update_view(request):
             for i, product in enumerate(products)
         ]
 
-    role = request.session.get("role")
-    context = {
-        "role": role,
-        'quote_form': quote_form,
-        'quote': quote,
-        'pk': pk,
-        'product_forms': product_forms,
-        'action': action,
-    }
+        context["product_forms"] = product_forms
 
     return render(request, "quote/partials/create_or_update.html", context=context)
 
