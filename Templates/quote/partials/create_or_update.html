@@ -2,7 +2,7 @@
 
 <div id="create_or_update_quote" class="w-full h-full p-4 flex flex-col gap-2 bg-slate-50/50 rounded-xs justify-center items-center text-sm">
     <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
-        <p>{% if action == "create" %}Crear Cotizacion{% else %}Actualizar Cotizacion #{{ quote }}{% endif %}</p>
+        <p>{% if action == "create" %}Crear Cotizacion{% elif action == "update" %}Actualizar Cotizacion #{{ quote }}{% endif %}</p>
     </div>
     
     <div class="w-full h-[80%] border-2 border-[#B6B6B6] overflow-y-scroll">
@@ -86,8 +86,8 @@
             id="create_or_update_quote"
             {% if action == "create" %}
             hx-post="{% url 'create_or_update_quote' %}?action=create"
-            {% else %}
-            hx-post="{% url 'create_or_update_quote'  %}?action=update&pk={{ pk }}"
+            {% elif action == "update" %}
+            hx-post="{% url "create_or_update_quote" %}?action=update&pk={{ quote.pk }}"
             {% endif %}
             hx-target="body"
             hx-include="#quote_info, #quote_items"
@@ -95,7 +95,7 @@
             class="w-1/4 h-[32px] bg-green-600 text-white rounded-xs flex justify-center items-center shadow hover:bg-green-700 duration-300">
             {% if action == "create" %}
             Crear Cotización
-            {% else %}
+            {% elif action == "update" %}
             Actualizar Cotización
             {% endif %}
         </button>
