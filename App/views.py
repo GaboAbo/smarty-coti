@@ -382,6 +382,7 @@ def quote_create_or_update_view(request):
     pk = data.get("pk")
     action = data.get("action") or "create"
 
+    print(pk, action)
 
     if pk and action == "update":
         quote = get_object_or_404(
@@ -395,6 +396,8 @@ def quote_create_or_update_view(request):
         )
     else: 
         quote = None
+
+    print(request.method, quote)
 
     if request.method == "POST":
         client = request.POST.get("client") or Entity.objects.first().id
@@ -415,14 +418,14 @@ def quote_create_or_update_view(request):
                     quote = quote_form.save()
                     messages.success(request, f"Quote #{quote.pk} saved.")
 
-                for item in items:
-                    product_pk = item.pop("product_pk")
-                    instance = ProductQuote.objects.filter(pk=product_pk).first() if product_pk else None
-                    
-                    product_quote_form = ProductQuoteFullForm(item, instance=instance)
-                    if product_quote_form.is_valid():
-                        product_quote = product_quote_form.save()
-                        print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
+                    for item in items:
+                        product_pk = item.pop("product_pk")
+                        instance = ProductQuote.objects.filter(pk=product_pk).first() if product_pk else None
+                        
+                        product_quote_form = ProductQuoteFullForm(item, instance=instance)
+                        if product_quote_form.is_valid():
+                            product_quote = product_quote_form.save()
+                            print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
 
             return redirect("dashboard")
 
