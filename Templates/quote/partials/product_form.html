@@ -3,7 +3,6 @@
 <tr
     id="product_form-{{ index }}"
     class="h-1/6 border-b-4 border-b-white/70 rounded-lg bg-slate-600/10 hover:bg-slate-600/20 duration-300">
-    <input id="product_pk-{{ index }}" name="product_pk" type="hidden" value="{{ index }}" />
     <td>{{ product_form.product }}</td>
     <td>{{ product_form.discount }}</td>
     <td>
@@ -25,13 +24,13 @@
         colspan="2"
         hx-get="{% url 'update_product_prices' %}?index={{ index }}"
         hx-trigger="
+            load delay:50ms,
             change from:#id_product_form-{{ index }}-product,
             change from:#id_product_form-{{ index }}-discount,
             change from:#id_product_form-{{ index }}-profit_margin,
             change from:#id_product_form-{{ index }}-quantity
         "
         hx-include="
-            #product_pk-{{ index }},
             #id_product_form-{{ index }}-product,
             #id_product_form-{{ index }}-discount,
             #id_product_form-{{ index }}-profit_margin,

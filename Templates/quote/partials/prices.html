@@ -1,7 +1,5 @@
-<div class="flex gap-x-2">
-    {{ pricing_form.unit_price }}
-    {{ pricing_form.subtotal }}
-</div>
+{{ pricing_form.unit_price }}
+{{ pricing_form.subtotal }}
 <div
     hx-get="{% url "update_quote_totals" %}"
     hx-trigger="load"
