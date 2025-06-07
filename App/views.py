@@ -316,7 +316,9 @@ def quote_detail_view(request, pk):
     return render(request, 'quote/partials/overview.html', context=context)
 
 
-def quote_create_view(request):
+"""def quote_create_or_update_view(request):
+    cache.set('total_net', {})
+
     if request.method == "POST":
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
@@ -364,21 +366,26 @@ def quote_create_view(request):
         "role": role,
         "quote_form": quote_form
     }
-    return render(request, "quote/partials/create.html", context=context)
+    return render(request, "quote/partials/create.html", context=context)"""
 
 
-def quote_update_view(request, pk):
+def quote_create_or_update_view(request):
     cache.set('total_net', {})
+    pk = request.POST.get('pk')
+    action = request.POST.get('action') or "create"
 
-    quote = get_object_or_404(
-        Quote.objects.prefetch_related(
-            Prefetch(
-                'products',
-                queryset=ProductQuote.objects.only('pk')
-            )
-        ),
-        pk=pk
-    )
+    if pk:
+        quote = get_object_or_404(
+            Quote.objects.prefetch_related(
+                Prefetch(
+                    'products',
+                    queryset=ProductQuote.objects.only('pk')
+                )
+            ),
+            pk=pk
+        )
+    else: 
+        quote = None
 
     if request.method == "POST":
         client = request.POST.get("client") or Entity.objects.first().id
@@ -412,7 +419,9 @@ def quote_update_view(request, pk):
                     print(f"Quote #{quote.pk} saved!")
 
                     for form in product_forms:
-                        product_quote = form.save()
+                        product_quote = form.save(commit=False)
+                        product_quote.quote = quote
+                        product_quote.save()
                         print(f"Product quote #{product_quote.pk} saved.")
                     
                     return redirect("dashboard")
@@ -423,13 +432,15 @@ def quote_update_view(request, pk):
 
     request.session["form_counter"] = 0
     request.session["total_net"] = {}
-    quote_form = QuoteForm(instance=quote)
-    products = quote.products.all()
 
-    product_forms = [
-        ProductQuoteForm(instance=product, prefix=f'pq_form-{i}')
-        for i, product in enumerate(products)
-    ]
+    if action == "create":
+        quote_form = QuoteForm(instance=quote)
+        products = quote.products.all()
+
+        product_forms = [
+            ProductQuoteForm(instance=product, prefix=f'pq_form-{i}')
+            for i, product in enumerate(products)
+        ]
 
     role = request.session.get("role")
     context = {
@@ -438,8 +449,10 @@ def quote_update_view(request, pk):
         'quote': quote,
         'pk': pk,
         'product_forms': product_forms,
+        'action': action,
     }
-    return render(request, "quote/partials/update.html", context=context)
+
+    return render(request, "quote/partials/create_or_update.html", context=context)
 
 
 def quote_delete_view(request, pk):

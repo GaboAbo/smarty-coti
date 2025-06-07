@@ -125,7 +125,7 @@
         {% endif %}
         <button
             {% if quote.status == "AP" or quote.status == "CL" %}disabled{% endif %}
-            hx-get="{% url "update_quote" quote.pk %}"
+            hx-get="{% url "create_or_update_quote" %}?pk={{ quote.pk }}"
             hx-target="#quote_view"
             hx-swap="outerHTML transition:true"
             class="w-1/6 h-[32px] flex justify-center items-center rounded-xs text-white
