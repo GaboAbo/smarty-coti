@@ -5,7 +5,7 @@
         <p>Actualizar Cotizacion #{{ quote }}</p>
     </div>
 
-    <div class="w-full h-[80%] border-2 border-[#B6B6B6] overflow-y-auto">
+    <div class="w-full h-[80%] border-2 border-[#B6B6B6] overflow-y-scroll">
         <table id="product_table" class="table-fixed w-full h-full text-sm border-separate border-spacing-2">
             <thead class="sticky top-0 bg-slate-50 z-10">
                 <tr class="h-[48px] my-2">
@@ -18,7 +18,7 @@
                     <th style="width:10%">&nbsp;</th>
                 </tr>
             </thead>
-            <tbody id="quote_items">
+            <tbody id="quote_items" class="h-full">
                 {% for pk in product_pks %}
                     <tr
                         hx-trigger="load delay:{{ forloop.counter0|add:"5" }}0ms"
