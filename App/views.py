@@ -267,8 +267,8 @@ def remove_product_form_view(request):
 def update_product_prices_view(request):
     form_counter = request.GET.get("index", 0)
     product = request.GET.get("product")
-    discount = int(request.GET.get("discount"))
-    quantity = int(request.GET.get("quantity"))
+    discount = request.GET.get("discount") or 0
+    quantity = request.GET.get("quantity") or 1
     profit_margin = request.GET.get("profit_margin") or 35
 
     if not product:
@@ -276,7 +276,7 @@ def update_product_prices_view(request):
     
     product = Product.objects.get(pk=product)
 
-    unit_price, subtotal = calcultate_subtotal(request, form_counter, product, discount, int(profit_margin), quantity)
+    unit_price, subtotal = calcultate_subtotal(request, form_counter, product, discount, profit_margin, quantity)
 
     pricing_form = PricingForm(initial={"unit_price": unit_price, "subtotal": subtotal}, index=form_counter)
 

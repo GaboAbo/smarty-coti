@@ -12,7 +12,7 @@
         {% else %}
         <input type="number"
             type="hidden"
-            name="profit_margin"
+            name="product_form={{ index }}profit_margin"
             value="35"
             readonly
             class="w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs bg-gray-100" />
@@ -23,8 +23,19 @@
     <td
         colspan="2"
         hx-get="{% url 'update_product_prices' %}?index={{ index }}"
-        hx-trigger="load once delay:50ms, change from:#product-{{ index }}, change from:#discount-{{ index }}, change from:#profit_margin-{{ index }}, change from:#quantity-{{ index }}"
-        hx-include="#pk-{{ index }}, #product-{{ index }}, #discount-{{ index }}, #profit_margin-{{ index }}, #quantity-{{ index }}"
+        hx-trigger="
+            change from:#product_form-{{ index }}-product,
+            change from:#product_form-{{ index }}-discount,
+            change from:#product_form-{{ index }}-profit_margin,
+            change from:#product_form-{{ index }}-quantity
+        "
+        hx-include="
+            #product_pk-{{ index }},
+            #product_form-{{ index }}-product,
+            #product_form-{{ index }}-discount,
+            #product_form-{{ index }}-profit_margin,
+            #product_form-{{ index }}-quantity
+        "
         hx-target="this"
         hx-swap="innerHTML">
     </td>
