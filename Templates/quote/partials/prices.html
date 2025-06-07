@@ -1,7 +1,7 @@
-<div clas="flex flex-row justify-evenly">
-{{ pricing_form.unit_price }}
-{{ pricing_form.subtotal }}
-</td>
+<div clas="flex flex-row">
+    <div class="w-1/2">{{ pricing_form.unit_price }}</div>
+    <div class="w-1/2">{{ pricing_form.subtotal }}</div>
+</div>
 <div
     hx-get="{% url "update_quote_totals" %}"
     hx-trigger="load"
