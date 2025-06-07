@@ -26,15 +26,15 @@
         hx-trigger="
             load delay:50ms,
             change from:#id_pq_form-{{ index }}-product,
-            change from:#id_pq-{{ index }}-discount,
-            change from:#id_pq-{{ index }}-profit_margin,
-            change from:#id_pq-{{ index }}-quantity
+            change from:#id_pq_form-{{ index }}-discount,
+            change from:#id_pq_form-{{ index }}-profit_margin,
+            change from:#id_pq_form-{{ index }}-quantity
         "
         hx-include="
-            #id_pq-{{ index }}-product,
-            #id_pq-{{ index }}-discount,
-            #id_pq-{{ index }}-profit_margin,
-            #id_pq-{{ index }}-quantity
+            #id_pq_form-{{ index }}-product,
+            #id_pq_form-{{ index }}-discount,
+            #id_pq_form-{{ index }}-profit_margin,
+            #id_pq_form-{{ index }}-quantity
         "
         hx-target="this"
         hx-swap="innerHTML">

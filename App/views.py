@@ -265,7 +265,7 @@ def remove_product_form_view(request):
 
 
 def update_product_prices_view(request):
-    print(request.GET)
+    print("Request", request.GET)
     form_counter = request.GET.get("index", 0)
     product = request.GET.get(f"pq_form-{form_counter}-product")
     discount = request.GET.get(f"pq_form-{form_counter}-discount") or 0
