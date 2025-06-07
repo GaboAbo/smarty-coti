@@ -324,66 +324,6 @@ def quote_create_view(request):
 
         try:
             with transaction.atomic():
-                quote_form = QuoteForm({"client":client, "salesRep": salesRep})
-                if quote_form.is_valid():
-                    quote = quote_form.save()
-                    print(f"Quote #{quote} saved!")
-
-                    for item in items:
-                        item["quote"] = quote.pk
-                        product_quote_form = ProductQuoteFullForm(item)
-                        if product_quote_form.is_valid():
-                            product_quote = product_quote_form.save()
-                            print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
-
-                        else:
-                            print("Quote item storage failed.")
-                else:
-                    print(quote_form.errors)
-
-        except Exception as e:
-            print("Transaction failed:", e)
-            print("Changes reverted.")
-        
-        return redirect("dashboard")
-
-    cache.set('form_counter', 0)
-    cache.set('total_net', {})
-    request.session["total_net"] = {}
-    quote_form = QuoteForm()
-    role = request.session.get("role")
-    context = {
-        "role": role,
-        "quote_form": quote_form
-    }
-    return render(request, "quote/partials/create.html", context=context)
-
-
-def quote_update_view(request, pk):
-    cache.set('total_net', {})
-    quote = get_object_or_404(
-        Quote.objects.prefetch_related(
-            Prefetch(
-                'products',
-                queryset=ProductQuote.objects.only('pk')
-            )
-        ),
-        pk=pk
-    )
-    if request.method == "POST":
-        client = request.POST.get("client")
-        salesRep = request.POST.get("salesRep")
-        items = []
-        keys = ['product', 'discount', 'unit_price', 'quantity', 'subtotal', 'product_pk']
-        length = len(request.POST.getlist('product'))
-
-        for i in range(length):
-            item = {key: request.POST.getlist(key)[i] for key in keys}
-            item['profit_margin'] = 35
-            items.append(item)
-
-        try:
-            with transaction.atomic():
                 quote_form = QuoteForm({"client":client, "salesRep": salesRep}, instance=quote)
                 if quote_form.is_valid():
                     quote = quote_form.save()
@@ -405,21 +345,95 @@ def quote_update_view(request, pk):
         except Exception as e:
             print("Transaction failed:", e)
             print("Changes reverted.")
+        
+        return redirect("dashboard")
 
-    
+    cache.set('form_counter', 0)
+    cache.set('total_net', {})
+    request.session["total_net"] = {}
+    quote_form = QuoteForm()
+    role = request.session.get("role")
+    context = {
+        "role": role,
+        "quote_form": quote_form
+    }
+    return render(request, "quote/partials/create.html", context=context)
+
+
+def quote_update_view(request, pk):
+    cache.set('total_net', {})
+
+    quote = get_object_or_404(
+        Quote.objects.prefetch_related(
+            Prefetch(
+                'products',
+                queryset=ProductQuote.objects.only('pk')
+            )
+        ),
+        pk=pk
+    )
+
+    if request.method == "POST":
+        client = request.POST.get("client") or Entity.objects.first().id
+        salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
+
+        items = []
+        keys = ['product_pk', 'product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
+        length = len(request.POST.getlist('product'))
+
+        for i in range(length):
+            item = {key: request.POST.getlist(key)[i] for key in keys}
+            items.append(item)
+
+        try:
+            with transaction.atomic():
+                quote_form = QuoteForm({"client": client, "salesRep": salesRep}, instance=quote)
+
+                product_forms = []
+                is_valid = True
+
+                for item in items:
+                    product_pk = item.pop("product_pk", None)
+                    instance = ProductQuote.objects.filter(pk=product_pk).first() if product_pk else None
+                    form = ProductQuoteFullForm(item, instance=instance)
+                    product_forms.append(form)
+                    if not form.is_valid():
+                        is_valid = False
+
+                if quote_form.is_valid() and is_valid:
+                    quote = quote_form.save()
+                    print(f"Quote #{quote.pk} saved!")
+
+                    for form in product_forms:
+                        product_quote = form.save()
+                        print(f"Product quote #{product_quote.pk} saved.")
+                    
+                    return redirect("dashboard")
+
+        except Exception as e:
+            print("Transaction failed:", e)
+            print("Changes reverted.")
+
     request.session["form_counter"] = 0
     request.session["total_net"] = {}
     quote_form = QuoteForm(instance=quote)
-    products_pks = list(quote.products.values_list("pk", flat=True))
+    products = quote.products.all()
+
+    product_forms = [
+        ProductQuoteFullForm(instance=product, prefix=f'product_form-{i}')
+        for i, product in enumerate(products)
+    ]
+
     role = request.session.get("role")
     context = {
         "role": role,
         'quote_form': quote_form,
         'quote': quote,
         'pk': pk,
-        'product_pks': products_pks
+        'product_forms': product_forms,
     }
     return render(request, "quote/partials/update.html", context=context)
+
 
 
 def quote_delete_view(request, pk):
