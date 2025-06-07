@@ -397,7 +397,6 @@ def quote_create_or_update_view(request):
         quote = None
 
     if request.method == "POST":
-
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
 
@@ -425,15 +424,17 @@ def quote_create_or_update_view(request):
                         is_valid = False
 
                 if quote_form.is_valid() and is_valid:
-                    quote = quote_form.save()
-                    messages.success(request, f"Quote #{quote.pk} saved.")
+                    quote = quote_form.save(commit=False)
+                    quote.save()
+                    
 
                     for form in product_forms:
                         product_quote = form.save(commit=False)
                         product_quote.quote = quote
                         product_quote.save()
                         messages.success(request, f"Product quote #{product_quote.pk} saved.")
-                    
+
+                    messages.success(request, f"Quote #{quote.pk} saved.")
                     return redirect("dashboard")
 
         except Exception as e:
