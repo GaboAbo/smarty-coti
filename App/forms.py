@@ -110,7 +110,7 @@ class PricingForm(forms.ModelForm):
     unit_price = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(attrs={
-            'class': 'w-1/2 text-center',
+            'class': 'w-full text-center',
             'readonly': 'readonly',
             'style': 'pointer-events: none',
         })
@@ -119,7 +119,7 @@ class PricingForm(forms.ModelForm):
     subtotal = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(attrs={
-            'class': 'w-1/2 text-center',
+            'class': 'w-full text-center',
             'readonly': 'readonly',
             'style': 'pointer-events: none',
         })
