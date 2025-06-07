@@ -1,6 +1,6 @@
-<div clas="flex flex-col">
-    <div class="w-1/2">{{ pricing_form.unit_price }}</div>
-    <div class="w-1/2">{{ pricing_form.subtotal }}</div>
+<div clas="flex">
+    {{ pricing_form.unit_price }}
+    {{ pricing_form.subtotal }}
 </div>
 <div
     hx-get="{% url "update_quote_totals" %}"

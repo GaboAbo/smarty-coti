@@ -104,6 +104,7 @@ class PricingForm(forms.ModelForm):
         widget=forms.NumberInput(attrs={
             'class': 'w-1/2 text-center',
             'readonly': 'readonly',
+            'style': 'pointer-events: none',
         })
     )
 
@@ -112,6 +113,7 @@ class PricingForm(forms.ModelForm):
         widget=forms.NumberInput(attrs={
             'class': 'w-1/2 text-center',
             'readonly': 'readonly',
+            'style': 'pointer-events: none',
         })
     )
 
