@@ -374,7 +374,7 @@ def quote_create_or_update_view(request):
     pk = request.POST.get('pk')
     action = request.POST.get('action') or "create"
 
-    if pk:
+    if pk and action == "update":
         quote = get_object_or_404(
             Quote.objects.prefetch_related(
                 Prefetch(
@@ -433,8 +433,9 @@ def quote_create_or_update_view(request):
     request.session["form_counter"] = 0
     request.session["total_net"] = {}
 
-    if action == "create":
-        quote_form = QuoteForm(instance=quote)
+    quote_form = QuoteForm(instance=quote)
+
+    if action == "update":
         products = quote.products.all()
 
         product_forms = [
