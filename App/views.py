@@ -7,6 +7,10 @@ from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.core.cache import cache
+from django.contrib import messages
+
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_http_methods
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
 from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
@@ -369,12 +373,15 @@ def quote_detail_view(request, pk):
     return render(request, "quote/partials/create.html", context=context)"""
 
 
+@csrf_protect
+@require_http_methods(["GET", "POST"])
 def quote_create_or_update_view(request):
-    cache.set('total_net', {})
+    cache.set('total_net', {}, timeout=60 * 10)
 
-    if request.method == "GET":
-        pk = request.GET.get('pk')
-        action = request.GET.get('action') or "create"
+    data = request.GET if request.method == "GET" else request.POST
+    pk = data.get("pk")
+    action = data.get("action") or "create"
+
 
     if pk and action == "update":
         quote = get_object_or_404(
@@ -390,8 +397,6 @@ def quote_create_or_update_view(request):
         quote = None
 
     if request.method == "POST":
-        pk = request.POST.get('pk')
-        action = request.POST.get('action') or "create"
 
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
@@ -421,13 +426,13 @@ def quote_create_or_update_view(request):
 
                 if quote_form.is_valid() and is_valid:
                     quote = quote_form.save()
-                    print(f"Quote #{quote.pk} saved!")
+                    messages.success(request, f"Quote #{quote.pk} saved.")
 
                     for form in product_forms:
                         product_quote = form.save(commit=False)
                         product_quote.quote = quote
                         product_quote.save()
-                        print(f"Product quote #{product_quote.pk} saved.")
+                        messages.success(request, f"Product quote #{product_quote.pk} saved.")
                     
                     return redirect("dashboard")
 
