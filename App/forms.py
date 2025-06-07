@@ -48,6 +48,7 @@ class ProductQuoteForm(forms.ModelForm):
         queryset=Product.objects.all(),
         required=True,
         widget=forms.Select(attrs={
+            'placeholder': 'Ingrese producto',
             'name': 'product',
             'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'list': 'product-list',
@@ -59,6 +60,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=100,
         initial=0,
         widget=forms.NumberInput(attrs={
+            'placeholder': 'Ingrese descuento',
             'name': 'discount',
             'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',
@@ -70,6 +72,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=100,
         initial=35,
         widget=forms.NumberInput(attrs={
+            'placeholder': 'Ingrese margen',
             'name': 'profit_margin',
             'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',
@@ -81,6 +84,7 @@ class ProductQuoteForm(forms.ModelForm):
         max_value=500,
         initial=1,
         widget=forms.NumberInput(attrs={
+            'placeholder': 'Ingrese cantidad',
             'name': 'quantity',
             'class': 'w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs',
             'step': '1',

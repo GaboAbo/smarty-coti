@@ -265,11 +265,12 @@ def remove_product_form_view(request):
 
 
 def update_product_prices_view(request):
+    print(request.GET)
     form_counter = request.GET.get("index", 0)
-    product = request.GET.get("product")
-    discount = request.GET.get("discount") or 0
-    quantity = request.GET.get("quantity") or 1
-    profit_margin = request.GET.get("profit_margin") or 35
+    product = request.GET.get(f"pq_form-{form_counter}-product")
+    discount = request.GET.get(f"pq_form-{form_counter}-discount") or 0
+    quantity = request.GET.get(f"pq_form-{form_counter}-quantity") or 1
+    profit_margin = request.GET.get(f"pq_form-{form_counter}-profit_margin") or 35
 
     if not product:
         return HttpResponse("")
@@ -433,7 +434,6 @@ def quote_update_view(request, pk):
         'product_forms': product_forms,
     }
     return render(request, "quote/partials/update.html", context=context)
-
 
 
 def quote_delete_view(request, pk):
