@@ -389,18 +389,16 @@ def quote_update_view(request, pk):
                     quote = quote_form.save()
                     print(f"Quote #{quote} saved!")
 
+                    for item in items:
+                        item["quote"] = quote.pk
+                        product_pk = item.pop("product_pk")
+                        if product_pk and str(product_pk).isdigit():
+                            instance = ProductQuote.objects.filter(pk=product_pk).first()
 
-                for item in items:
-                    item["quote"] = quote.pk
-                    product_pk = item.pop("product_pk")
-                    if product_pk and str(product_pk).isdigit():
-                        instance = ProductQuote.objects.get(pk=product_pk)
-                    else:
-                        instance = None
-                    product_quote_form = ProductQuoteFullForm(item, instance=instance)
-                    if product_quote_form.is_valid():
-                        product_quote = product_quote_form.save()
-                        print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
+                        product_quote_form = ProductQuoteFullForm(item, instance=instance)
+                        if product_quote_form.is_valid():
+                            product_quote = product_quote_form.save()
+                            print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
             
             return redirect("dashboard")
 

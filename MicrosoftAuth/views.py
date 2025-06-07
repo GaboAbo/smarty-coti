@@ -35,7 +35,6 @@ _confidential_client = None
 
 
 def set_client():
-    print(f"ENVIRONMENT = {ENVIRONMENT}")
     global _confidential_client
     if _confidential_client is None:
         _confidential_client = ConfidentialClientApplication(
