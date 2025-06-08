@@ -38,9 +38,43 @@ class QuoteForm(forms.ModelForm):
         })
     )
 
+    currency = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full text-center',
+        })
+    )
+    total_net = forms.DecimalField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'w-full text-center',
+            'readonly': 'readonly',
+            'style': 'pointer-events: none',
+            'step': '0.0001',
+        })
+    )
+    iva = forms.DecimalField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'w-full text-center',
+            'readonly': 'readonly',
+            'style': 'pointer-events: none',
+            'step': '0.0001',
+        })
+    )
+    final = forms.DecimalField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'w-full text-center',
+            'readonly': 'readonly',
+            'style': 'pointer-events: none',
+            'step': '0.0001',
+        })
+    )
+
     class Meta:
         model = Quote
-        fields = ['client', 'salesRep']
+        fields = ['client', 'salesRep', 'currency', 'total_net', 'iva', 'final']
 
 
 class ProductQuoteForm(forms.ModelForm):
@@ -93,27 +127,29 @@ class ProductQuoteForm(forms.ModelForm):
             field.widget.attrs.update({
                 "name": name,
                 "placeholder": f"Ingrese {name}",
-                "class": "w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs"
+                "class": "w-full pl-[4px] border-2 border-[#B6B6B6] rounded-xs bg-white"
             })
 
 
 
 class PricingForm(forms.ModelForm):
-    unit_price = forms.IntegerField(
+    unit_price = forms.DecimalField(
         required=False,
         widget=forms.NumberInput(attrs={
             'class': 'w-full text-center',
             'readonly': 'readonly',
             'style': 'pointer-events: none',
+            'step': '0.0001',
         })
     )
 
-    subtotal = forms.IntegerField(
+    subtotal = forms.DecimalField(
         required=False,
         widget=forms.NumberInput(attrs={
             'class': 'w-full text-center',
             'readonly': 'readonly',
             'style': 'pointer-events: none',
+            'step': '0.0001',
         })
     )
 

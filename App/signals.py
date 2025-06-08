@@ -5,13 +5,13 @@ from django.core.cache import cache
 from .models import Product, Quote, ProductQuote
 
 
-@receiver(post_save, sender=ProductQuote)
+"""@receiver(post_save, sender=ProductQuote)
 def update_quote_total(sender, instance, **kwargs):
     print("Quote signal activated!")
     quote = instance.quote
     total = sum(product.subtotal for product in quote.products.all())
     quote.total = total
-    quote.save()
+    quote.save()"""
 
 
 @receiver(post_save, sender=Product)

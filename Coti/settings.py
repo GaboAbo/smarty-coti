@@ -51,9 +51,9 @@ ALLOWED_HOSTS = [
     "169.254.129.1", "169.254.129.2", "169.254.129.3", "169.254.129.4", "169.254.129.5"
 ]
 if ENV == 'development':
-    ALLOWED_HOSTS += ["b149-190-161-217-167.ngrok-free.app"]
+    ALLOWED_HOSTS += ["e130-190-161-217-167.ngrok-free.app"]
 
-ALLOWED_REDIRECT_HOSTS = ["axion"]
+ALLOWED_REDIRECT_HOSTS = ["smarty"]
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'

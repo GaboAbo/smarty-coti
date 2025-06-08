@@ -5,6 +5,16 @@ from AuthUser.models import Client, SalesRep
 
 
 # Create your models here.
+
+class DailyIndicators(models.Model):
+    date = models.DateField(unique=True)
+    uf = models.DecimalField(max_digits=10, decimal_places=2)
+    dolar = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.date} → UF: {self.uf}, USD: {self.dolar}"
+
+
 class Product(models.Model):
     code = models.CharField("Codigo", max_length=255, unique=True)
     material_number = models.CharField(max_length=255, null=True, blank=True)
@@ -22,12 +32,22 @@ class Quote(models.Model):
         ("WT", "En espera"),
         ("CL", "Cerrada"),
     ]
+    currency_choices = [
+        ("USD", "USD"),
+        ("CLP", "CLP"),
+        ("UF", "UF"),
+    ]
     client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE, related_name='sales_rep')
     status = models.CharField("Estado", max_length=50, choices=status_choices, default="WT")
     date = models.DateField("Fecha", auto_now=True)
     approved_by = models.ForeignKey("AuthUser.SalesRep", verbose_name="Aprobador", on_delete=models.CASCADE, default=1, related_name='manager')
-    total = models.PositiveIntegerField("Total", default=0)
+    currency = models.CharField("Moneda", max_length=50, choices=currency_choices, default="USD")
+    
+    total_net = models.DecimalField("Subtotal", default=0, max_digits=20, decimal_places=4)
+    iva = models.DecimalField("IVA", default=0, max_digits=20, decimal_places=4)
+    final = models.DecimalField("Total", default=0, max_digits=20, decimal_places=4)
+    
 
     @property
     def has_discounted_items(self):
@@ -65,9 +85,9 @@ class ProductQuote(models.Model):
     quote = models.ForeignKey("Quote", verbose_name="Cotizacion", on_delete=models.CASCADE, related_name='products')
     discount = models.PositiveIntegerField("Descuento", default=0)
     profit_margin = models.PositiveIntegerField("GM%", default=35) # 35%
-    unit_price = models.PositiveIntegerField("Precio unitario")
+    unit_price = models.DecimalField("Precio unitario", max_digits=20, decimal_places=4)
     quantity = models.PositiveIntegerField("Cantidad", default=1)
-    subtotal = models.PositiveIntegerField("Subtotal")
+    subtotal = models.DecimalField("Subtotal", max_digits=20, decimal_places=4)
 
     def __str__(self):
         return f"{self.product.code}: {self.product.description}"

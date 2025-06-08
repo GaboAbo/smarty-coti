@@ -14,8 +14,8 @@
                 <th colspan="6">Total Neto</th>
                 <td colspan="20" class="bg-slate-600/10">
                     <div class="flex flex-row w-full bg-slate-600/10 rounded-md">
-                        <p class="w-1/2 px-2 text-left">USD</p>
-                        <p class="w-1/2 px-2 text-right">{{ quote.total }}</p>
+                        <p class="w-1/2 px-2 text-left">{{ quote.currency }}</p>
+                        <p class="w-1/2 px-2 text-right">{{ quote.total_net }}</p>
                     </div>
                 </td>
             </tr>
@@ -27,8 +27,8 @@
                 <th colspan="6">IVA</th>
                 <td colspan="20" class="bg-slate-600/10">
                     <div class="flex flex-row w-full bg-slate-600/10 rounded-md">
-                        <p class="w-1/2 px-2 text-left">USD</p>
-                        <p class="w-1/2 px-2 text-right">{{ iva }}</p>
+                        <p class="w-1/2 px-2 text-left">{{ quote.currency }}</p>
+                        <p class="w-1/2 px-2 text-right">{{ quote.iva }}</p>
                     </div>
                 </td>
             </tr>
@@ -40,8 +40,8 @@
                 <th colspan="6">Total con IVA</th>
                 <td colspan="20" class="bg-slate-600/10">
                     <div class="flex flex-row w-full bg-slate-600/10 rounded-md">
-                        <p class="w-1/2 px-2 text-left">USD</p>
-                        <p class="w-1/2 px-2 text-right">{{ final }}</p>
+                        <p class="w-1/2 px-2 text-left">{{ quote.currency }}</p>
+                        <p class="w-1/2 px-2 text-right">{{ quote.final }}</p>
                     </div>
                 </td>
             </tr>

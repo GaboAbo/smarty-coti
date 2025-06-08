@@ -1,6 +1,9 @@
 import random, time
+from datetime import date
 
 from django.core.cache import cache
+
+from ..models import DailyIndicators
 
 from ..models import Product, Quote
 
@@ -26,3 +29,13 @@ def get_all_quotes(pk=None, role="REP", refresh=None):
 
 def generate_temp_id():
     return f"{int(time.time())}{random.randint(0, 999999)}"
+
+
+def set_indicators():
+    today = date.today()
+    try:
+        indicators = DailyIndicators.objects.get(date=today)
+        cache.set("indicators", indicators, timeout=60 * 60 * 24)
+        return True
+    except DailyIndicators.DoesNotExist:
+        return False

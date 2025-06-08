@@ -303,14 +303,14 @@
             <td class="text-center" colspan="6">{{ product.quantity }}</td>
             <td class="text-center" colspan="10" rowspan="{{ products|length }}">
                 <div class="flex-row w-full">
-                    <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
-                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-left">{{ quote.currency }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total_net }}</p>
                 </div>
             </td>
             <td class="text-center" colspan="10" rowspan="{{ products|length }}">
                 <div class="flex-row w-full">
-                    <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
-                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-left">{{ quote.currency }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total_net }}</p>
                 </div>
             </td>
         </tr>
@@ -326,8 +326,8 @@
             <th class="text-center py-2" colspan="10">TOTAL NETO</th>
             <th colspan="10">
                 <div class="flex-row w-full">
-                    <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
-                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-left">{{ quote.currency }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.total_net }}</p>
                 </div>
             </th>
         </tr>
@@ -339,8 +339,8 @@
             <th class="text-center py-2" colspan="10">IVA</th>
             <th class="text-center" colspan="10">
                 <div class="flex-row w-full">
-                    <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
-                    <p class="w-1/2 pr-4 pl-4 text-right">{{ iva }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-left">{{ quote.currency }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.iva }}</p>
                 </div>
             </th>
         </tr>
@@ -352,8 +352,8 @@
             <th class="text-center py-2" colspan="10">TOTAL CON IVA</th>
             <th class="text-center" colspan="10">
                 <div class="flex-row w-full">
-                    <p class="w-1/2 pr-4 pl-4 text-left">USD</p>
-                    <p class="w-1/2 pr-4 pl-4 text-right">{{ final }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-left">{{ quote.currency }}</p>
+                    <p class="w-1/2 pr-4 pl-4 text-right">{{ quote.final }}</p>
                 </div>
             </th>
         </tr>

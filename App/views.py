@@ -13,9 +13,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
 from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
-from .services.utils import calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
+from .services.utils import exchange_currency, calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
 
-from .models import Quote, Product, ProductQuote, Template, TemplateProduct
+from .models import DailyIndicators, Quote, Product, ProductQuote, Template, TemplateProduct
 
 from AuthUser.models import SalesRep, Entity
 
@@ -211,10 +211,13 @@ def product_form_view(request):
     pk = request.GET.get("pk")
     index = cache.get("form_counter", 0) + 1
 
+    exchage = request.GET.get("exchage") or "USD"
+
     cache.set("form_counter", index)
     
     if pk:
         instance = ProductQuote.objects.get(pk=pk)
+        instance.price = exchange_currency(instance.price, exchage)
     else:
         instance = None
 
@@ -278,15 +281,18 @@ def update_product_prices_view(request):
     quantity = request.GET.get("quantity") or 1
     profit_margin = request.GET.get("profit_margin") or 35
 
+    exchange = request.GET.get("exchange") or "USD"
+
     if not product:
         return HttpResponse("")
     
     product = Product.objects.get(pk=product)
+    price = exchange_currency(product.price, exchange)
 
     unit_price, subtotal = calcultate_subtotal(
         request,
         form_counter,
-        product,
+        price,
         int(discount),
         int(profit_margin),
         int(quantity)
@@ -310,14 +316,10 @@ def update_quote_totals_view(request):
 def quote_detail_view(request, pk):
     role = request.session.get("role")
     quote = Quote.objects.get(pk=pk)
-    iva = round(quote.total * 0.19)
-    final = quote.total + iva
 
     context = {
         "role": role,
         "quote": quote,
-        "iva": iva,
-        "final": final
     }
 
     return render(request, 'quote/partials/overview.html', context=context)
@@ -340,8 +342,13 @@ def quote_create_or_update_view(request):
         quote = None
 
     if request.method == "POST":
+        print(request.POST)
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
+        currency = request.POST.get("exchange") or "USD"
+        total_net = request.POST.get("total_net") or 0
+        iva = request.POST.get("iva") or 0
+        final = request.POST.get("final") or 0
 
         items = []
         keys = ['product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
@@ -357,9 +364,28 @@ def quote_create_or_update_view(request):
         try:
             with transaction.atomic():
                 if action == "update":
-                    quote_form = QuoteForm({"client": client, "salesRep": salesRep}, instance=quote)
+                    quote_form = QuoteForm(
+                        {
+                            "client": client,
+                            "salesRep": salesRep,
+                            "currency": currency,
+                            "total_net": total_net,
+                            "iva": iva,
+                            "final": final
+                        },
+                        instance=quote
+                    )
                 else:
-                    quote_form = QuoteForm({"client": client, "salesRep": salesRep})
+                    quote_form = QuoteForm(
+                        {
+                            "client": client,
+                            "salesRep": salesRep,
+                            "currency": currency,
+                            "total_net": total_net,
+                            "iva": iva,
+                            "final": final
+                        }
+                    )
 
                 if quote_form.is_valid():
                     try:
@@ -382,6 +408,7 @@ def quote_create_or_update_view(request):
                         
                         product_quote_form = ProductQuoteFullForm(item, instance=instance)
                         if product_quote_form.is_valid():
+                            print("form valid")
                             product_quote = product_quote_form.save()
                             print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
 
@@ -445,15 +472,10 @@ def template_products_view(request):
 def generate_quote_pdf_view(request, quote_id):
     quote = Quote.objects.get(id=quote_id)
     products = ProductQuote.objects.filter(quote=quote)
-    iva = round(quote.total * 0.19)
-    final = quote.total + iva
-
     html_string_pdf = render_to_string(
         "docs/quote.html",
         {
             'quote': quote,
-            'iva': iva,
-            'final': final,
             'products': products,
             'logo': OLYMPUS_LOGO,
         }

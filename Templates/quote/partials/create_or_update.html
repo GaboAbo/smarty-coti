@@ -6,9 +6,9 @@
     </div>
     
     <div class="w-full h-[80%] border-2 border-[#B6B6B6] overflow-y-scroll">
-        <table id="product_table" class="table-fixed w-full h-full text-sm border-separate border-spacing-2">
+        <table id="product_table" class="table-auto w-full text-sm border-separate border-spacing-x-2">
             <thead class="sticky top-0 bg-slate-50 z-10">
-                <tr class="h-[48px] my-2">
+                <tr class="h-[48px]">
                     <th style="width:40%">Producto - Descripcion</th>
                     <th style="width:10%">Descuento</th>
                     <th style="width:10%">{% if role == "MAN" or role == "ADM" %}Margen{% endif %}</th>
@@ -30,12 +30,19 @@
 
     <div id="quote_info" class="w-full h-[10%] p-4 bg-slate-50 flex gap-x-4">
         <div class="w-2/5 flex gap-1">
-            <div class="w-1/2">
+            <div class="w-2/5">
                 {{ quote_form.client }}
                 </datalist>
             </div>
-            <div class="w-1/2">
+            <div class="w-2/5">
                 {{ quote_form.salesRep }}
+            </div>
+            <div class="w-1/5">
+                <select id="exchange" name="exchange" class="w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm">
+                    <option value="USD">USD</option>
+                    <option value="CLP">CLP</option>
+                    <option value="UF">UF</option>
+                </select>
             </div>
         </div>
         <div
