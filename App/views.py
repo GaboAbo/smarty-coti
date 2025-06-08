@@ -12,10 +12,10 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
-from .services.session_cache import get_all_products, get_all_quotes, generate_temp_id
+from .services.session_cache import set_indicators, get_all_products, get_all_quotes
 from .services.utils import exchange_currency, calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
 
-from .models import DailyIndicators, Quote, Product, ProductQuote, Template, TemplateProduct
+from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
 from AuthUser.models import SalesRep, Entity
 
@@ -45,6 +45,7 @@ def index(request):
 
 
 def dashboard_view(request):
+    set_indicators()
     role = request.session.get("role")
     role_display = dict(SalesRep.ROLE_CHOICES).get(role, "Unknown")
     context = {
