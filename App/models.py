@@ -55,13 +55,6 @@ class Quote(models.Model):
         if self.status != "CL":
             self.status = "CL"
             self.save()
-    
-    def save(self, *args, **kwargs):
-        if self.status == "WT":
-            if not self.has_discounted_items:
-                self.status = "AP"
-                self.approved_by = self.salesRep
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{timezone.now().year}-{self.pk:04d}"

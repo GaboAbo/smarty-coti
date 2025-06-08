@@ -11,7 +11,7 @@
                 <tr class="h-[48px] my-2">
                     <th style="width:40%">Producto - Descripcion</th>
                     <th style="width:10%">Descuento</th>
-                    <th style="width:10%">{% if role == "MAN" %}Margen{% endif %}</th>
+                    <th style="width:10%">{% if role == "MAN" or role == "ADM" %}Margen{% endif %}</th>
                     <th style="width:10%">Cantidad</th>
                     <th style="width:10%">Precio unitario</th>
                     <th style="width:10%">Precio venta</th>
@@ -62,7 +62,7 @@
     <div class="w-full flex flex-row justify-evenly items-center text-sm gap-2">
         <button
             hx-get="{% url "list_layout" %}"
-            hx-target="#quote_edit"
+            hx-target="#create_or_update_quote"
             hx-swap="innerHTML transition:true"
             class="w-1/4 h-[32px] bg-slate-500 text-white rounded-xs flex justify-center items-center shadow hover:bg-slate-600 duration-300"
             type="button">

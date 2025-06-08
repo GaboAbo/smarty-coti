@@ -2,7 +2,7 @@ from weasyprint import HTML
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
@@ -71,7 +71,10 @@ def sidebar(request):
 
 
 def list_layout_view(request):
-    return render(request, "quote/list_layout.html")
+    context = {
+        "role": request.session.get("role"),
+    }
+    return render(request, "quote/list_layout.html", context=context)
 
 
 def quote_list_view(request):
@@ -206,9 +209,9 @@ def quote_products_view(request, pk):
 def product_form_view(request):
     role = request.session.get("role")
     pk = request.GET.get("pk")
-    index = request.GET.get("index") or cache.get("form_counter", 0)
+    index = cache.get("form_counter", 0) + 1
 
-    cache.set("form_counter", int(index) + 1)
+    cache.set("form_counter", index)
     
     if pk:
         instance = ProductQuote.objects.get(pk=pk)
@@ -270,10 +273,10 @@ def remove_product_form_view(request):
 
 def update_product_prices_view(request):
     form_counter = request.GET.get("index", 0)
-    product = request.GET.get(f"pq_form-{form_counter}-product")
-    discount = request.GET.get(f"pq_form-{form_counter}-discount") or 0
-    quantity = request.GET.get(f"pq_form-{form_counter}-quantity") or 1
-    profit_margin = request.GET.get(f"pq_form-{form_counter}-profit_margin") or 35
+    product = request.GET.get("product")
+    discount = request.GET.get("discount") or 0
+    quantity = request.GET.get("quantity") or 1
+    profit_margin = request.GET.get("profit_margin") or 35
 
     if not product:
         return HttpResponse("")
@@ -320,8 +323,21 @@ def quote_detail_view(request, pk):
     return render(request, 'quote/partials/overview.html', context=context)
 
 
-"""def quote_create_or_update_view(request):
+@csrf_protect
+@require_http_methods(["GET", "POST"])
+def quote_create_or_update_view(request):
     cache.set('total_net', {})
+
+    pk = request.GET.get("pk") or None
+    action = request.GET.get("action") or "create"
+
+    if pk and action == "update":
+        quote = get_object_or_404(
+            Quote.objects.prefetch_related('products'),
+            pk=pk
+        )
+    else:
+        quote = None
 
     if request.method == "POST":
         client = request.POST.get("client") or Entity.objects.first().id
@@ -329,82 +345,9 @@ def quote_detail_view(request, pk):
 
         items = []
         keys = ['product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
-        length = len(request.POST.getlist('product'))
-
-        for i in range(length):
-            item = {key: request.POST.getlist(key)[i] for key in keys}
-            items.append(item)
-
-        try:
-            with transaction.atomic():
-                quote_form = QuoteForm({"client":client, "salesRep": salesRep}, instance=quote)
-                if quote_form.is_valid():
-                    quote = quote_form.save()
-                    print(f"Quote #{quote} saved!")
-
-                    for item in items:
-                        item["quote"] = quote.pk
-                        product_pk = item.pop("product_pk")
-                        if product_pk and str(product_pk).isdigit():
-                            instance = ProductQuote.objects.filter(pk=product_pk).first()
-
-                        product_quote_form = ProductQuoteFullForm(item, instance=instance)
-                        if product_quote_form.is_valid():
-                            product_quote = product_quote_form.save()
-                            print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
-            
-            return redirect("dashboard")
-
-        except Exception as e:
-            print("Transaction failed:", e)
-            print("Changes reverted.")
+        if action == "update":
+            keys.append("product_pk")
         
-        return redirect("dashboard")
-
-    cache.set('form_counter', 0)
-    cache.set('total_net', {})
-    request.session["total_net"] = {}
-    quote_form = QuoteForm()
-    role = request.session.get("role")
-    context = {
-        "role": role,
-        "quote_form": quote_form
-    }
-    return render(request, "quote/partials/create.html", context=context)"""
-
-
-@csrf_protect
-@require_http_methods(["GET", "POST"])
-def quote_create_or_update_view(request):
-    cache.set('total_net', {}, timeout=60 * 10)
-
-    data = request.GET if request.method == "GET" else request.POST
-    pk = data.get("pk")
-    action = data.get("action") or "create"
-
-    print(pk, action)
-
-    if pk and action == "update":
-        quote = get_object_or_404(
-            Quote.objects.prefetch_related(
-                Prefetch(
-                    'products',
-                    queryset=ProductQuote.objects.only('pk')
-                )
-            ),
-            pk=pk
-        )
-    else: 
-        quote = None
-
-    print(request.method, quote)
-
-    if request.method == "POST":
-        client = request.POST.get("client") or Entity.objects.first().id
-        salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
-
-        items = []
-        keys = ['product_pk', 'product', 'discount', 'profit_margin', 'unit_price', 'quantity', 'subtotal']
         length = len(request.POST.getlist('product'))
 
         for i in range(length):
@@ -413,19 +356,39 @@ def quote_create_or_update_view(request):
 
         try:
             with transaction.atomic():
-                quote_form = QuoteForm({"client": client, "salesRep": salesRep}, instance=quote)
+                if action == "update":
+                    quote_form = QuoteForm({"client": client, "salesRep": salesRep}, instance=quote)
+                else:
+                    quote_form = QuoteForm({"client": client, "salesRep": salesRep})
+
                 if quote_form.is_valid():
-                    quote = quote_form.save()
-                    messages.success(request, f"Quote #{quote.pk} saved.")
+                    try:
+                        quote = quote_form.save()
+                        print(f"Quote #{quote.pk} saved.")
+                    except IntegrityError as e:
+                        print("IntegrityError while saving quote:", e)
+                        raise
+                    except Exception as e:
+                        print("Unexpected error while saving quote:", e)
+                        raise
 
                     for item in items:
-                        product_pk = item.pop("product_pk")
+                        item["quote"] = quote
+                        try:
+                            product_pk = int(item.pop("product_pk", None))
+                        except (ValueError, TypeError):
+                            product_pk = None
                         instance = ProductQuote.objects.filter(pk=product_pk).first() if product_pk else None
                         
                         product_quote_form = ProductQuoteFullForm(item, instance=instance)
                         if product_quote_form.is_valid():
                             product_quote = product_quote_form.save()
                             print(f"Product quote #{product_quote.pk} related to Quote #{quote} saved!")
+
+                    if quote.status == "WT" and not quote.has_discounted_items:
+                        quote.status = "AP"
+                        quote.approved_by = quote.salesRep
+                        quote.save(update_fields=["status", "approved_by"])
 
             return redirect("dashboard")
 
@@ -451,11 +414,11 @@ def quote_create_or_update_view(request):
         products = quote.products.all()
 
         product_forms = [
-            ProductQuoteForm(instance=product, prefix=f'pq_form-{i}')
-            for i, product in enumerate(products)
+            ProductQuoteForm(instance=product, index=index) for index, product in enumerate(products)
         ]
 
         context["product_forms"] = product_forms
+        request.session["form_counter"] = len(products)
 
     return render(request, "quote/partials/create_or_update.html", context=context)
 

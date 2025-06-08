@@ -113,6 +113,7 @@ def microsoft_callback(request):
 
     user = SalesRep.objects.filter(email=user_email).first()
     if user:
+        print("valid user")
         request.session["pk"] = user.pk
         request.session["role"] = user.role
         request.session["user_email"] = user_email
@@ -122,6 +123,8 @@ def microsoft_callback(request):
         login(request, user)
 
         return redirect("dashboard")
+    else:
+        print("not valid user")
 
 
 def microsoft_logout(request: HttpRequest, app_type: str = "server"):

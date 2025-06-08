@@ -16,10 +16,9 @@ from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
 
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-
-environ.Env().read_env()
+env.read_env(BASE_DIR / ".env")
 
 ENV = env('ENV', default='development')
 
@@ -35,14 +34,11 @@ else:
     print("⚠️ Using a default development SECRET_KEY. DEBUG set to True. Do not use this in production!")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e+8aov8db6+rsty=@q6ckxn7v2i9$s*zg(g78qt+6^ixacs(55'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,6 +50,9 @@ ALLOWED_HOSTS = [
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
     "169.254.129.1", "169.254.129.2", "169.254.129.3", "169.254.129.4", "169.254.129.5"
 ]
+if ENV == 'development':
+    ALLOWED_HOSTS += ["b149-190-161-217-167.ngrok-free.app"]
+
 ALLOWED_REDIRECT_HOSTS = ["axion"]
 
 LOGIN_URL = '/auth/login/'
@@ -228,7 +227,7 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "Axion": {
+        "Smarty": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": False,

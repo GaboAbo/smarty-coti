@@ -19,7 +19,7 @@ def get_all_quotes(pk=None, role="REP", refresh=None):
         if role == "MAN" or role == "ADM":
             quotes = Quote.objects.all()
         else:
-            quotes = Quote.objects.filter(salesRep__pk=pk)
+            quotes = Quote.objects.filter(salesRep__pk=pk).exclude(status="CL")
         cache.set("all_quotes", quotes, timeout=None)
     return quotes
 
