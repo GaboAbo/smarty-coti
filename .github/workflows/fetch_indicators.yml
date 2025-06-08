@@ -1,0 +1,39 @@
+name: Fetch Daily Indicators (Scheduled)
+
+on:
+  schedule:
+    - cron: '1 0 * * *'  # Every day at 00:01 UTC
+  workflow_dispatch:
+
+jobs:
+  fetch-indicators:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_33BC796571494326AEBF6DEC1FFD28B3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AEE2666CC32945A39ED2F99C415A359D }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C7C4A16EEBD048AE90053A3AEBE4134F }}
+
+      - name: Log in to ACR
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name: Pull latest Docker image
+        run: |
+          docker pull ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest
+
+      - name: Run fetch_daily_indicators command
+        run: |
+          docker run --rm \
+            -e ENV=production \
+            -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
+            -e DB_NAME="${{ secrets.DB_NAME }}" \
+            -e DB_USER="${{ secrets.DB_USER }}" \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            -e DB_HOST="${{ secrets.DB_HOST }}" \
+            -e DB_PORT=5432 \
+            ${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_REPO }}:latest \
+            python manage.py fetch_daily_indicators
