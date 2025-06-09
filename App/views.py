@@ -3,11 +3,9 @@ from weasyprint import HTML
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db import transaction, IntegrityError
-from django.db.models import Prefetch
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.core.cache import cache
-from django.contrib import messages
 
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
@@ -23,8 +21,6 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 
 from .Constants.logo import OLYMPUS_LOGO
 from .Constants.bg import BACKGROUND
-
-from decimal import Decimal
 
 
 def index(request):

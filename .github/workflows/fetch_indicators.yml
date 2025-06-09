@@ -3,11 +3,19 @@ name: Fetch Daily Indicators (Scheduled)
 on:
   schedule:
     - cron: '1 0 * * *'  # Every day at 00:01 UTC
+      timezone: 'America/Santiago' # Chile time zone
   workflow_dispatch:
 
 jobs:
-  fetch-indicators:
+  build-test-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
     steps:
       - name: Login to Azure
