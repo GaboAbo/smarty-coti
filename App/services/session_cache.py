@@ -36,6 +36,8 @@ def set_indicators():
     try:
         indicators = DailyIndicators.objects.get(date=today)
         cache.set("indicators", indicators, timeout=60 * 60 * 24)
+        print(indicators)
         return True
     except DailyIndicators.DoesNotExist:
+        print("Indicators not found")
         return False
