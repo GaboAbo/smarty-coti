@@ -3,8 +3,9 @@
     {{ pricing_form.subtotal }}
 </div>
 <div
-    hx-get="{% url "update_quote_totals" %}"
-    hx-trigger="load"
+    hx-get="{% url "update_quote_totals" %}?index={{ index }}"
+    hx-trigger="load, change from:#subtotal-{{ index }}"
     hx-target="#quote_totals"
+    hx-include="#subtotal-{{ index }}, #exchange"
     hx-swap="innerHTML">
 </div>

@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
 from .services.session_cache import set_indicators, get_all_products, get_all_quotes
-from .services.utils import exchange_currency, calcultate_subtotal, remove_item_from_subtotal, calculate_quote_totals
+from .services.utils import exchange_currency, set_total_net, calculate_subtotal, remove_item_from_subtotal, calculate_quote_totals
 
 from .models import Quote, Product, ProductQuote, Template, TemplateProduct
 
@@ -23,6 +23,8 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 
 from .Constants.logo import OLYMPUS_LOGO
 from .Constants.bg import BACKGROUND
+
+from decimal import Decimal
 
 
 def index(request):
@@ -278,20 +280,23 @@ def remove_product_form_view(request):
 def update_product_prices_view(request):
     form_counter = request.GET.get("index", 0)
     product = request.GET.get("product")
-    discount = request.GET.get("discount") or 0
-    quantity = request.GET.get("quantity") or 1
-    profit_margin = request.GET.get("profit_margin") or 35
+    quantity = request.GET.get("quantity", 1)
+    discount = int(request.GET.get("discount", 0))
+    profit_margin = int(request.GET.get("profit_margin", 35))
 
     exchange = request.GET.get("exchange") or "USD"
 
     if not product:
         return HttpResponse("")
     
-    product = Product.objects.get(pk=product)
+    try:
+        product = Product.objects.get(pk=product)
+    except Product.DoesNotExist:
+        return HttpResponse("")
+
     price = exchange_currency(product.price, exchange)
 
-    unit_price, subtotal = calcultate_subtotal(
-        request,
+    unit_price, subtotal = calculate_subtotal(
         form_counter,
         price,
         int(discount),
@@ -299,7 +304,16 @@ def update_product_prices_view(request):
         int(quantity)
     )
 
-    pricing_form = PricingForm(initial={"unit_price": unit_price, "subtotal": subtotal}, index=form_counter)
+    if product.code == "MDO":
+        custom = True
+    else:
+        custom = False
+
+    if exchange == "CLP":
+        unit_price = int(unit_price)
+        subtotal = int(subtotal)
+
+    pricing_form = PricingForm(initial={"unit_price": unit_price, "subtotal": subtotal}, index=form_counter, custom=custom)
 
     context = {
         "index": form_counter,
@@ -310,7 +324,14 @@ def update_product_prices_view(request):
 
 
 def update_quote_totals_view(request):
-    context = calculate_quote_totals()
+    index = request.GET.get("index") or None
+    price = request.GET.get("subtotal") or None
+    exchange = request.GET.get("exchange") or None
+
+    if index and price:
+        set_total_net(index, price)
+
+    context = calculate_quote_totals(exchange)
     return render(request, "quote/partials/total_prices.html", context=context)
 
 
@@ -343,7 +364,6 @@ def quote_create_or_update_view(request):
         quote = None
 
     if request.method == "POST":
-        print(request.POST)
         client = request.POST.get("client") or Entity.objects.first().id
         salesRep = request.POST.get("salesRep") or SalesRep.objects.first().id
         currency = request.POST.get("exchange") or "USD"
@@ -363,7 +383,7 @@ def quote_create_or_update_view(request):
             items.append(item)
 
         try:
-            with transaction.atomic():
+            with transaction.atomic():                    
                 if action == "update":
                     quote_form = QuoteForm(
                         {

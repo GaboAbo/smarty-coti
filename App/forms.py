@@ -136,9 +136,6 @@ class PricingForm(forms.ModelForm):
     unit_price = forms.DecimalField(
         required=False,
         widget=forms.NumberInput(attrs={
-            'class': 'w-full text-center',
-            'readonly': 'readonly',
-            'style': 'pointer-events: none',
             'step': '0.0001',
         })
     )
@@ -146,9 +143,6 @@ class PricingForm(forms.ModelForm):
     subtotal = forms.DecimalField(
         required=False,
         widget=forms.NumberInput(attrs={
-            'class': 'w-full text-center',
-            'readonly': 'readonly',
-            'style': 'pointer-events: none',
             'step': '0.0001',
         })
     )
@@ -157,13 +151,20 @@ class PricingForm(forms.ModelForm):
         model = ProductQuote
         fields = ['unit_price', 'subtotal']
 
-    def __init__(self, *args, index=None, **kwargs):
+    def __init__(self, *args, index=None, custom=False, **kwargs):
         super().__init__(*args, **kwargs)
         if index is not None:
             for name, field in self.fields.items():
                 field.widget.attrs.update({
                     "id": f"{name}-{index}",
                     "name": name,
+                    "readonly": "readonly",
+                    "class": "w-full text-right outline-none border-transparent shadow-none"
+                })
+            if custom:
+                self.fields["subtotal"].widget.attrs.pop("readonly", None)
+                self.fields["subtotal"].widget.attrs.update({
+                    "class": "w-full text-right border-2 border-[#B6B6B6] rounded-xs bg-white"
                 })
 
 

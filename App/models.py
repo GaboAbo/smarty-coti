@@ -44,9 +44,9 @@ class Quote(models.Model):
     approved_by = models.ForeignKey("AuthUser.SalesRep", verbose_name="Aprobador", on_delete=models.CASCADE, default=1, related_name='manager')
     currency = models.CharField("Moneda", max_length=50, choices=currency_choices, default="USD")
     
-    total_net = models.DecimalField("Subtotal", default=0, max_digits=20, decimal_places=4)
-    iva = models.DecimalField("IVA", default=0, max_digits=20, decimal_places=4)
-    final = models.DecimalField("Total", default=0, max_digits=20, decimal_places=4)
+    total_net = models.DecimalField("Subtotal", default=0, max_digits=20, decimal_places=2)
+    iva = models.DecimalField("IVA", default=0, max_digits=20, decimal_places=2)
+    final = models.DecimalField("Total", default=0, max_digits=20, decimal_places=2)
     
 
     @property
@@ -85,9 +85,9 @@ class ProductQuote(models.Model):
     quote = models.ForeignKey("Quote", verbose_name="Cotizacion", on_delete=models.CASCADE, related_name='products')
     discount = models.PositiveIntegerField("Descuento", default=0)
     profit_margin = models.PositiveIntegerField("GM%", default=35) # 35%
-    unit_price = models.DecimalField("Precio unitario", max_digits=20, decimal_places=4)
+    unit_price = models.DecimalField("Precio unitario", max_digits=20, decimal_places=2)
     quantity = models.PositiveIntegerField("Cantidad", default=1)
-    subtotal = models.DecimalField("Subtotal", max_digits=20, decimal_places=4)
+    subtotal = models.DecimalField("Subtotal", max_digits=20, decimal_places=2)
 
     def __str__(self):
         return f"{self.product.code}: {self.product.description}"

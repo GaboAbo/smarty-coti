@@ -34,23 +34,23 @@ def exchange_currency(price, exchange: str):
         return price
 
 
-def calcultate_subtotal(request, index, price, discount, profit_margin, quantity):
+def calculate_subtotal(index, price, discount=None, profit_margin=None, quantity=None):
+    if discount and profit_margin and quantity:
+        try:
+            price = Decimal(price)
+            discount = Decimal(discount)
+            profit_margin = Decimal(profit_margin)
+        except InvalidOperation:
+            raise ValueError("Invalid values")
 
-    try:
-        price = Decimal(price)
-        discount = Decimal(discount)
-        profit_margin = Decimal(profit_margin)
-    except InvalidOperation:
-        raise ValueError("Invalid values")
+        price_after_discount = round(price * ((100 - discount) / 100), 2)
+        price_after_percentages = round(price_after_discount * (1 + FREIGHT + INSURANCE + CUSTOMS + WARRANT_AND_MAINTENANCE), 2)
+        unit_price = round(price_after_percentages * ((100 + profit_margin) / 100), 2)
+        subtotal = unit_price * quantity
 
-    price_after_discount = round(price * ((100 - discount) / 100), 2)
-    price_after_percentages = round(price_after_discount * (1 + FREIGHT + INSURANCE + CUSTOMS + WARRANT_AND_MAINTENANCE), 2)
-    unit_price = round(price_after_percentages * ((100 + profit_margin) / 100), 2)
-    subtotal = unit_price * quantity
-
-    current_total = cache.get('total_net', {})
-    current_total[index] = subtotal
-    cache.set('total_net', current_total)
+    else:
+        unit_price = price
+        subtotal = price
 
     return unit_price, subtotal
 
@@ -63,14 +63,24 @@ def remove_item_from_subtotal(request, index):
         current_total.pop(str(index))
         cache.set('total_net', current_total)
 
-    pass
+
+def set_total_net(index, subtotal):
+    current_total = cache.get('total_net', {})
+    current_total[index] = Decimal(subtotal)
+    cache.set('total_net', current_total)
 
 
-def calculate_quote_totals():
+def calculate_quote_totals(exchange):
     current_total = cache.get('total_net', {})
     total_net = sum([value for value in current_total.values()])
     iva = round(total_net * Decimal(0.19), 2)
     final = total_net + iva
+
+    if exchange == "CLP":
+        total_net = int(total_net)
+        iva = int(iva)
+        final = int(final)
+    
     return {
         'total_net': total_net,
         'iva': iva,
