@@ -31,8 +31,6 @@ def index(request):
 
 
 def dashboard_view(request):
-    if not request.session.get("user"):
-        return redirect("index")
 
     set_indicators()
     role = request.session.get("role")
