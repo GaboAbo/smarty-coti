@@ -24,28 +24,20 @@ from .Constants.bg import BACKGROUND
 
 
 def index(request):
-    """
-    Entry view for the web app.
-
-    Redirects authenticated users to the home dashboard,
-    otherwise renders the index page.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: Redirect or rendered HTML page.
-    """
-    user = request.session.get("user")
-    if user:
+    if request.session.get("user"):
         return redirect("dashboard")
+    
     return render(request, 'index.html', {'bg': BACKGROUND})
 
 
 def dashboard_view(request):
+    if not request.session.get("user"):
+        return redirect("index")
+
     set_indicators()
     role = request.session.get("role")
-    role_display = dict(SalesRep.ROLE_CHOICES).get(role, "Unknown")
+    role_display = dict(SalesRep.ROLE_CHOICES).get(role, "Invitado")
+    
     context = {
         "user_email": request.session.get("user_email"),
         "full_name": request.session.get("full_name"),
