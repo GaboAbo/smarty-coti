@@ -44,7 +44,6 @@ else:
 
 CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net"]
 ALLOWED_HOSTS = [
-    "d588-190-162-72-222.ngrok-free.app",
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
 ]
 
