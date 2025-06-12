@@ -6,6 +6,7 @@ from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.views.decorators.cache import never_cache
 
 from .functions import validate_microsoft_token
 
@@ -31,20 +32,16 @@ REDIRECT_URI = env(
     default=""
 )
 
-_confidential_client = None
-
 
 def set_client():
-    global _confidential_client
-    if _confidential_client is None:
-        _confidential_client = ConfidentialClientApplication(
-            CLIENT_ID,
-            CLIENT_SECRET,
-            authority=f"https://login.microsoftonline.com/{TENANT}",
-        )
-    return _confidential_client
+    return ConfidentialClientApplication(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        authority=f"https://login.microsoftonline.com/{TENANT}",
+    )
 
 
+@never_cache
 def microsoft_login(request: HttpRequest) -> HttpResponseRedirect:
     """
     Initiates the Microsoft OAuth2 login flow based on the application type.
@@ -83,19 +80,24 @@ def microsoft_login(request: HttpRequest) -> HttpResponseRedirect:
     return redirect(auth_url)
 
 
+@never_cache
 def microsoft_callback(request):
     _confidential_client = set_client()
-    auth_flow = request.session.get("auth_flow")
+    auth_flow = request.session.pop("auth_flow", None)
     auth_response = request.GET
+
+    if not auth_flow or not auth_response:
+        messages.error(request, "Ha ocurrido un error, intente de nuevo.")
+        return redirect("/")
 
     result = _confidential_client.acquire_token_by_auth_code_flow(
         auth_flow, auth_response,
-        scopes=["api://3512716b-4204-40bd-9761-758d67088b63/User.Read"]
+        scopes=["api://{CLIENT_ID}/User.Read"]
     )
     
     if not result or "id_token_claims" not in result:
         logger.warning("Microsoft callback failed: Missing id_token_claims or result is empty. Result: %s", result)
-        messages.error(request, "Error al autenticar con Microsoft, no posee permisos para utilizar aplicacion")
+        messages.error(request, "Error al autenticar con Microsoft, no posee permisos para utilizar aplicacion.")
         return redirect("/")
     
     access_token = result.get("access_token")
@@ -108,13 +110,13 @@ def microsoft_callback(request):
             full_name = claims.get("name")
     except AuthenticationFailed as e:
         logger.warning("Microsoft callback failed: Token not valid. Result: %s", result)
-        messages.error(request, f"Error al autenticar con Microsoft")
+        messages.error(request, f"Error al autenticar con Microsoft.")
         return redirect("/")
 
     user = SalesRep.objects.filter(email=user_email).first()
 
     if not user:
-        messages.error(request, f"Error al autenticar con Microsoft, usuario no enlazado a aplicacion")
+        messages.error(request, f"Error al autenticar con Microsoft, usuario no enlazado a aplicacion.")
         return redirect("/")
     
     login(request, user)
@@ -130,6 +132,7 @@ def microsoft_callback(request):
     return redirect("dashboard")
 
 
+@never_cache
 def microsoft_logout(request: HttpRequest, app_type: str = "server"):
     logout(request)
     
