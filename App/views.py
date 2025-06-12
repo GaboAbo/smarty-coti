@@ -6,6 +6,7 @@ from django.db import transaction, IntegrityError
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.core.cache import cache
+from django.contrib.auth.decorators import login_required
 
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
@@ -30,7 +31,10 @@ def index(request):
     return render(request, 'index.html', {'bg': BACKGROUND})
 
 
+@login_required
 def dashboard_view(request):
+    if not request.session.get("user"):
+        return redirect("/")
 
     set_indicators()
     role = request.session.get("role")
