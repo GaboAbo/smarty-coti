@@ -31,7 +31,6 @@ def index(request):
     return render(request, 'index.html', {'bg': BACKGROUND})
 
 
-@login_required
 def dashboard_view(request):
     if not request.session.get("user"):
         return redirect("/")

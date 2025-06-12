@@ -17,7 +17,6 @@ from App.views import (
     update_quote_totals_view,
     quote_detail_view,
     quote_create_or_update_view,
-    #quote_update_view,
     quote_products_view,
     quote_delete_view,
     template_selector_view,
@@ -43,7 +42,6 @@ urlpatterns = [
     path('update-quote-totals/', update_quote_totals_view, name='update_quote_totals'),
 
     path('quotes/create_or_update/', quote_create_or_update_view, name='create_or_update_quote'),
-    #path('quotes/<int:pk>/update/', quote_update_view, name='update_quote'),
     path('quotes/<int:pk>/', quote_detail_view, name='quote_detail'),
     path('quotes/<int:pk>/products/', quote_products_view, name='quote_products'),
     path('quotes/<int:pk>/delete/', quote_delete_view, name='delete_quote'),
