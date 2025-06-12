@@ -92,7 +92,7 @@ def microsoft_callback(request):
 
     result = _confidential_client.acquire_token_by_auth_code_flow(
         auth_flow, auth_response,
-        scopes=["api://{CLIENT_ID}/User.Read"]
+        scopes=[f"api://{CLIENT_ID}/User.Read"]
     )
     
     if not result or "id_token_claims" not in result:
