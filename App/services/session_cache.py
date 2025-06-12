@@ -17,13 +17,13 @@ def get_all_products(refresh=None):
 
 
 def get_all_quotes(pk=None, role="REP", refresh=None):
-    quotes = cache.get("all_quotes")
+    quotes = cache.get(f"quotes_{pk}_{role}")
     if quotes is None or refresh:
         if role == "MAN" or role == "ADM":
             quotes = Quote.objects.all()
         else:
-            quotes = Quote.objects.filter(salesRep__pk=pk).exclude(status="CL")
-        cache.set("all_quotes", quotes, timeout=None)
+            quotes = Quote.objects.filter(salesRep__pk=pk)
+        cache.set(f"quotes_{pk}_{role}", quotes, timeout=60*60)
     return quotes
 
 

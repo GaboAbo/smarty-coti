@@ -90,12 +90,12 @@ def microsoft_callback(request):
 
     result = _confidential_client.acquire_token_by_auth_code_flow(
         auth_flow, auth_response,
-        scopes=[f"api://{CLIENT_ID}/User.Read"]
+        scopes=["api://3512716b-4204-40bd-9761-758d67088b63/User.Read"]
     )
     
     if not result or "id_token_claims" not in result:
         logger.warning("Microsoft callback failed: Missing id_token_claims or result is empty. Result: %s", result)
-        messages.error(request, "Error al autenticar con Microsoft")
+        messages.error(request, "Error al autenticar con Microsoft, no posee permisos para utilizar aplicacion")
         return redirect("/")
     
     access_token = result.get("access_token")
@@ -108,24 +108,26 @@ def microsoft_callback(request):
             full_name = claims.get("name")
     except AuthenticationFailed as e:
         logger.warning("Microsoft callback failed: Token not valid. Result: %s", result)
-        messages.error(request, f"Error al validar el token: {str(e)}")
+        messages.error(request, f"Error al autenticar con Microsoft")
         return redirect("/")
 
     user = SalesRep.objects.filter(email=user_email).first()
-    if user:
-        login(request, user)
 
-        request.session["pk"] = user.pk
-        request.session["role"] = user.role
-        request.session["user_email"] = user_email
-        request.session["full_name"] = full_name
-        request.session["token"] = result["refresh_token"]
+    if not user:
+        messages.error(request, f"Error al autenticar con Microsoft, usuario no enlazado a aplicacion")
+        return redirect("/")
+    
+    login(request, user)
+
+    request.session["pk"] = user.pk
+    request.session["role"] = user.role
+    request.session["user_email"] = user_email
+    request.session["full_name"] = full_name
+    request.session["token"] = result["refresh_token"]
         
-        request.session.modified = True
+    request.session.modified = True
 
-        return redirect("dashboard")
-    else:
-        print("not valid user")
+    return redirect("dashboard")
 
 
 def microsoft_logout(request: HttpRequest, app_type: str = "server"):

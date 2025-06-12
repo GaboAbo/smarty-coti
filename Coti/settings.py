@@ -44,6 +44,7 @@ else:
 
 CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net"]
 ALLOWED_HOSTS = [
+    "d588-190-162-72-222.ngrok-free.app",
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
 ]
 
@@ -57,16 +58,15 @@ SESSION_COOKIE_AGE = 1209600
 SESSION_COOKIE_HTTPONLY = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
 
 if ENV == 'production':
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = 'None'
-    CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
 else:
     SESSION_COOKIE_SECURE = False
     SESSION_COOKIE_SAMESITE = 'Lax'
-    CSRF_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False
 
 # Application definition
