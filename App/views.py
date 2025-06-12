@@ -25,14 +25,14 @@ from .Constants.bg import BACKGROUND
 
 
 def index(request):
-    if request.session.get("user"):
+    if request.session.get("user_email"):
         return redirect("dashboard")
     
     return render(request, 'index.html', {'bg': BACKGROUND})
 
 
 def dashboard_view(request):
-    if not request.session.get("user"):
+    if not request.session.get("user_email"):
         return redirect("/")
 
     set_indicators()
