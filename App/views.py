@@ -1,7 +1,7 @@
 from weasyprint import HTML
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.db import transaction, IntegrityError
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
@@ -31,87 +31,132 @@ def index(request):
     return render(request, 'index.html', {'bg': BACKGROUND})
 
 
-def dashboard_view(request):
-    if not request.session.get("user_email"):
+def dashboard_view(request: HttpRequest) -> HttpResponse:
+    """
+    Renders the main dashboard view for authenticated users.
+
+    Redirects to the homepage if the session does not contain a valid 'user_email'.
+    Calls `set_indicators()` to prepare dashboard metrics.
+    
+    Context variables passed to the 'home.html' template:
+        - user_email (str): The email of the logged-in user.
+        - full_name (str): The user's full name.
+        - role (str): The user's role identifier.
+        - role_display (str): Human-readable label for the user's role.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request object.
+
+    Returns:
+        HttpResponse: A rendered response of the dashboard or a redirect to '/'.
+    """
+    session = request.session
+    user_email = session.get("user_email")
+
+    if not user_email:
         return redirect("/")
 
     set_indicators()
-    role = request.session.get("role")
+
+    role = session.get("role")
     role_display = dict(SalesRep.ROLE_CHOICES).get(role, "Invitado")
-    
+
     context = {
-        "user_email": request.session.get("user_email"),
-        "full_name": request.session.get("full_name"),
-        "role": request.session.get("role"),
-        "role_display": role_display
+        "user_email": user_email,
+        "full_name": session.get("full_name"),
+        "role": role,
+        "role_display": role_display,
     }
-    return render(request, 'home.html', context=context)
+
+    return render(request, "home.html", context)
 
 
-def sidebar(request):
+def sidebar(request: HttpRequest) -> HttpResponse:
     """
-    Renders the sidebar with active tab highlight.
+    Render the sidebar partial with the active tab highlighted.
+
+    Retrieves the `tab` parameter from the GET query (defaults to 'quotes') and 
+    passes it to the 'partials/sidebar.html' template.
 
     Args:
-        request (HttpRequest): The HTTP request object. May contain `tab` GET param.
+        request (HttpRequest): The incoming HTTP request.
 
     Returns:
-        HttpResponse: Rendered sidebar partial.
+        HttpResponse: The rendered sidebar HTML fragment.
     """
     tab = request.GET.get("tab", "quotes")
-    return render(request, "partials/sidebar.html", {"active_tab": tab})
+    return render(request, "partials/sidebar.html", {"tab": tab})
 
 
-def list_layout_view(request):
-    context = {
-        "role": request.session.get("role"),
-    }
-    return render(request, "quote/list_layout.html", context=context)
+def list_layout_view(request: HttpRequest) -> HttpResponse:
+    """
+    Render the quote list layout view.
+
+    Retrieves the user's `role` from the session (defaults to 'REP') and passes it
+    to the 'quote/list_layout.html' template for layout customization.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+
+    Returns:
+        HttpResponse: The rendered list layout page.
+    """
+    role = request.session.get("role", "REP")
+    return render(request, "quote/list_layout.html", {"role": role})
 
 
-def quote_list_view(request):
-    user_pk = request.session.get("pk")
-    user_role = request.session.get("role")
-    refresh = request.GET.get("refresh") or None
+def quote_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Render a paginated and filtered list of quotes for the current user.
+
+    Filters are applied based on query parameters (e.g., client, sales rep, status),
+    and results are paginated to 10 items per page. Empty slots are padded with
+    `None` to ensure a consistent list size.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request with session and GET params.
+
+    Returns:
+        HttpResponse: Rendered HTML partial with quote data and pagination.
+    """
+    session = request.session
+    user_pk = session.get("pk")
+    user_role = session.get("role")
+    refresh = request.GET.get("refresh")
 
     quotes = get_all_quotes(user_pk, user_role, refresh).order_by("date")
 
-    pk = request.GET.get("pk")
-    client = request.GET.get("client")
-    sales_rep = request.GET.get("sales_rep")
-    date = request.GET.get("date")
-    status = request.GET.get("status")
+    filters = {
+        "pk__icontains": request.GET.get("pk"),
+        "client__entity__name__icontains": request.GET.get("client"),
+        "salesRep__name__icontains": request.GET.get("sales_rep"),
+        "date": request.GET.get("date"),
+        "status": request.GET.get("status"),
+    }
 
-    if pk:
-        quotes = quotes.filter(pk__icontains=pk)
-    if client:
-        quotes = quotes.filter(client__entity__name__icontains=client)
-    if sales_rep:
-        quotes = quotes.filter(salesRep__name__icontains=sales_rep)
-    if date:
-        quotes = quotes.filter(date=date)
-    if status:
-        quotes = quotes.filter(status=status)
+    for key, value in filters.items():
+        if value:
+            quotes = quotes.filter(**{key: value})
 
     paginator = Paginator(quotes, 10)
-    page_number = request.GET.get("page", 1) or 1
+    page_number = request.GET.get("page") or 1
     page_obj = paginator.get_page(page_number)
 
     real_quotes = quotes.exists()
-
-    quotes = list(page_obj.object_list)
-    quotes += [None] * (10 - len(quotes))
+    paginated_quotes = list(page_obj.object_list)
+    paginated_quotes += [None] * (10 - len(paginated_quotes))
 
     context = {
-        "quotes": quotes,
+        "quotes": paginated_quotes,
         "real_quotes": real_quotes,
         "page_obj": page_obj,
         "current_filters": request.GET.urlencode(),
     }
 
-    return render(request, "quote/partials/quote_list.html", context=context)
+    return render(request, "quote/partials/quote_list.html", context)
     
 
+# Deletion incoming
 def pending_quote_list_view(request):
     user_pk = request.session.get("pk")
     user_role = request.session.get("role")
