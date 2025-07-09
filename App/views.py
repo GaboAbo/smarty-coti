@@ -3,6 +3,8 @@ from weasyprint import HTML
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest, HttpResponse
 from django.db import transaction, IntegrityError
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.core.cache import cache
@@ -132,10 +134,20 @@ def quote_list_view(request: HttpRequest) -> HttpResponse:
         "public_id__icontains": request.GET.get("public_id"),
         "client__entity__name__icontains": request.GET.get("entity"),
         "client__name__icontains": request.GET.get("client"),
-        "salesRep__name__icontains": request.GET.get("sales_rep"),
         "date": request.GET.get("date"),
         "status": request.GET.get("status"),
     }
+
+    sales_rep = request.GET.get("sales_rep")
+
+    if sales_rep:
+        quotes = quotes.annotate(
+            full_name=Concat(
+                "salesRep__first_name",
+                Value(" "),
+                "salesRep__last_name"
+            )
+        ).filter(full_name__icontains=sales_rep)
 
     for key, value in filters.items():
         if value:
