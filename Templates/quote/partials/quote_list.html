@@ -18,7 +18,7 @@
         </tr>
         {% else %}
         <tr class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10">
-            <td colspan="6" style="empty-cells: show;">&nbsp;</td>
+            <td colspan="7" style="empty-cells: show;">&nbsp;</td>
         </tr>
         {% endif %}
     {% endfor %}
@@ -42,7 +42,7 @@
             Anterior
         </button>
     </td>
-    <td class="text-center mx-4" colspan="4">
+    <td class="text-center mx-4" colspan="5">
         <div class="flex justify-center items-center w-full">
             <p>Página <b>{{ page_obj.number }}</b> de {{ page_obj.paginator.num_pages }}</p>
         </div>

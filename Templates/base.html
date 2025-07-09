@@ -12,17 +12,17 @@
         <link rel="icon" href="{% static 'icons/axion_logo.svg' %}" type="image/svg+xml">
         <script src="https://unpkg.com/htmx.org@1.9.12"></script>
     </head>
-    <body class="basic-container w-full h-screen font-roboto text-slate-700 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
-        <div class="absolute top-0 r-1/2 w-full h-[5%] flex justify-around">
-            <div class="w-5/6 h-full flex flex-row items-center">
-                <p class="px-2 flex items-center h-full text-white bg-amber-500">{{ role_display }}</p>
-                <p class="px-2 flex items-center h-full text-[#1e293b]">Bienvenid@, {{ full_name }}</p>
+    <body class="basic-container w-full h-screen flex font-roboto text-slate-700 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
+        <div class="fixed top-0 w-full h-[8%] flex justify-around">
+            <div class="w-[80%] h-[48px] mt-[10px] ml-[10px] flex flex-row items-center text-sm">
+                <p class="px-2 flex items-center w-[10%] h-full text-white bg-amber-500 rounded-l-sm">{{ role_display }}</p>
+                <p class="px-2 flex items-center h-full text-[#1e293b] bg-white rounded-r-sm">{{ full_name }}</p>
             </div>
-            <form method="post" action="{% url 'logout' %}" class="w-1/6 h-full">
+            <form method="post" action="{% url 'logout' %}" class="w-[20%] h-[48px] mt-[10px] mr-[10px]">
                 {% csrf_token %}
                 <button
                     type="submit"
-                    class="w-full h-full flex justify-center items-center text-[#1e293b] hover:text-white bg-white hover:bg-amber-500 duration-300">
+                    class="w-full h-full flex justify-center items-center text-white bg-slate-400 hover:bg-slate-600 duration-300">
                     Cerrar Sesion
                 </button>
             </form>

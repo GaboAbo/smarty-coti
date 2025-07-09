@@ -1,8 +1,8 @@
 {% load static %}
 
 {% with current_filters|safe as filters %}
-<div id="quote_list" class="w-full h-full flex flex-col items-start p-4 bg-slate-50/50 rounded-xs text-sm">
-    <div class="basic-container w-full h-[10%] mb-[10px] bg-slate-50 text-xl font-bold">
+<div id="quote_list" class="w-full h-full flex flex-col gap-[10px] items-start p-4 bg-slate-50/50 rounded-xs text-sm">
+    <div class="basic-container w-full h-[10%] bg-slate-50 text-xl font-bold">
         <p>Listado de Cotizaciones</p>
     </div>
     
@@ -10,12 +10,13 @@
         <table id="quote_table" class="w-full h-full table-fixed text-sm border-separate border-spacing-1">
             <thead class="h-[10%] bg-slate-50">
                 <tr class="h-full">
-                    <th style="width:16%">ID</th>
-                    <th style="width:32%">Cliente</th>
-                    <th style="width:16%">Rep. Ventas</th>
+                    <th style="width:12%">ID</th>
+                    <th style="width:28%">Entidad</th>
+                    <th style="width:14%">Cliente</th>
+                    <th style="width:14%">Rep. Ventas</th>
                     <th style="width:10%">Fecha</th>
                     <th style="width:10%">Estado</th>
-                    <th style="width:16%">Acciones</th>
+                    <th style="width:12%">Acciones</th>
                 </tr>
             </thead>
             <tbody
@@ -38,7 +39,7 @@
             hx-swap="innerHTML"
             hx-include="this">
             <input
-                class="w-[10%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[12%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="public_id"
                 placeholder="Buscar por ID">
             <input
@@ -58,7 +59,7 @@
                 name="date"
                 type="date">
             <select
-                class="w-[8%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[10%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="status">
                 <option value="">Todas</option>
                 <option value="AP">Aprobada</option>
@@ -69,22 +70,22 @@
                 {% endif %}
             </select>
             <input
-                class="w-[8%] h-[32px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
+                class="w-[12%] h-[32px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-slate-600 duration-150 text-white text-sm"
                 hx-get="{% url "quote_list" %}?refresh=all"
                 hx-trigger="click delay:50ms"
                 hx-target="#table_data"
                 hx-swap="innerHTML transition:true"
                 type="reset"
                 value="Refrescar">
-            <button
-                class="w-[8%] h-[32px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
-                hx-get="{% url "create_or_update_quote" %}?action=create"
-                hx-target="#quote_list"
-                hx-swap="outerHTML transition:true"
-                type="button">
-                Agregar
-            </button>
         </form>
     </div>
+    <button
+        class="absolute bottom-0 right-0 mb-[10px] mr-[10px] w-[20%] h-[48px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-green-600 duration-150 text-white text-base"
+        hx-get="{% url "create_or_update_quote" %}?action=create"
+        hx-target="#quote_list"
+        hx-swap="outerHTML transition:true"
+        type="button">
+        Crear Cotizacion
+    </button>
 </div>
 {% endwith %}
