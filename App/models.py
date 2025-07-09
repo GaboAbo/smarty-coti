@@ -47,6 +47,17 @@ class Quote(models.Model):
     total_net = models.DecimalField("Subtotal", default=0, max_digits=20, decimal_places=2)
     iva = models.DecimalField("IVA", default=0, max_digits=20, decimal_places=2)
     final = models.DecimalField("Total", default=0, max_digits=20, decimal_places=2)
+
+    public_id = models.CharField(max_length=20, unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new and not self.public_id:
+            self.public_id = f"{timezone.now().year}-{self.pk:04d}"
+            super().save(update_fields=["public_id"])
     
 
     @property
@@ -77,7 +88,7 @@ class Quote(models.Model):
             self.save()
 
     def __str__(self):
-        return f"{timezone.now().year}-{self.pk:04d}"
+        return self.public_id
 
 
 class ProductQuote(models.Model):

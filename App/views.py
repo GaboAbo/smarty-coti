@@ -129,10 +129,9 @@ def quote_list_view(request: HttpRequest) -> HttpResponse:
     quotes = get_all_quotes(user_pk, user_role, refresh).order_by("date")
 
     filters = {
-        "pk__icontains": request.GET.get("pk"),
-        "client__client__entity__name__icontains": request.GET.get("entity"),
-        "client__client__first_name__icontains": request.GET.get("client"),
-        "client__client__last_name__icontains": request.GET.get("client"),
+        "public_id__icontains": request.GET.get("public_id"),
+        "client__entity__name__icontains": request.GET.get("entity"),
+        "client__name__icontains": request.GET.get("client"),
         "salesRep__name__icontains": request.GET.get("sales_rep"),
         "date": request.GET.get("date"),
         "status": request.GET.get("status"),

@@ -45,7 +45,7 @@ else:
 CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net"]
 ALLOWED_HOSTS = [
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
-    "71d7b37866ef.ngrok-free.app"
+    "ba4377d946f2.ngrok-free.app"
 ]
 
 LOGIN_URL = '/mAuth/login/'

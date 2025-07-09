@@ -120,12 +120,10 @@ class Client(EnterpriseUser):
     Model representing a client user.
 
     Attributes:
-        first_name (str): Client’s first name.
-        last_name (str): Client’s last name.
+        name (str): Client’s name.
     """
 
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         verbose_name = "Cliente"
