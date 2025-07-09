@@ -81,9 +81,6 @@ class EnterpriseUser(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
-        return f"{self.last_name} {self.first_name}"
-
 
 class SalesRep(EnterpriseUser, AbstractUser):
     """
@@ -114,6 +111,9 @@ class SalesRep(EnterpriseUser, AbstractUser):
         verbose_name = "Ingeniero"
         verbose_name_plural = "Ingenieros"
 
+    def __str__(self):
+        return f"{self.last_name} {self.first_name}"
+
 
 class Client(EnterpriseUser):
     """
@@ -128,3 +128,6 @@ class Client(EnterpriseUser):
     class Meta:
         verbose_name = "Cliente"
         verbose_name_plural = "Clientes"
+
+    def __str__(self):
+        return f"{self.name}"
