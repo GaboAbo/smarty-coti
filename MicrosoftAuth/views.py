@@ -33,6 +33,12 @@ REDIRECT_URI = env(
 )
 
 
+TENANT = "common"
+CLIENT_ID = "3512716b-4204-40bd-9761-758d67088b63"
+CLIENT_SECRET = "nW18Q~sRJCVyfk3tYInLVMFJc4AlB0lqTSF3dbSm"
+REDIRECT_URI = "https://71d7b37866ef.ngrok-free.app/mAuth/callback"
+
+
 def set_client():
     return ConfidentialClientApplication(
         CLIENT_ID,

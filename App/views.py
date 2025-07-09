@@ -22,6 +22,8 @@ from .forms import QuoteForm, ProductQuoteForm, PricingForm, ProductQuoteFullFor
 
 from .Constants.logo import OLYMPUS_LOGO
 from .Constants.bg import BACKGROUND
+from .Constants.ISO9001 import ISO9001
+from .Constants.ISO13485 import ISO13845
 
 
 def index(request):
@@ -128,7 +130,9 @@ def quote_list_view(request: HttpRequest) -> HttpResponse:
 
     filters = {
         "pk__icontains": request.GET.get("pk"),
-        "client__entity__name__icontains": request.GET.get("client"),
+        "client__client__entity__name__icontains": request.GET.get("entity"),
+        "client__client__first_name__icontains": request.GET.get("client"),
+        "client__client__last_name__icontains": request.GET.get("client"),
         "salesRep__name__icontains": request.GET.get("sales_rep"),
         "date": request.GET.get("date"),
         "status": request.GET.get("status"),
@@ -533,9 +537,11 @@ def generate_quote_pdf_view(request, quote_id):
             'quote': quote,
             'products': products,
             'logo': OLYMPUS_LOGO,
+            'ISO9001': ISO9001,
+            'ISO13485': ISO13845,
         }
     )
     pdf = HTML(string=html_string_pdf).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote} - {quote.client.name}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Cotizacion #{quote} - {quote.client.entity.name}.pdf"'
     return response

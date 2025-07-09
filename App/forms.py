@@ -1,7 +1,7 @@
 from django import forms
 from .models import Quote, Product, ProductQuote, Template
 
-from AuthUser.models import Entity, SalesRep
+from AuthUser.models import Entity, SalesRep, Client
 
 
 class TemplateForm(forms.ModelForm):
@@ -19,9 +19,9 @@ class TemplateForm(forms.ModelForm):
 
 class QuoteForm(forms.ModelForm):
     client = forms.ModelChoiceField(
-        queryset=Entity.objects.all(),
+        queryset=Client.objects.all(),
         required=True,
-        empty_label="Seleccione Institución",
+        empty_label="Seleccione Cliente",
         widget=forms.Select(attrs={
             'class': 'w-full h-[24px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm',
             'list': 'client-list',

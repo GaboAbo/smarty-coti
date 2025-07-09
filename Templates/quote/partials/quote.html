@@ -2,7 +2,7 @@
     id="quote-{{ quote.pk }}"
     class="border-b-4 border-b-white/70 rounded-lg bg-slate-600/10 hover:bg-slate-600/20 duration-300">
     <td>{{ quote }}</td>
-    <td>{{ quote.client.name }}</td>
+    <td>{{ quote.client.entity.name }}</td>
     <td>{{ quote.salesRep.first_name }} {{ quote.salesRep.last_name }}</td>
     <td>{{ quote.date }}</td>
     <td>{{ quote.get_status_display }}</td>

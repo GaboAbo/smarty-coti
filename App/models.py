@@ -37,7 +37,7 @@ class Quote(models.Model):
         ("CLP", "CLP"),
         ("UF", "UF"),
     ]
-    client = models.ForeignKey("AuthUser.Entity", verbose_name="Cliente", on_delete=models.CASCADE)
+    client = models.ForeignKey("AuthUser.Client", verbose_name="Cliente", on_delete=models.CASCADE)
     salesRep = models.ForeignKey("AuthUser.SalesRep", verbose_name="Rep. Ventas", on_delete=models.CASCADE, related_name='sales_rep')
     status = models.CharField("Estado", max_length=50, choices=status_choices, default="WT")
     date = models.DateField("Fecha", auto_now=True)

@@ -210,6 +210,9 @@
                 width: 100%;
                 height: 10px;
                 background-color: #B6B6B6;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
             }
             .title-bar {
                 width: 100%;
@@ -228,12 +231,28 @@
                 justify-content: center;
                 align-items: center;
             }
+            .img-container-header {
+                display: flex;
+                justify-content: center;
+                align-items: center; 
+                width: 30%;
+                height: 200%;
+            }
             .img-container {
                 display: flex;
                 justify-content: center;
                 align-items: center; 
                 width: 30%;
                 height: 100%;
+            }
+            .iso-container {
+                display: flex;
+                justify-content: center;
+                align-items: center; 
+                width: 48px;
+                height: 48px;
+                margin-right: 24px;
+                background-color: #fff;
             }
             .fit-image {
                 max-width: 100%;
@@ -246,13 +265,15 @@
         </style>
 </head>
 <body>
-    <div class="title-bar fill font-bold">COTIZACIÓN N°{{ quote }}</div>
+    <div class="title-bar fill font-bold">
+        COTIZACIÓN N°{{ quote }}
+    </div>
 
     <table class="table mt-8">
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Institución</th>
-            <td class="text-left" colspan="20">{{ quote.client.name }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.entity.name }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Fecha</th>
             <td class="text-left" colspan="20">{{ quote.date }}</td>
@@ -268,7 +289,7 @@
         <tr>
             <td class="h-16 fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9">Región</th>
-            <td class="text-left" colspan="20">{{ quote.client.get_region_display }}</td>
+            <td class="text-left" colspan="20">{{ quote.client.entity.get_region_display }}</td>
             <td class="fill" colspan="1"></td>
             <th class="text-left font-bold" colspan="9"></th>
             <td class="text-left" colspan="20"></td>
@@ -418,7 +439,14 @@
         </tr>
     </table>
 
-    <div class="end-bar mt-4"></div>
+    <div class="end-bar mt-4">
+        <div class="iso-container">
+            <img src="{{ ISO9001 }}" alt="ISO9001" style="width: 48px; height: 48px;">
+        </div>
+        <div class="iso-container">
+            <img src="{{ ISO13485 }}" alt="ISO13485" style="width: 48px; height: 48px;">
+        </div>
+    </div>
     <div class="logo-bar mt-4">
         <div class="img-container">
             <img src="{{ logo }}" alt="Olympus Logo" style="max-width: 100%; height: auto;">

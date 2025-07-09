@@ -38,15 +38,19 @@
             hx-swap="innerHTML"
             hx-include="this">
             <input
-                class="w-[16%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[8%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="public_id"
                 placeholder="Buscar por ID">
             <input
-                class="w-[32%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[30%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                name="entity"
+                placeholder="Buscar por Entidad">
+            <input
+                class="w-[14%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="client"
                 placeholder="Buscar por Cliente">
             <input
-                class="w-[16%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[14%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="sales_rep"
                 placeholder="Buscar por Rep. Ventas">
             <input
@@ -54,7 +58,7 @@
                 name="date"
                 type="date">
             <select
-                class="w-[10%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
+                class="w-[8%] h-[32px] border-2 rounded-xs border-slate-300 focus:outline-none focus:border-slate-700 px-2 text-sm"
                 name="status">
                 <option value="">Todas</option>
                 <option value="AP">Aprobada</option>
@@ -76,7 +80,8 @@
                 class="w-[8%] h-[32px] flex justify-center items-center rounded-xs bg-slate-400 hover:bg-green-600 duration-150 text-white text-sm"
                 hx-get="{% url "create_or_update_quote" %}?action=create"
                 hx-target="#quote_list"
-                hx-swap="outerHTML transition:true">
+                hx-swap="outerHTML transition:true"
+                type="button">
                 Agregar
             </button>
         </form>

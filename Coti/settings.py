@@ -31,7 +31,7 @@ if ENV == 'production':
 else:
     SECRET_KEY = env('DJANGO_SECRET_KEY', default=get_random_secret_key())
     DEBUG = True
-    print("⚠️ Using a default development SECRET_KEY. DEBUG set to True. Do not use this in production!")
+    print("Using a default development SECRET_KEY. DEBUG set to True. Do not use this in production!")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -45,6 +45,7 @@ else:
 CSRF_TRUSTED_ORIGINS = ["https://smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net"]
 ALLOWED_HOSTS = [
     "smarty2-dahxeqepe8g5braz.eastus2-01.azurewebsites.net",
+    "71d7b37866ef.ngrok-free.app"
 ]
 
 LOGIN_URL = '/mAuth/login/'
